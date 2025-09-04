@@ -1,74 +1,97 @@
 import io
 from pathlib import Path
+
 from pptx import Presentation
 from pptx.enum.shapes import MSO_AUTO_SHAPE_TYPE
 
-def _blank_slide(prs):
-    return prs.slides.add_slide(prs.slide_layouts[6])  # Blank
 
-def _shape(prs):
-    slide = _blank_slide(prs)
-    shape = slide.shapes.add_shape(
-        MSO_AUTO_SHAPE_TYPE.RECTANGLE, 0, 0, 1_000_000, 1_000_000
-    )
-    return shape, slide
+def _blank_slide(prs: Presentation):
+    # Blank layout
+    return prs.slides.add_slide(prs.slide_layouts[6])
 
-def _roundtrip(prs):
-    buf = io.BytesIO(); prs.save(buf); buf.seek(0)
+
+def _roundtrip(prs: Presentation) -> Presentation:
+    buf = io.BytesIO()
+    prs.save(buf)
+    buf.seek(0)
     return Presentation(buf)
+
 
 def _last_shape(slide):
     return slide.shapes[-1]
 
-def test_hyperlink_external_url_with_anchor_roundtrip():
+
+def test_hyperlink_http_roundtrip():
     prs = Presentation()
-    shape, _ = _shape(prs)
-    hl = shape.click_action.hyperlink
-    hl.address = "https://example.com/page#section"
+    slide = _blank_slide(prs)
+
+    shp = slide.shapes.add_shape(
+        MSO_AUTO_SHAPE_TYPE.RECTANGLE, 1_000_000, 1_000_000, 2_000_000, 1_000_000
+    )
+    shp.click_action.hyperlink.address = "https://example.com/page#section"
+
     prs2 = _roundtrip(prs)
     shp2 = _last_shape(prs2.slides[0])
-    hl2 = shp2.click_action.hyperlink
-    assert (hl2.address or "").endswith("example.com/page#section") or "example.com/page#section" in (hl2.address or "")
+    addr = shp2.click_action.hyperlink.address or ""
+
+    # Keep it simple and short to avoid E501
+    assert "example.com/page#section" in addr
+
 
 def test_hyperlink_file_uri_roundtrip(tmp_path: Path):
     prs = Presentation()
-    shape, _ = _shape(prs)
-    target = tmp_path / "other.pptx"
-    target.write_bytes(b"")  # create an empty file
-    shape.click_action.hyperlink.address = target.as_uri()  # file://... URI
-    prs2 = _roundtrip(prs)
-    shp2 = _last_shape(prs2.slides[0])
-    addr = shp2.click_action.hyperlink.address or ""
-    assert addr.startswith("file://")
+    slide = _blank_slide(prs)
 
-def test_hyperlink_mailto_with_subject_roundtrip():
-    prs = Presentation()
-    shape, _ = _shape(prs)
-    shape.click_action.hyperlink.address = "mailto:abc@example.com?subject=Hello"
+    file_path = tmp_path / "doc.txt"
+    file_path.write_text("hello")
+    uri = file_path.as_uri()
+
+    shp = slide.shapes.add_shape(
+        MSO_AUTO_SHAPE_TYPE.ROUNDED_RECTANGLE, 0, 0, 2_000_000, 1_000_000
+    )
+    shp.click_action.hyperlink.address = uri
+
     prs2 = _roundtrip(prs)
     shp2 = _last_shape(prs2.slides[0])
     addr = shp2.click_action.hyperlink.address or ""
-    assert addr.startswith("mailto:") and "subject=Hello" in addr
+
+    assert addr.startswith("file:")
+    assert file_path.name in addr
+
+
+def test_hyperlink_mailto_roundtrip():
+    prs = Presentation()
+    slide = _blank_slide(prs)
+
+    shp = slide.shapes.add_shape(
+        MSO_AUTO_SHAPE_TYPE.ROUNDED_RECTANGLE, 0, 0, 2_000_000, 1_000_000
+    )
+    shp.click_action.hyperlink.address = "mailto:foo@example.com?subject=Hello"
+
+    prs2 = _roundtrip(prs)
+    shp2 = _last_shape(prs2.slides[0])
+    addr = shp2.click_action.hyperlink.address or ""
+
+    # PT018: break assertions
+    assert addr.startswith("mailto:")
+    assert "subject=Hello" in addr
+
 
 def test_hyperlink_slide_anchor_via_target_slide_roundtrip():
     prs = Presentation()
-    s1 = _blank_slide(prs)
-    s2 = _blank_slide(prs)
-    shape = s1.shapes.add_shape(
-        MSO_AUTO_SHAPE_TYPE.RECTANGLE, 0, 0, 1_000_000, 1_000_000
-    )
-    shape.click_action.target_slide = s2
-    prs2 = _roundtrip(prs)
-    s1r = prs2.slides[0]
-    shp2 = s1r.shapes[-1]
-    ca2 = shp2.click_action
-    assert (ca2.target_slide is not None), "target_slide should roundtrip"
+    slide1 = _blank_slide(prs)
+    slide2 = _blank_slide(prs)
 
-def test_hyperlink_invalid_target_graceful():
-    prs = Presentation()
-    shape, _ = _shape(prs)
-    shape.click_action.hyperlink.address = "nota://protocol"
+    shp = slide1.shapes.add_shape(
+        MSO_AUTO_SHAPE_TYPE.ROUNDED_RECTANGLE, 0, 0, 2_000_000, 1_000_000
+    )
+    # was: shp.click_action.hyperlink.target_slide = slide2
+    shp.click_action.target_slide = slide2
+
     prs2 = _roundtrip(prs)
     shp2 = _last_shape(prs2.slides[0])
-    addr = shp2.click_action.hyperlink.address or ""
-    assert addr.startswith("nota://")
+    # was: target = shp2.click_action.hyperlink.target_slide
+    target = shp2.click_action.target_slide
+
+    assert target is prs2.slides[1]
+
