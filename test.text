@@ -1,0 +1,34 @@
+d9b54e3e0c32b52518533356ea7677611deb1efe
+
+
+{
+  "list_of_files": [
+    "./pyproject.toml",
+    "./README.rst",
+    "./LICENSE",
+    "./src/pptx/__init__.py",
+    "./src/pptx/action.py",
+    "./src/pptx/chart/chart.py",
+    "./src/pptx/chart/datalabel.py",
+    "./src/pptx/chart/legend.py",
+    "./src/pptx/chart/plot.py",
+    "./src/pptx/presentation.py",
+    "./src/pptx/util.py",
+    "./src/pptx/shapes/autoshape.py",
+    "./tests/test_chart_labels_legend.py",
+    "./tests/test_hyperlinks.py",
+    "./requirements.txt",
+    "./tox.ini",
+    "./pytest.ini"
+  ]
+}
+
+
+
+ruff check src tests
+PYTHONPATH=src python -m pytest -q
+
+# 2) Auto-fix style/simplification nags you pasted
+ruff check src tests --select SIM,C4,C41,C42,I,F,UP,TC --fix --unsafe-fixes
+ruff format
+PYTHONPATH=src python -m pytest -q

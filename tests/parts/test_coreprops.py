@@ -13,7 +13,7 @@ from pptx.oxml.coreprops import CT_CoreProperties
 from pptx.parts.coreprops import CorePropertiesPart
 
 
-class DescribeCorePropertiesPart(object):
+class DescribeCorePropertiesPart:
     """Unit-test suite for `pptx.parts.coreprops.CorePropertiesPart` objects."""
 
     @pytest.mark.parametrize(
@@ -146,9 +146,7 @@ class DescribeCorePropertiesPart(object):
         assert core_props.modified is not None
         # core_props.modified only stores time with seconds resolution, so
         # comparison needs to be a little loose (within two seconds)
-        modified_timedelta = (
-            dt.datetime.now(dt.timezone.utc).replace(tzinfo=None) - core_props.modified
-        )
+        modified_timedelta = dt.datetime.now(dt.UTC).replace(tzinfo=None) - core_props.modified
         max_expected_timedelta = dt.timedelta(seconds=2)
         assert modified_timedelta < max_expected_timedelta
 
@@ -165,9 +163,9 @@ class DescribeCorePropertiesPart(object):
         if not tagname:
             child_element = ""
         elif not str_val:
-            child_element = "\n  <%s%s/>\n" % (tagname, attrs)  # pragma: no cover
+            child_element = f"\n  <{tagname}{attrs}/>\n"  # pragma: no cover
         else:
-            child_element = "\n  <%s%s>%s</%s>\n" % (tagname, attrs, str_val, tagname)
+            child_element = f"\n  <{tagname}{attrs}>{str_val}</{tagname}>\n"
         return tmpl % child_element
 
     @pytest.fixture

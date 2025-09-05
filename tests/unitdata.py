@@ -6,7 +6,7 @@ from pptx.oxml import parse_xml
 from pptx.oxml.ns import nsdecls
 
 
-class BaseBuilder(object):
+class BaseBuilder:
     """
     Provides common behavior for all data builders.
     """
@@ -19,7 +19,7 @@ class BaseBuilder(object):
         self._xmlattr_method_map = {}
         for attr_name in self.__attrs__:
             base_name = attr_name.split(":")[1] if ":" in attr_name else attr_name
-            method_name = "with_%s" % base_name
+            method_name = f"with_{base_name}"
             self._xmlattr_method_map[method_name] = attr_name
         self._child_bldrs = []
 
@@ -62,7 +62,7 @@ class BaseBuilder(object):
         """
         if not nspfxs:
             nspfxs = self.__nspfxs__
-        self._nsdecls = " %s" % nsdecls(*nspfxs)
+        self._nsdecls = f" {nsdecls(*nspfxs)}"
         return self
 
     def xml(self, indent=0):
@@ -71,18 +71,18 @@ class BaseBuilder(object):
         """
         indent_str = " " * indent
         if self._is_empty:
-            xml = "%s%s\n" % (indent_str, self._empty_element_tag)
+            xml = f"{indent_str}{self._empty_element_tag}\n"
         else:
-            xml = "%s\n" % self._non_empty_element_xml(indent)
+            xml = f"{self._non_empty_element_xml(indent)}\n"
         return xml
 
     @property
     def _empty_element_tag(self):
-        return "<%s%s%s/>" % (self.__tag__, self._nsdecls, self._xmlattrs_str)
+        return f"<{self.__tag__}{self._nsdecls}{self._xmlattrs_str}/>"
 
     @property
     def _end_tag(self):
-        return "</%s>" % self.__tag__
+        return f"</{self.__tag__}>"
 
     @property
     def _is_empty(self):
@@ -91,26 +91,21 @@ class BaseBuilder(object):
     def _non_empty_element_xml(self, indent):
         indent_str = " " * indent
         if self._text:
-            xml = "%s%s%s%s" % (  # pragma: no cover
-                indent_str,
-                self._start_tag,
-                self._text,
-                self._end_tag,
-            )
+            xml = f"{indent_str}{self._start_tag}{self._text}{self._end_tag}"
         else:
-            xml = "%s%s\n" % (indent_str, self._start_tag)
+            xml = f"{indent_str}{self._start_tag}\n"
             for child_bldr in self._child_bldrs:
                 xml += child_bldr.xml(indent + 2)
-            xml += "%s%s" % (indent_str, self._end_tag)
+            xml += f"{indent_str}{self._end_tag}"
         return xml
 
     def _set_xmlattr(self, xmlattr_name, value):
-        xmlattr_str = ' %s="%s"' % (xmlattr_name, str(value))
+        xmlattr_str = f' {xmlattr_name}="{str(value)}"'
         self._xmlattrs.append(xmlattr_str)
 
     @property
     def _start_tag(self):
-        return "<%s%s%s>" % (self.__tag__, self._nsdecls, self._xmlattrs_str)
+        return f"<{self.__tag__}{self._nsdecls}{self._xmlattrs_str}>"
 
     @property
     def _xmlattrs_str(self):

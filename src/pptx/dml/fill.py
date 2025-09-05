@@ -24,14 +24,14 @@ if TYPE_CHECKING:
     from pptx.oxml.xmlchemy import BaseOxmlElement
 
 
-class FillFormat(object):
+class FillFormat:
     """Provides access to the current fill properties.
 
     Also provides methods to change the fill type.
     """
 
     def __init__(self, eg_fill_properties_parent: BaseOxmlElement, fill_obj: _Fill):
-        super(FillFormat, self).__init__()
+        super().__init__()
         self._xPr = eg_fill_properties_parent
         self._fill = fill_obj
 
@@ -161,7 +161,7 @@ class FillFormat(object):
         return self._fill.type
 
 
-class _Fill(object):
+class _Fill:
     """
     Object factory for fill object of class matching fill element, such as
     _SolidFill for ``<a:solidFill>``; also serves as the base class for all
@@ -185,7 +185,7 @@ class _Fill(object):
             fill_cls = _SolidFill
         else:
             fill_cls = _Fill
-        return super(_Fill, cls).__new__(fill_cls)
+        return super().__new__(fill_cls)
 
     @property
     def back_color(self):
@@ -196,7 +196,7 @@ class _Fill(object):
     @property
     def fore_color(self):
         """Raise TypeError for types that do not override this property."""
-        tmpl = "fill type %s has no foreground color, call .solid() or .pattern" "ed() first"
+        tmpl = "fill type %s has no foreground color, call .solid() or .patterned() first"
         raise TypeError(tmpl % self.__class__.__name__)
 
     @property
@@ -297,7 +297,7 @@ class _PattFill(_Fill):
     """Provides access to patterned fill properties."""
 
     def __init__(self, pattFill):
-        super(_PattFill, self).__init__()
+        super().__init__()
         self._element = self._pattFill = pattFill
 
     @lazyproperty
@@ -335,7 +335,7 @@ class _SolidFill(_Fill):
     """Provides access to fill properties such as color for solid fills."""
 
     def __init__(self, solidFill):
-        super(_SolidFill, self).__init__()
+        super().__init__()
         self._solidFill = solidFill
 
     @lazyproperty
@@ -374,7 +374,7 @@ class _GradientStop(ElementProxy):
     """
 
     def __init__(self, gs):
-        super(_GradientStop, self).__init__(gs)
+        super().__init__(gs)
         self._gs = gs
 
     @lazyproperty

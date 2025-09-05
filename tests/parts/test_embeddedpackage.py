@@ -17,7 +17,7 @@ from pptx.parts.embeddedpackage import (
 from ..unitutil.mock import ANY, FixtureRequest, class_mock, initializer_mock, instance_mock
 
 
-class DescribeEmbeddedPackagePart(object):
+class DescribeEmbeddedPackagePart:
     """Unit-test suite for `pptx.parts.embeddedpackage.EmbeddedPackagePart` objects."""
 
     @pytest.mark.parametrize(
@@ -35,7 +35,7 @@ class DescribeEmbeddedPackagePart(object):
         package_ = instance_mock(request, OpcPackage)
         embedded_object_part_ = instance_mock(request, EmbeddedPartCls)
         EmbeddedPartCls_ = class_mock(
-            request, "pptx.parts.embeddedpackage.%s" % EmbeddedPartCls.__name__
+            request, f"pptx.parts.embeddedpackage.{EmbeddedPartCls.__name__}"
         )
         EmbeddedPartCls_.new.return_value = embedded_object_part_
 

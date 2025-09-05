@@ -7,9 +7,9 @@ import pytest
 from pptx.oxml.ns import NamespacePrefixedTag, namespaces, nsdecls, nsuri, qn
 
 
-class DescribeNamespacePrefixedTag(object):
+class DescribeNamespacePrefixedTag:
     def it_behaves_like_a_string_when_you_want_it_to(self, nsptag):
-        s = "- %s -" % nsptag
+        s = f"- {nsptag} -"
         assert s == "- a:foobar -"
 
     def it_knows_its_clark_name(self, nsptag, clark_name):
@@ -29,22 +29,22 @@ class DescribeNamespacePrefixedTag(object):
         assert nsptag.nsuri == namespace_uri_a
 
 
-class DescribeNamespaces(object):
+class DescribeNamespaces:
     def it_composes_a_dict_of_ns_uris_keyed_by_ns_pfx(self, nsmap):
         assert namespaces("a", "p") == nsmap
 
 
-class DescribeNsdecls(object):
+class DescribeNsdecls:
     def it_formats_namespace_declarations_from_a_list_of_prefixes(self, nsdecls_str):
         assert nsdecls("a", "p") == nsdecls_str
 
 
-class DescribeNsuri(object):
+class DescribeNsuri:
     def it_finds_the_namespace_uri_corresponding_to_a_namespace_prefix(self, namespace_uri_a):
         assert nsuri("a") == namespace_uri_a
 
 
-class DescribeQn(object):
+class DescribeQn:
     def it_calculates_the_clark_name_for_an_ns_prefixed_tag_string(self, nsptag_str, clark_name):
         assert qn(nsptag_str) == clark_name
 
@@ -56,7 +56,7 @@ class DescribeQn(object):
 
 @pytest.fixture
 def clark_name(namespace_uri_a, local_part):
-    return "{%s}%s" % (namespace_uri_a, local_part)
+    return f"{{{namespace_uri_a}}}{local_part}"
 
 
 @pytest.fixture
@@ -76,7 +76,7 @@ def namespace_uri_p():
 
 @pytest.fixture
 def nsdecls_str(namespace_uri_a, namespace_uri_p):
-    return 'xmlns:a="%s" xmlns:p="%s"' % (namespace_uri_a, namespace_uri_p)
+    return f'xmlns:a="{namespace_uri_a}" xmlns:p="{namespace_uri_p}"'
 
 
 @pytest.fixture
@@ -91,4 +91,4 @@ def nsptag(nsptag_str):
 
 @pytest.fixture
 def nsptag_str(local_part):
-    return "a:%s" % local_part
+    return f"a:{local_part}"

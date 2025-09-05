@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING, cast
 
 from pptx.enum.action import PP_ACTION
 from pptx.opc.constants import RELATIONSHIP_TYPE as RT
+from pptx.oxml.shapes.shared import CT_NonVisualDrawingProps
 from pptx.shapes import Subshape
 from pptx.util import lazyproperty
 
 if TYPE_CHECKING:
     from pptx.oxml.action import CT_Hyperlink
-    from pptx.oxml.shapes.shared import CT_NonVisualDrawingProps
     from pptx.oxml.text import CT_TextCharacterProperties
     from pptx.parts.slide import SlidePart
     from pptx.shapes.base import BaseShape
@@ -30,7 +30,7 @@ class ActionSetting(Subshape):
         parent: BaseShape,
         hover: bool = False,
     ):
-        super(ActionSetting, self).__init__(parent)
+        super().__init__(parent)
         # xPr is either a cNvPr or rPr element
         self._element = xPr
         # _hover determines use of `a:hlinkClick` or `a:hlinkHover`
@@ -199,7 +199,7 @@ class Hyperlink(Subshape):
         parent: BaseShape,
         hover: bool = False,
     ):
-        super(Hyperlink, self).__init__(parent)
+        super().__init__(parent)
         # xPr is either a cNvPr or rPr element
         self._element = xPr
         # _hover determines use of `a:hlinkClick` or `a:hlinkHover`

@@ -23,7 +23,7 @@ class CT_PercentageBuilder(BaseBuilder):
 
     def __init__(self, tag):
         self.__tag__ = tag
-        super(CT_PercentageBuilder, self).__init__()
+        super().__init__()
 
 
 class CT_PresetColorBuilder(BaseBuilder):

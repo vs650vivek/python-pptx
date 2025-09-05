@@ -147,9 +147,9 @@ class DescribePackageWriter:
             instance_mock(
                 request,
                 Part,
-                partname=PackURI("/ppt/%s.xml" % x),
-                blob="blob_%s" % x,
-                rels=instance_mock(request, _Relationships, xml="rels_xml_%s" % x),
+                partname=PackURI(f"/ppt/{x}.xml"),
+                blob=f"blob_{x}",
+                rels=instance_mock(request, _Relationships, xml=f"rels_xml_{x}"),
             )
             for x in ("a", "b", "c")
         ]
@@ -331,7 +331,7 @@ class Describe_ZipPkgWriter:
 
         pkg_writer.write(pack_uri, b"blob")
 
-        members = {PackURI("/%s" % name): zipf.read(name) for name in zipf.namelist()}
+        members = {PackURI(f"/{name}"): zipf.read(name) for name in zipf.namelist()}
         assert len(members) == 1
         assert members[pack_uri] == b"blob"
 

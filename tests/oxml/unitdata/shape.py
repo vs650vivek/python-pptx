@@ -47,7 +47,7 @@ class CT_GroupShapeBuilder(BaseBuilder):
 
     def __init__(self, tag):
         self.__tag__ = tag
-        super(CT_GroupShapeBuilder, self).__init__()
+        super().__init__()
 
 
 class CT_GroupShapePropertiesBuilder(BaseBuilder):
@@ -128,7 +128,7 @@ class CT_Transform2DBuilder(BaseBuilder):
 
     def __init__(self, tag):
         self.__tag__ = tag
-        super(CT_Transform2DBuilder, self).__init__()
+        super().__init__()
 
 
 def a_cNvPr():

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 # -- Maps namespace prefix to namespace name for all known PowerPoint XML namespaces --
 _nsmap = {
     "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -40,7 +39,7 @@ class NamespacePrefixedTag(str):
     """Value object that knows the semantics of an XML tag having a namespace prefix."""
 
     def __new__(cls, nstag: str):
-        return super(NamespacePrefixedTag, cls).__new__(cls, nstag)
+        return super().__new__(cls, nstag)
 
     def __init__(self, nstag: str):
         self._pfx, self._local_part = nstag.split(":")
@@ -49,12 +48,12 @@ class NamespacePrefixedTag(str):
     @classmethod
     def from_clark_name(cls, clark_name: str) -> NamespacePrefixedTag:
         nsuri, local_name = clark_name[1:].split("}")
-        nstag = "%s:%s" % (pfxmap[nsuri], local_name)
+        nstag = f"{pfxmap[nsuri]}:{local_name}"
         return cls(nstag)
 
     @property
     def clark_name(self):
-        return "{%s}%s" % (self._ns_uri, self._local_part)
+        return f"{{{self._ns_uri}}}{self._local_part}"
 
     @property
     def local_part(self):
@@ -103,7 +102,7 @@ nsmap = namespaces  # alias for more compact use with Element()
 
 
 def nsdecls(*prefixes: str):
-    return " ".join(['xmlns:%s="%s"' % (pfx, _nsmap[pfx]) for pfx in prefixes])
+    return " ".join([f'xmlns:{pfx}="{_nsmap[pfx]}"' for pfx in prefixes])
 
 
 def nsuri(nspfx: str):

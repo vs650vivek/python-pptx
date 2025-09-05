@@ -49,7 +49,7 @@ def ChartXmlWriter(chart_type, chart_data):
             XL_CT.XY_SCATTER_SMOOTH_NO_MARKERS: _XyChartXmlWriter,
         }[chart_type]
     except KeyError:
-        raise NotImplementedError("XML writer for chart type %s not yet implemented" % chart_type)
+        raise NotImplementedError(f"XML writer for chart type {chart_type} not yet implemented")
     return BuilderCls(chart_type, chart_data)
 
 
@@ -76,7 +76,7 @@ def SeriesXmlRewriterFactory(chart_type, chart_data):
     return RewriterCls(chart_data)
 
 
-class _BaseChartXmlWriter(object):
+class _BaseChartXmlWriter:
     """
     Generates XML text (unicode) for a default chart, like the one added by
     PowerPoint when you click the *Add Column Chart* button on the ribbon.
@@ -84,7 +84,7 @@ class _BaseChartXmlWriter(object):
     """
 
     def __init__(self, chart_type, series_seq):
-        super(_BaseChartXmlWriter, self).__init__()
+        super().__init__()
         self._chart_type = chart_type
         self._chart_data = series_seq
         self._series_seq = list(series_seq)
@@ -98,13 +98,13 @@ class _BaseChartXmlWriter(object):
         raise NotImplementedError("must be implemented by all subclasses")
 
 
-class _BaseSeriesXmlWriter(object):
+class _BaseSeriesXmlWriter:
     """
     Provides shared members for series XML writers.
     """
 
     def __init__(self, series, date_1904=False):
-        super(_BaseSeriesXmlWriter, self).__init__()
+        super().__init__()
         self._series = series
         self._date_1904 = date_1904
 
@@ -140,7 +140,7 @@ class _BaseSeriesXmlWriter(object):
         in the overall data point sequence of the chart and is started at
         *offset*.
         """
-        xml = ('                <c:ptCount val="{pt_count}"/>\n').format(pt_count=len(values))
+        xml = f'                <c:ptCount val="{len(values)}"/>\n'
 
         pt_tmpl = (
             '                <c:pt idx="{idx}">\n'
@@ -164,7 +164,7 @@ class _BaseSeriesXmlWriter(object):
             **{
                 "wksht_ref": self._series.name_ref,
                 "series_name": self.name,
-                "nsdecls": " %s" % nsdecls("c"),
+                "nsdecls": " {}".format(nsdecls("c")),
             }
         )
         return parse_xml(xml)
@@ -204,13 +204,13 @@ class _BaseSeriesXmlWriter(object):
         )
 
 
-class _BaseSeriesXmlRewriter(object):
+class _BaseSeriesXmlRewriter:
     """
     Base class for series XML rewriters.
     """
 
     def __init__(self, chart_data):
-        super(_BaseSeriesXmlRewriter, self).__init__()
+        super().__init__()
         self._chart_data = chart_data
 
     def replace_series_data(self, chartSpace):
@@ -417,7 +417,7 @@ class _AreaChartXmlWriter(_BaseChartXmlWriter):
             XL_CHART_TYPE.AREA_STACKED: "stacked",
             XL_CHART_TYPE.AREA_STACKED_100: "percentStacked",
         }[self._chart_type]
-        return '        <c:grouping val="%s"/>\n' % val
+        return f'        <c:grouping val="{val}"/>\n'
 
     @property
     def _ser_xml(self):
@@ -516,7 +516,7 @@ class _BarChartXmlWriter(_BaseChartXmlWriter):
             return '        <c:barDir val="bar"/>\n'
         elif self._chart_type in col_types:
             return '        <c:barDir val="col"/>\n'
-        raise NotImplementedError("no _barDir_xml() for chart type %s" % self._chart_type)
+        raise NotImplementedError(f"no _barDir_xml() for chart type {self._chart_type}")
 
     @property
     def _cat_ax_pos(self):
@@ -586,7 +586,7 @@ class _BarChartXmlWriter(_BaseChartXmlWriter):
             return '        <c:grouping val="stacked"/>\n'
         elif self._chart_type in percentStacked_types:
             return '        <c:grouping val="percentStacked"/>\n'
-        raise NotImplementedError("no _grouping_xml() for chart type %s" % self._chart_type)
+        raise NotImplementedError(f"no _grouping_xml() for chart type {self._chart_type}")
 
     @property
     def _overlap_xml(self):
@@ -853,7 +853,7 @@ class _LineChartXmlWriter(_BaseChartXmlWriter):
             return '        <c:grouping val="stacked"/>\n'
         elif self._chart_type in percentStacked_types:
             return '        <c:grouping val="percentStacked"/>\n'
-        raise NotImplementedError("no _grouping_xml() for chart type %s" % self._chart_type)
+        raise NotImplementedError(f"no _grouping_xml() for chart type {self._chart_type}")
 
     @property
     def _marker_xml(self):
@@ -861,9 +861,7 @@ class _LineChartXmlWriter(_BaseChartXmlWriter):
         no_marker_types = (XL.LINE, XL.LINE_STACKED, XL.LINE_STACKED_100)
         if self._chart_type in no_marker_types:
             return (
-                "          <c:marker>\n"
-                '            <c:symbol val="none"/>\n'
-                "          </c:marker>\n"
+                '          <c:marker>\n            <c:symbol val="none"/>\n          </c:marker>\n'
             )
         return ""
 
@@ -1053,9 +1051,7 @@ class _RadarChartXmlWriter(_BaseChartXmlWriter):
     def _marker_xml(self):
         if self._chart_type == XL_CHART_TYPE.RADAR:
             return (
-                "          <c:marker>\n"
-                '            <c:symbol val="none"/>\n'
-                "          </c:marker>\n"
+                '          <c:marker>\n            <c:symbol val="none"/>\n          </c:marker>\n'
             )
         return ""
 
@@ -1109,9 +1105,9 @@ class _XyChartXmlWriter(_BaseChartXmlWriter):
             "  <c:chart>\n"
             "    <c:plotArea>\n"
             "      <c:scatterChart>\n"
-            '        <c:scatterStyle val="%s"/>\n'
+            f'        <c:scatterStyle val="{self._scatterStyle_val}"/>\n'
             '        <c:varyColors val="0"/>\n'
-            "%s"
+            f"{self._ser_xml}"
             '        <c:axId val="-2128940872"/>\n'
             '        <c:axId val="-2129643912"/>\n'
             "      </c:scatterChart>\n"
@@ -1167,7 +1163,7 @@ class _XyChartXmlWriter(_BaseChartXmlWriter):
             "    </a:p>\n"
             "  </c:txPr>\n"
             "</c:chartSpace>\n"
-        ) % (self._scatterStyle_val, self._ser_xml)
+        )
         return xml
 
     @property
@@ -1178,9 +1174,7 @@ class _XyChartXmlWriter(_BaseChartXmlWriter):
         )
         if self._chart_type in no_marker_types:
             return (
-                "          <c:marker>\n"
-                '            <c:symbol val="none"/>\n'
-                "          </c:marker>\n"
+                '          <c:marker>\n            <c:symbol val="none"/>\n          </c:marker>\n'
             )
         return ""
 
@@ -1256,7 +1250,7 @@ class _BubbleChartXmlWriter(_XyChartXmlWriter):
             "      <c:layout/>\n"
             "      <c:bubbleChart>\n"
             '        <c:varyColors val="0"/>\n'
-            "%s"
+            f"{self._ser_xml}"
             "        <c:dLbls>\n"
             '          <c:showLegendKey val="0"/>\n'
             '          <c:showVal val="0"/>\n'
@@ -1322,7 +1316,7 @@ class _BubbleChartXmlWriter(_XyChartXmlWriter):
             "    </a:p>\n"
             "  </c:txPr>\n"
             "</c:chartSpace>\n"
-        ) % self._ser_xml
+        )
         return xml
 
     @property
@@ -1382,7 +1376,7 @@ class _CategorySeriesXmlWriter(_BaseSeriesXmlWriter):
                         "number_format": categories.number_format,
                         "cat_count": categories.leaf_count,
                         "cat_pt_xml": self._cat_num_pt_xml,
-                        "nsdecls": " %s" % nsdecls("c"),
+                        "nsdecls": " {}".format(nsdecls("c")),
                     }
                 )
             )
@@ -1394,7 +1388,7 @@ class _CategorySeriesXmlWriter(_BaseSeriesXmlWriter):
                         "wksht_ref": self._series.categories_ref,
                         "cat_count": categories.leaf_count,
                         "cat_pt_xml": self._cat_pt_xml,
-                        "nsdecls": " %s" % nsdecls("c"),
+                        "nsdecls": " {}".format(nsdecls("c")),
                     }
                 )
             )
@@ -1405,7 +1399,7 @@ class _CategorySeriesXmlWriter(_BaseSeriesXmlWriter):
                     "wksht_ref": self._series.categories_ref,
                     "cat_count": categories.leaf_count,
                     "lvl_xml": self._lvl_xml(categories),
-                    "nsdecls": " %s" % nsdecls("c"),
+                    "nsdecls": " {}".format(nsdecls("c")),
                 }
             )
         )
@@ -1455,7 +1449,7 @@ class _CategorySeriesXmlWriter(_BaseSeriesXmlWriter):
         """
         xml = self._val_tmpl.format(
             **{
-                "nsdecls": " %s" % nsdecls("c"),
+                "nsdecls": " {}".format(nsdecls("c")),
                 "values_ref": self._series.values_ref,
                 "number_format": self._series.number_format,
                 "val_count": len(self._series),
@@ -1547,12 +1541,12 @@ class _CategorySeriesXmlWriter(_BaseSeriesXmlWriter):
                     '                  <c:pt idx="%d">\n'
                     "                    <c:v>%s</c:v>\n"
                     "                  </c:pt>\n"
-                ) % (idx, escape("%s" % name))
+                ) % (idx, escape(f"{name}"))
             return xml
 
         xml = ""
         for level in categories.levels:
-            xml += ("                <c:lvl>\n" "{lvl_pt_xml}" "                </c:lvl>\n").format(
+            xml += ("                <c:lvl>\n{lvl_pt_xml}                </c:lvl>\n").format(
                 **{"lvl_pt_xml": lvl_pt_xml(level)}
             )
         return xml
@@ -1644,7 +1638,7 @@ class _XySeriesXmlWriter(_BaseSeriesXmlWriter):
         """
         xml = self._xVal_tmpl.format(
             **{
-                "nsdecls": " %s" % nsdecls("c"),
+                "nsdecls": " {}".format(nsdecls("c")),
                 "numRef_xml": self.numRef_xml(
                     self._series.x_values_ref,
                     self._series.number_format,
@@ -1679,7 +1673,7 @@ class _XySeriesXmlWriter(_BaseSeriesXmlWriter):
         """
         xml = self._yVal_tmpl.format(
             **{
-                "nsdecls": " %s" % nsdecls("c"),
+                "nsdecls": " {}".format(nsdecls("c")),
                 "numRef_xml": self.numRef_xml(
                     self._series.y_values_ref,
                     self._series.number_format,
@@ -1712,7 +1706,7 @@ class _XySeriesXmlWriter(_BaseSeriesXmlWriter):
         The template for the ``<c:xVal>`` element for this series, containing
         the X values and their spreadsheet range reference.
         """
-        return "          <c:xVal{nsdecls}>\n" "{numRef_xml}" "          </c:xVal>\n"
+        return "          <c:xVal{nsdecls}>\n{numRef_xml}          </c:xVal>\n"
 
     @property
     def _yVal_tmpl(self):
@@ -1720,7 +1714,7 @@ class _XySeriesXmlWriter(_BaseSeriesXmlWriter):
         The template for the ``<c:yVal>`` element for this series, containing
         the Y values and their spreadsheet range reference.
         """
-        return "          <c:yVal{nsdecls}>\n" "{numRef_xml}" "          </c:yVal>\n"
+        return "          <c:yVal{nsdecls}>\n{numRef_xml}          </c:yVal>\n"
 
 
 class _BubbleSeriesXmlWriter(_XySeriesXmlWriter):
@@ -1737,7 +1731,7 @@ class _BubbleSeriesXmlWriter(_XySeriesXmlWriter):
         """
         xml = self._bubbleSize_tmpl.format(
             **{
-                "nsdecls": " %s" % nsdecls("c"),
+                "nsdecls": " {}".format(nsdecls("c")),
                 "numRef_xml": self.numRef_xml(
                     self._series.bubble_sizes_ref,
                     self._series.number_format,
@@ -1772,7 +1766,7 @@ class _BubbleSeriesXmlWriter(_XySeriesXmlWriter):
         containing the bubble size values and their spreadsheet range
         reference.
         """
-        return "          <c:bubbleSize{nsdecls}>\n" "{numRef_xml}" "          </c:bubbleSize>\n"
+        return "          <c:bubbleSize{nsdecls}>\n{numRef_xml}          </c:bubbleSize>\n"
 
 
 class _BubbleSeriesXmlRewriter(_BaseSeriesXmlRewriter):

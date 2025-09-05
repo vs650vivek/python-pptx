@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.enum.shapes import MSO_AUTO_SHAPE_TYPE, PP_PLACEHOLDER
 from pptx.oxml import parse_xml
@@ -27,6 +27,8 @@ from pptx.oxml.xmlchemy import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pptx.oxml.shapes.shared import (
         CT_ApplicationNonVisualDrawingProps,
         CT_NonVisualDrawingProps,
@@ -251,18 +253,18 @@ class CT_Shape(BaseShapeElement):
     ) -> CT_Shape:
         """Return a new `p:sp` element tree configured as a base auto shape."""
         xml = (
-            "<p:sp %s>\n"
+            "<p:sp {}>\n"
             "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
+            '    <p:cNvPr id="{}" name="{}"/>\n'
             "    <p:cNvSpPr/>\n"
             "    <p:nvPr/>\n"
             "  </p:nvSpPr>\n"
             "  <p:spPr>\n"
             "    <a:xfrm>\n"
-            '      <a:off x="%s" y="%s"/>\n'
-            '      <a:ext cx="%s" cy="%s"/>\n'
+            '      <a:off x="{}" y="{}"/>\n'
+            '      <a:ext cx="{}" cy="{}"/>\n'
             "    </a:xfrm>\n"
-            '    <a:prstGeom prst="%s">\n'
+            '    <a:prstGeom prst="{}">\n'
             "      <a:avLst/>\n"
             "    </a:prstGeom>\n"
             "  </p:spPr>\n"
@@ -287,9 +289,9 @@ class CT_Shape(BaseShapeElement):
             '      <a:pPr algn="ctr"/>\n'
             "    </a:p>\n"
             "  </p:txBody>\n"
-            "</p:sp>" % (nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d", "%s")
+            "</p:sp>".format(nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d", "%s")
         ) % (id_, name, left, top, width, height, prst)
-        return cast(CT_Shape, parse_xml(xml))
+        return cast("CT_Shape", parse_xml(xml))
 
     @staticmethod
     def new_freeform_sp(shape_id: int, name: str, x: int, y: int, cx: int, cy: int):
@@ -299,16 +301,16 @@ class CT_Shape(BaseShapeElement):
         path list.
         """
         xml = (
-            "<p:sp %s>\n"
+            "<p:sp {}>\n"
             "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
+            '    <p:cNvPr id="{}" name="{}"/>\n'
             "    <p:cNvSpPr/>\n"
             "    <p:nvPr/>\n"
             "  </p:nvSpPr>\n"
             "  <p:spPr>\n"
             "    <a:xfrm>\n"
-            '      <a:off x="%s" y="%s"/>\n'
-            '      <a:ext cx="%s" cy="%s"/>\n'
+            '      <a:off x="{}" y="{}"/>\n'
+            '      <a:ext cx="{}" cy="{}"/>\n'
             "    </a:xfrm>\n"
             "    <a:custGeom>\n"
             "      <a:avLst/>\n"
@@ -340,9 +342,9 @@ class CT_Shape(BaseShapeElement):
             '      <a:pPr algn="ctr"/>\n'
             "    </a:p>\n"
             "  </p:txBody>\n"
-            "</p:sp>" % (nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d")
+            "</p:sp>".format(nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d")
         ) % (shape_id, name, x, y, cx, cy)
-        return cast(CT_Shape, parse_xml(xml))
+        return cast("CT_Shape", parse_xml(xml))
 
     @staticmethod
     def new_placeholder_sp(
@@ -350,7 +352,7 @@ class CT_Shape(BaseShapeElement):
     ) -> CT_Shape:
         """Return a new `p:sp` element tree configured as a placeholder shape."""
         sp = cast(
-            CT_Shape,
+            "CT_Shape",
             parse_xml(
                 f"<p:sp {nsdecls('a', 'p')}>\n"
                 f"  <p:nvSpPr>\n"
@@ -414,16 +416,16 @@ class CT_Shape(BaseShapeElement):
     @staticmethod
     def _textbox_sp_tmpl():
         return (
-            "<p:sp %s>\n"
+            "<p:sp {}>\n"
             "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
+            '    <p:cNvPr id="{}" name="{}"/>\n'
             '    <p:cNvSpPr txBox="1"/>\n'
             "    <p:nvPr/>\n"
             "  </p:nvSpPr>\n"
             "  <p:spPr>\n"
             "    <a:xfrm>\n"
-            '      <a:off x="%s" y="%s"/>\n'
-            '      <a:ext cx="%s" cy="%s"/>\n'
+            '      <a:off x="{}" y="{}"/>\n'
+            '      <a:ext cx="{}" cy="{}"/>\n'
             "    </a:xfrm>\n"
             '    <a:prstGeom prst="rect">\n'
             "      <a:avLst/>\n"
@@ -437,7 +439,7 @@ class CT_Shape(BaseShapeElement):
             "    <a:lstStyle/>\n"
             "    <a:p/>\n"
             "  </p:txBody>\n"
-            "</p:sp>" % (nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d")
+            "</p:sp>".format(nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d")
         )
 
 

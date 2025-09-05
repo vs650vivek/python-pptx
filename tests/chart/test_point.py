@@ -13,7 +13,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock
 
 
-class Describe_BasePoints(object):
+class Describe_BasePoints:
     def it_supports_indexed_access(self, getitem_fixture):
         points, idx, Point_, ser, point_ = getitem_fixture
         point = points[idx]
@@ -55,7 +55,7 @@ class Describe_BasePoints(object):
         return instance_mock(request, Point)
 
 
-class DescribeBubblePoints(object):
+class DescribeBubblePoints:
     def it_supports_len(self, len_fixture):
         points, expected_value = len_fixture
         assert len(points) == expected_value
@@ -86,7 +86,7 @@ class DescribeBubblePoints(object):
         return points, expected_value
 
 
-class DescribeCategoryPoints(object):
+class DescribeCategoryPoints:
     def it_supports_len(self, len_fixture):
         points, expected_value = len_fixture
         assert len(points) == expected_value
@@ -106,7 +106,7 @@ class DescribeCategoryPoints(object):
         return points, expected_value
 
 
-class DescribePoint(object):
+class DescribePoint:
     def it_provides_access_to_its_data_label(self, data_label_fixture):
         point, DataLabel_, ser, idx, data_label_ = data_label_fixture
         data_label = point.data_label
@@ -185,7 +185,7 @@ class DescribePoint(object):
         return instance_mock(request, Marker)
 
 
-class DescribeXyPoints(object):
+class DescribeXyPoints:
     def it_supports_len(self, len_fixture):
         points, expected_value = len_fixture
         assert len(points) == expected_value

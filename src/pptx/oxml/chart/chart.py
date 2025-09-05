@@ -48,9 +48,7 @@ class CT_Chart(BaseOxmlElement):
         True if this chart has a legend defined, False otherwise.
         """
         legend = self.legend
-        if legend is None:
-            return False
-        return True
+        return legend is not None
 
     @has_legend.setter
     def has_legend(self, bool_value):
@@ -69,7 +67,7 @@ class CT_Chart(BaseOxmlElement):
     @staticmethod
     def new_chart(rId: str) -> CT_Chart:
         """Return a new `c:chart` element."""
-        return cast(CT_Chart, parse_xml(f'<c:chart {nsdecls("c")} {nsdecls("r")} r:id="{rId}"/>'))
+        return cast("CT_Chart", parse_xml(f'<c:chart {nsdecls("c")} {nsdecls("r")} r:id="{rId}"/>'))
 
     def _new_title(self):
         return CT_Title.new_title()
@@ -188,8 +186,7 @@ class CT_PlotArea(BaseOxmlElement):
         ordering within the xChart element (not necessarily document order).
         """
         for xChart in self.iter_xCharts():
-            for ser in xChart.iter_sers():
-                yield ser
+            yield from xChart.iter_sers()
 
     def iter_xCharts(self):
         """

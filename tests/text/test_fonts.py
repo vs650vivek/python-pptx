@@ -33,7 +33,7 @@ from ..unitutil.mock import (
 )
 
 
-class DescribeFontFiles(object):
+class DescribeFontFiles:
     """Unit-test suite for `pptx.text.fonts.FontFiles` object."""
 
     def it_can_find_a_system_font_file(self, find_fixture):
@@ -172,7 +172,7 @@ class DescribeFontFiles(object):
         return method_mock(request, FontFiles, "_windows_font_directories", autospec=False)
 
 
-class Describe_Font(object):
+class Describe_Font:
     """Unit-test suite for `pptx.text.fonts._Font` object."""
 
     def it_can_construct_from_a_font_file_path(self, open_fixture):
@@ -252,14 +252,7 @@ class Describe_Font(object):
         font = _Font(stream)
         _table_count_.return_value = 2
         stream_read_.return_value = (
-            b"name"
-            b"xxxx"
-            b"\x00\x00\x00\x2A"
-            b"\x00\x00\x00\x15"
-            b"head"
-            b"xxxx"
-            b"\x00\x00\x00\x15"
-            b"\x00\x00\x00\x2A"
+            b"namexxxx\x00\x00\x00\x2a\x00\x00\x00\x15headxxxx\x00\x00\x00\x15\x00\x00\x00\x2a"
         )
         expected_values = [("name", 42, 21), ("head", 21, 42)]
         return font, expected_values
@@ -332,7 +325,7 @@ class Describe_Font(object):
         return property_mock(request, _Font, "_tables")
 
 
-class Describe_Stream(object):
+class Describe_Stream:
     """Unit-test suite for `pptx.text.fonts._Stream` object."""
 
     def it_can_construct_from_a_path(self, request):
@@ -384,7 +377,7 @@ class Describe_Stream(object):
     def read_flds_fixture(self, file_):
         stream = _Stream(file_)
         tmpl, offset = b">4sHH", 0
-        file_.read.return_value = b"foob" b"\x00\x2A" b"\x00\x15"
+        file_.read.return_value = b"foob\x00\x2a\x00\x15"
         expected_values = (b"foob", 42, 21)
         return stream, tmpl, offset, file_, expected_values
 
@@ -395,7 +388,7 @@ class Describe_Stream(object):
         return instance_mock(request, io.RawIOBase)
 
 
-class Describe_TableFactory(object):
+class Describe_TableFactory:
     """Unit-test suite for `pptx.text.fonts._TableFactory` object."""
 
     def it_constructs_the_appropriate_table_object(self, fixture):
@@ -425,7 +418,7 @@ class Describe_TableFactory(object):
         return instance_mock(request, _Stream)
 
 
-class Describe_HeadTable(object):
+class Describe_HeadTable:
     """Unit-test suite for `pptx.text.fonts._HeadTable` object."""
 
     def it_knows_whether_the_font_is_bold(self, bold_fixture):
@@ -458,7 +451,7 @@ class Describe_HeadTable(object):
 
     @pytest.fixture
     def macStyle_fixture(self):
-        bytes_ = b"xxxxyyyy....................................\xF0\xBA........"
+        bytes_ = b"xxxxyyyy....................................\xf0\xba........"
         stream = _Stream(io.BytesIO(bytes_))
         offset, length = 0, len(bytes_)
         head_table = _HeadTable(None, stream, offset, length)
@@ -472,7 +465,7 @@ class Describe_HeadTable(object):
         return property_mock(request, _HeadTable, "_macStyle")
 
 
-class Describe_NameTable(object):
+class Describe_NameTable:
     """Unit-test suite for `pptx.text.fonts._NameTable` object."""
 
     def it_knows_the_font_family_name(self, family_fixture):
@@ -602,7 +595,7 @@ class Describe_NameTable(object):
 
     @pytest.fixture(
         params=[
-            (1, 0, b"Foob\x8Ar", "Foobär"),
+            (1, 0, b"Foob\x8ar", "Foobär"),
             (1, 1, b"Foobar", None),
             (0, 9, "Foobär".encode("utf-16-be"), "Foobär"),
             (3, 6, "Foobär".encode("utf-16-be"), "Foobär"),
@@ -631,23 +624,14 @@ class Describe_NameTable(object):
     @pytest.fixture
     def header_fixture(self, _table_bytes_prop_):
         name_table = _NameTable(None, None, None, None)
-        _table_bytes_prop_.return_value = b"\x00\x00\x00\x02\x00\x2A"
+        _table_bytes_prop_.return_value = b"\x00\x00\x00\x02\x00\x2a"
         expected_value = (0, 2, 42)
         return name_table, expected_value
 
     @pytest.fixture
     def name_hdr_fixture(self):
         name_table = _NameTable(None, None, None, None)
-        bufr = (
-            b"123456"
-            b"123456789012"
-            b"\x00\x00"
-            b"\x00\x01"
-            b"\x00\x02"
-            b"\x00\x03"
-            b"\x00\x04"
-            b"\x00\x05"
-        )
+        bufr = b"123456123456789012\x00\x00\x00\x01\x00\x02\x00\x03\x00\x04\x00\x05"
         idx = 1
         expected_value = (0, 1, 2, 3, 4, 5)
         return name_table, bufr, idx, expected_value

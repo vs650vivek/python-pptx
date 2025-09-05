@@ -9,7 +9,7 @@ from struct import calcsize, unpack_from
 from pptx.util import lazyproperty
 
 
-class FontFiles(object):
+class FontFiles:
     """A class-based singleton serving as a lazy cache for system font details."""
 
     _font_files = None
@@ -93,7 +93,7 @@ class FontFiles(object):
         return [r"C:\Windows\Fonts"]
 
 
-class _Font(object):
+class _Font:
     """
     A wrapper around an OTF/TTF font file stream that knows how to parse it
     for its name and style characteristics, e.g. bold and italic.
@@ -175,10 +175,10 @@ class _Font(object):
         A mapping of OpenType table tag, e.g. 'name', to a table object
         providing access to the contents of that table.
         """
-        return dict(
-            (tag, _TableFactory(tag, self._stream, off, len_))
+        return {
+            tag: _TableFactory(tag, self._stream, off, len_)
             for tag, off, len_ in self._iter_table_records()
-        )
+        }
 
     @property
     def _table_count(self):
@@ -188,7 +188,7 @@ class _Font(object):
         return self._fields[1]
 
 
-class _Stream(object):
+class _Stream:
     """A thin wrapper around a binary file that facilitates reading C-struct values."""
 
     def __init__(self, file):
@@ -223,7 +223,7 @@ class _Stream(object):
         return unpack_from(template, bufr)
 
 
-class _BaseTable(object):
+class _BaseTable:
     """
     Base class for OpenType font file table objects.
     """
@@ -242,7 +242,7 @@ class _HeadTable(_BaseTable):
     """
 
     def __init__(self, tag, stream, offset, length):
-        super(_HeadTable, self).__init__(tag, stream, offset, length)
+        super().__init__(tag, stream, offset, length)
 
     @property
     def is_bold(self):
@@ -280,7 +280,7 @@ class _NameTable(_BaseTable):
     """
 
     def __init__(self, tag, stream, offset, length):
-        super(_NameTable, self).__init__(tag, stream, offset, length)
+        super().__init__(tag, stream, offset, length)
 
     @property
     def family_name(self):

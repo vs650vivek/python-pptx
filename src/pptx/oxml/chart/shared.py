@@ -184,7 +184,7 @@ class CT_Title(BaseOxmlElement):
     def new_title():
         """Return "loose" `c:title` element containing default children."""
         return parse_xml(
-            "<c:title %s>" "  <c:layout/>" '  <c:overlay val="0"/>' "</c:title>" % nsdecls("c")
+            '<c:title {}>  <c:layout/>  <c:overlay val="0"/></c:title>'.format(nsdecls("c"))
         )
 
 
@@ -199,7 +199,7 @@ class CT_Tx(BaseOxmlElement):
 
     def _new_rich(self):
         return parse_xml(
-            "<c:rich %s>"
+            "<c:rich {}>"
             "  <a:bodyPr/>"
             "  <a:lstStyle/>"
             "  <a:p>"
@@ -207,7 +207,7 @@ class CT_Tx(BaseOxmlElement):
             "      <a:defRPr/>"
             "    </a:pPr>"
             "  </a:p>"
-            "</c:rich>" % nsdecls("c", "a")
+            "</c:rich>".format(nsdecls("c", "a"))
         )
 
 

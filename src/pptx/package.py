@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import IO, Iterator
+from typing import IO, TYPE_CHECKING
 
 from pptx.opc.constants import RELATIONSHIP_TYPE as RT
 from pptx.opc.package import OpcPackage
@@ -11,6 +11,9 @@ from pptx.parts.coreprops import CorePropertiesPart
 from pptx.parts.image import Image, ImagePart
 from pptx.parts.media import MediaPart
 from pptx.util import lazyproperty
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 
 class Package(OpcPackage):
@@ -122,11 +125,11 @@ class Package(OpcPackage):
         return _MediaParts(self)
 
 
-class _ImageParts(object):
+class _ImageParts:
     """Provides access to the image parts in a package."""
 
     def __init__(self, package):
-        super(_ImageParts, self).__init__()
+        super().__init__()
         self._package = package
 
     def __iter__(self) -> Iterator[ImagePart]:
@@ -169,7 +172,7 @@ class _ImageParts(object):
         return None
 
 
-class _MediaParts(object):
+class _MediaParts:
     """Provides access to the media parts in a package.
 
     Supports iteration and :meth:`get()` using the media object SHA1 hash as
@@ -177,7 +180,7 @@ class _MediaParts(object):
     """
 
     def __init__(self, package):
-        super(_MediaParts, self).__init__()
+        super().__init__()
         self._package = package
 
     def __iter__(self):

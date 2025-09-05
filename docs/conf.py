@@ -68,8 +68,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"python-pptx"
-copyright = u"2012, 2013, Steve Canny"
+project = "python-pptx"
+copyright = "2012, 2013, Steve Canny"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -449,9 +449,7 @@ html_static_path = ["_static"]
 # html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {
-    "**": ["localtoc.html", "relations.html", "sidebarlinks.html", "searchbox.html"]
-}
+html_sidebars = {"**": ["localtoc.html", "relations.html", "sidebarlinks.html", "searchbox.html"]}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -505,8 +503,8 @@ latex_documents = [
     (
         "index",
         "python-pptx.tex",
-        u"python-pptx Documentation",
-        u"Steve Canny",
+        "python-pptx Documentation",
+        "Steve Canny",
         "manual",
     ),
 ]
@@ -536,9 +534,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ("index", "python-pptx", u"python-pptx Documentation", [u"Steve Canny"], 1)
-]
+man_pages = [("index", "python-pptx", "python-pptx Documentation", ["Steve Canny"], 1)]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
@@ -553,8 +549,8 @@ texinfo_documents = [
     (
         "index",
         "python-pptx",
-        u"python-pptx Documentation",
-        u"Steve Canny",
+        "python-pptx Documentation",
+        "Steve Canny",
         "python-pptx",
         "One line description of project.",
         "Miscellaneous",

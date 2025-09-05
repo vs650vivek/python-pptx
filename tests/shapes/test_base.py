@@ -44,7 +44,7 @@ if TYPE_CHECKING:
     from pptx.types import ProvidesPart
 
 
-class DescribeBaseShape(object):
+class DescribeBaseShape:
     """Unit-test suite for `pptx.shapes.base.BaseShape` objects."""
 
     def it_provides_access_to_its_click_action(self, click_action_fixture):
@@ -100,7 +100,6 @@ class DescribeBaseShape(object):
 
     @pytest.fixture
     def provides_part(self) -> ProvidesPart:
-
         class FakeProvidesPart:
             @property
             def part(self) -> XmlPart:
@@ -575,7 +574,7 @@ class DescribeBaseShape(object):
         return 321
 
 
-class DescribeSubshape(object):
+class DescribeSubshape:
     def it_knows_the_part_it_belongs_to(self, subshape_with_parent_):
         subshape, parent_ = subshape_with_parent_
         part = subshape.part
@@ -590,7 +589,7 @@ class DescribeSubshape(object):
         return subshape, parent_
 
 
-class Describe_PlaceholderFormat(object):
+class Describe_PlaceholderFormat:
     def it_knows_its_idx(self, idx_get_fixture):
         placeholder_format, expected_value = idx_get_fixture
         assert placeholder_format.idx == expected_value

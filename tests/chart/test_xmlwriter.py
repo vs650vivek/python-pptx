@@ -45,7 +45,7 @@ from ..unitutil.file import snippet_seq, snippet_text
 from ..unitutil.mock import call, class_mock, instance_mock, method_mock
 
 
-class DescribeChartXmlWriter(object):
+class DescribeChartXmlWriter:
     def it_contructs_an_xml_writer_for_a_chart_type(self, call_fixture):
         chart_type, series_seq_, XmlWriterClass_, xml_writer_ = call_fixture
         xml_writer = ChartXmlWriter(chart_type, series_seq_)
@@ -90,7 +90,7 @@ class DescribeChartXmlWriter(object):
     def call_fixture(self, request, series_seq_):
         chart_type_member, XmlWriterClass = request.param
         xml_writer_ = instance_mock(request, XmlWriterClass)
-        class_spec = "pptx.chart.xmlwriter.%s" % XmlWriterClass.__name__
+        class_spec = f"pptx.chart.xmlwriter.{XmlWriterClass.__name__}"
         XmlWriterClass_ = class_mock(request, class_spec, return_value=xml_writer_)
         chart_type = getattr(XL_CHART_TYPE, chart_type_member)
         return chart_type, series_seq_, XmlWriterClass_, xml_writer_
@@ -102,7 +102,7 @@ class DescribeChartXmlWriter(object):
         return instance_mock(request, tuple)
 
 
-class DescribeSeriesXmlRewriterFactory(object):
+class DescribeSeriesXmlRewriterFactory:
     def it_contructs_an_xml_rewriter_for_a_chart_type(self, call_fixture):
         chart_type, chart_data_, XmlRewriterClass_, xml_rewriter_ = call_fixture
 
@@ -131,7 +131,7 @@ class DescribeSeriesXmlRewriterFactory(object):
         xml_rewriter_ = instance_mock(request, rewriter_cls)
         XmlRewriterClass_ = class_mock(
             request,
-            "pptx.chart.xmlwriter.%s" % rewriter_cls.__name__,
+            f"pptx.chart.xmlwriter.{rewriter_cls.__name__}",
             return_value=xml_rewriter_,
         )
         return chart_type, chart_data_, XmlRewriterClass_, xml_rewriter_
@@ -143,7 +143,7 @@ class DescribeSeriesXmlRewriterFactory(object):
         return instance_mock(request, _BaseChartData)
 
 
-class Describe_AreaChartXmlWriter(object):
+class Describe_AreaChartXmlWriter:
     def it_can_generate_xml_for_area_type_charts(self, xml_fixture):
         xml_writer, expected_xml = xml_fixture
         assert xml_writer.xml == expected_xml
@@ -168,7 +168,7 @@ class Describe_AreaChartXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_BarChartXmlWriter(object):
+class Describe_BarChartXmlWriter:
     """Unit-test suite for `pptx.chart.xmlwriter._BarChartXmlWriter`."""
 
     @pytest.mark.parametrize(
@@ -208,7 +208,7 @@ class Describe_BarChartXmlWriter(object):
         assert xml_writer.xml == snippet_text("4x2-multi-cat-bar")
 
 
-class Describe_BubbleChartXmlWriter(object):
+class Describe_BubbleChartXmlWriter:
     def it_can_generate_xml_for_bubble_charts(self, xml_fixture):
         xml_writer, expected_xml = xml_fixture
         assert xml_writer.xml == expected_xml
@@ -230,7 +230,7 @@ class Describe_BubbleChartXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_DoughnutChartXmlWriter(object):
+class Describe_DoughnutChartXmlWriter:
     def it_can_generate_xml_for_doughnut_type_charts(self, xml_fixture):
         xml_writer, expected_xml = xml_fixture
         assert xml_writer.xml == expected_xml
@@ -252,7 +252,7 @@ class Describe_DoughnutChartXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_LineChartXmlWriter(object):
+class Describe_LineChartXmlWriter:
     def it_can_generate_xml_for_a_line_chart(self, xml_fixture):
         xml_writer, expected_xml = xml_fixture
         assert xml_writer.xml == expected_xml
@@ -280,7 +280,7 @@ class Describe_LineChartXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_PieChartXmlWriter(object):
+class Describe_PieChartXmlWriter:
     """Unit-test suite for `pptx.chart.xmlwriter._PieChartXmlWriter`."""
 
     @pytest.mark.parametrize(
@@ -298,7 +298,7 @@ class Describe_PieChartXmlWriter(object):
         assert xml_writer.xml == snippet_text(snippet_name)
 
 
-class Describe_RadarChartXmlWriter(object):
+class Describe_RadarChartXmlWriter:
     """Unit-test suite for `pptx.chart.xmlwriter._RadarChartXmlWriter`."""
 
     def it_can_generate_xml_for_a_radar_chart(self):
@@ -308,7 +308,7 @@ class Describe_RadarChartXmlWriter(object):
         assert xml_writer.xml == snippet_text("2x5-radar")
 
 
-class Describe_XyChartXmlWriter(object):
+class Describe_XyChartXmlWriter:
     def it_can_generate_xml_for_xy_charts(self, xml_fixture):
         xml_writer, expected_xml = xml_fixture
         assert xml_writer.xml == expected_xml
@@ -333,7 +333,7 @@ class Describe_XyChartXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_BubbleSeriesXmlWriter(object):
+class Describe_BubbleSeriesXmlWriter:
     def it_knows_its_bubbleSize_XML(self, bubbleSize_fixture):
         xml_writer, expected_xml = bubbleSize_fixture
         bubbleSize = xml_writer.bubbleSize
@@ -353,7 +353,7 @@ class Describe_BubbleSeriesXmlWriter(object):
         cht_numfmt, ser_numfmt, expected_numfmt = request.param
         expected_xml = xml(
             'c:bubbleSize/c:numRef/(c:f"Sheet1!$C$2:$C$1",c:numCache/(c:form'
-            'atCode"%s",c:ptCount{val=0}))' % expected_numfmt
+            f'atCode"{expected_numfmt}",c:ptCount{{val=0}}))'
         )
         chart_number_format = () if cht_numfmt is None else (cht_numfmt,)
         series_number_format = () if ser_numfmt is None else (ser_numfmt,)
@@ -363,7 +363,7 @@ class Describe_BubbleSeriesXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_CategorySeriesXmlWriter(object):
+class Describe_CategorySeriesXmlWriter:
     def it_knows_its_val_XML(self, val_fixture):
         xml_writer, expected_xml = val_fixture
         val = xml_writer.val
@@ -375,8 +375,8 @@ class Describe_CategorySeriesXmlWriter(object):
     def val_fixture(self, series_data_):
         values_ref, number_format = "Sheet1!$B$2:$B$1", "Foobar"
         expected_xml = xml(
-            'c:val/c:numRef/(c:f"%s",c:numCache/(c:formatCode"%s",c:ptCount{'
-            "val=0}))" % (values_ref, number_format)
+            f'c:val/c:numRef/(c:f"{values_ref}",c:numCache/(c:formatCode"{number_format}",c:ptCount{{'
+            "val=0}))"
         )
         xml_writer = _CategorySeriesXmlWriter(series_data_)
         series_data_.values_ref = values_ref
@@ -390,7 +390,7 @@ class Describe_CategorySeriesXmlWriter(object):
         return instance_mock(request, CategorySeriesData)
 
 
-class Describe_XySeriesXmlWriter(object):
+class Describe_XySeriesXmlWriter:
     def it_knows_its_xVal_XML(self, xVal_fixture):
         xml_writer, expected_xml = xVal_fixture
         xVal = xml_writer.xVal
@@ -415,7 +415,7 @@ class Describe_XySeriesXmlWriter(object):
         cht_numfmt, ser_numfmt, expected_numfmt = request.param
         expected_xml = xml(
             'c:xVal/c:numRef/(c:f"Sheet1!$A$2:$A$1",c:numCache/(c:formatCode'
-            '"%s",c:ptCount{val=0}))' % expected_numfmt
+            f'"{expected_numfmt}",c:ptCount{{val=0}}))'
         )
         chart_number_format = () if cht_numfmt is None else (cht_numfmt,)
         series_number_format = () if ser_numfmt is None else (ser_numfmt,)
@@ -436,7 +436,7 @@ class Describe_XySeriesXmlWriter(object):
         cht_numfmt, ser_numfmt, expected_numfmt = request.param
         expected_xml = xml(
             'c:yVal/c:numRef/(c:f"Sheet1!$B$2:$B$1",c:numCache/(c:formatCode'
-            '"%s",c:ptCount{val=0}))' % expected_numfmt
+            f'"{expected_numfmt}",c:ptCount{{val=0}}))'
         )
         chart_number_format = () if cht_numfmt is None else (cht_numfmt,)
         series_number_format = () if ser_numfmt is None else (ser_numfmt,)
@@ -446,7 +446,7 @@ class Describe_XySeriesXmlWriter(object):
         return xml_writer, expected_xml
 
 
-class Describe_BaseSeriesXmlRewriter(object):
+class Describe_BaseSeriesXmlRewriter:
     def it_can_replace_series_data(self, replace_fixture):
         rewriter, chartSpace, plotArea, ser_count, calls = replace_fixture
         rewriter.replace_series_data(chartSpace)
@@ -514,8 +514,7 @@ class Describe_BaseSeriesXmlRewriter(object):
     def replace_fixture(self, request, chart_data_, _adjust_ser_count_, _rewrite_ser_data_):
         rewriter = _BaseSeriesXmlRewriter(chart_data_)
         chartSpace = element(
-            "c:chartSpace/c:chart/c:plotArea/c:barChart/(c:ser/c:order{val=0"
-            "},c:ser/c:order{val=1})"
+            "c:chartSpace/c:chart/c:plotArea/c:barChart/(c:ser/c:order{val=0},c:ser/c:order{val=1})"
         )
         plotArea = chartSpace.xpath("c:chart/c:plotArea")[0]
         sers = chartSpace.xpath(".//c:ser")
@@ -581,7 +580,7 @@ class Describe_BaseSeriesXmlRewriter(object):
         return method_mock(request, _BaseSeriesXmlRewriter, "_trim_ser_count_by", autospec=True)
 
 
-class Describe_BubbleSeriesXmlRewriter(object):
+class Describe_BubbleSeriesXmlRewriter:
     def it_can_rewrite_a_ser_element(self, rewrite_fixture):
         rewriter, ser, series_data, expected_xml = rewrite_fixture
         rewriter._rewrite_ser_data(ser, series_data, None)
@@ -603,7 +602,7 @@ class Describe_BubbleSeriesXmlRewriter(object):
         return rewriter, ser, series_data, expected_xml
 
 
-class Describe_CategorySeriesXmlRewriter(object):
+class Describe_CategorySeriesXmlRewriter:
     def it_can_rewrite_a_ser_element(self, rewrite_fixture):
         rewriter, ser, series_data, expected_xml = rewrite_fixture
         rewriter._rewrite_ser_data(ser, series_data, False)
@@ -631,7 +630,7 @@ class Describe_CategorySeriesXmlRewriter(object):
         return rewriter, ser, series_data, expected_xml
 
 
-class Describe_XySeriesXmlRewriter(object):
+class Describe_XySeriesXmlRewriter:
     def it_can_rewrite_a_ser_element(self, rewrite_fixture):
         rewriter, ser, series_data, expected_xml = rewrite_fixture
         rewriter._rewrite_ser_data(ser, series_data, None)

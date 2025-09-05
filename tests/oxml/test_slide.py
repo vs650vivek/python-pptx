@@ -7,7 +7,7 @@ from pptx.oxml.slide import CT_NotesMaster, CT_NotesSlide
 from ..unitutil.file import snippet_text
 
 
-class DescribeCT_NotesMaster(object):
+class DescribeCT_NotesMaster:
     """Unit-test suite for `pptx.oxml.slide.CT_NotesMaster` objects."""
 
     def it_can_create_a_default_notesMaster_element(self):
@@ -15,7 +15,7 @@ class DescribeCT_NotesMaster(object):
         assert notesMaster.xml == snippet_text("default-notesMaster")
 
 
-class DescribeCT_NotesSlide(object):
+class DescribeCT_NotesSlide:
     """Unit-test suite for `pptx.oxml.slide.CT_NotesSlide` objects."""
 
     def it_can_create_a_new_notes_element(self):

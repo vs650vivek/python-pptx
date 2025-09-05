@@ -9,7 +9,7 @@ from pptx.dml.effect import ShadowFormat
 from ..unitutil.cxml import element, xml
 
 
-class DescribeShadowFormat(object):
+class DescribeShadowFormat:
     def it_knows_whether_it_inherits(self, inherit_get_fixture):
         shadow, expected_value = inherit_get_fixture
         inherit = shadow.inherit

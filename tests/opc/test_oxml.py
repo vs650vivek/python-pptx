@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import pytest
 
@@ -19,16 +19,20 @@ from pptx.opc.oxml import (
 )
 from pptx.opc.packuri import PackURI
 from pptx.oxml import parse_xml
-from pptx.oxml.xmlchemy import BaseOxmlElement
 
 from ..unitutil.cxml import element
+
+if TYPE_CHECKING:
+    from pptx.oxml.xmlchemy import BaseOxmlElement
 
 
 class DescribeCT_Default:
     """Unit-test suite for `pptx.opc.oxml.CT_Default` objects."""
 
     def it_provides_read_access_to_xml_values(self):
-        default = cast(CT_Default, element("ct:Default{Extension=xml,ContentType=application/xml}"))
+        default = cast(
+            "CT_Default", element("ct:Default{Extension=xml,ContentType=application/xml}")
+        )
         assert default.extension == "xml"
         assert default.contentType == "application/xml"
 
@@ -38,7 +42,7 @@ class DescribeCT_Override:
 
     def it_provides_read_access_to_xml_values(self):
         override = cast(
-            CT_Override, element("ct:Override{PartName=/part/name.xml,ContentType=text/plain}")
+            "CT_Override", element("ct:Override{PartName=/part/name.xml,ContentType=text/plain}")
         )
         assert override.partName == "/part/name.xml"
         assert override.contentType == "text/plain"
@@ -49,7 +53,7 @@ class DescribeCT_Relationship:
 
     def it_provides_read_access_to_xml_values(self):
         rel = cast(
-            CT_Relationship,
+            "CT_Relationship",
             element("pr:Relationship{Id=rId9,Type=ReLtYpE,Target=docProps/core.xml}"),
         )
         assert rel.rId == "rId9"
@@ -119,9 +123,9 @@ class DescribeCT_Relationships:
 
     def it_can_generate_rels_file_xml(self):
         assert CT_Relationships.new().xml_file_bytes == (
-            "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"
-            '<Relationships xmlns="http://schemas.openxmlformats.org/package'
-            '/2006/relationships"/>'.encode("utf-8")
+            b"<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"
+            b'<Relationships xmlns="http://schemas.openxmlformats.org/package'
+            b'/2006/relationships"/>'
         )
 
 
@@ -139,7 +143,7 @@ class DescribeCT_Types:
             assert isinstance(override, CT_Override)
 
     def it_should_have_empty_list_on_no_matching_elements(self):
-        types = cast(CT_Types, element("ct:Types"))
+        types = cast("CT_Types", element("ct:Types"))
         assert types.default_lst == []
         assert types.override_lst == []
 
@@ -171,7 +175,7 @@ class DescribeCT_Types:
     @pytest.fixture
     def types(self) -> CT_Types:
         return cast(
-            CT_Types,
+            "CT_Types",
             element(
                 "ct:Types/(ct:Default{Extension=xml,ContentType=application/xml}"
                 ",ct:Default{Extension=jpeg,ContentType=image/jpeg}"
@@ -195,7 +199,7 @@ class Describe_serialize_part_xml:
         * [X] it returns bytes ready to save to file (not unicode)
         """
         part_elm = cast(
-            BaseOxmlElement,
+            "BaseOxmlElement",
             parse_xml(
                 '<f:foo xmlns:f="http://foo" xmlns:b="http://bar">\n  <f:bar>fØØ'
                 "bÅr</f:bar>\n</f:foo>\n"
@@ -205,7 +209,10 @@ class Describe_serialize_part_xml:
         # xml contains 134 chars, of which 3 are double-byte; it will have
         # len of 134 if it's unicode and 137 if it's bytes
         assert len(xml) == 137
-        assert xml == (
-            "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"
-            '<f:foo xmlns:f="http://foo" xmlns:b="http://bar"><f:bar>fØØbÅr</f:bar></f:foo>'
-        ).encode("utf-8")
+        assert (
+            xml
+            == (
+                "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n"
+                '<f:foo xmlns:f="http://foo" xmlns:b="http://bar"><f:bar>fØØbÅr</f:bar></f:foo>'
+            ).encode()
+        )

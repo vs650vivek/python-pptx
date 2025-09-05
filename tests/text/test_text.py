@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from pptx.oxml.text import CT_TextBody, CT_TextParagraph
 
 
-class DescribeTextFrame(object):
+class DescribeTextFrame:
     """Unit-test suite for `pptx.text.text.TextFrame` object."""
 
     def it_can_add_a_paragraph_to_itself(self, add_paragraph_fixture):
@@ -274,7 +274,7 @@ class DescribeTextFrame(object):
     def margin_get_fixture(self, request):
         txBody_cxml, side, unit, expected_value = request.param
         text_frame = TextFrame(element(txBody_cxml), None)
-        prop_name = "margin_%s" % side
+        prop_name = f"margin_{side}"
         return text_frame, prop_name, unit, expected_value
 
     @pytest.fixture(
@@ -312,7 +312,7 @@ class DescribeTextFrame(object):
     def margin_set_fixture(self, request):
         txBody_cxml, side, new_value, expected_txBody_cxml = request.param
         text_frame = TextFrame(element(txBody_cxml), None)
-        prop_name = "margin_%s" % side
+        prop_name = f"margin_{side}"
         expected_xml = xml(expected_txBody_cxml)
         return text_frame, prop_name, new_value, expected_xml
 
@@ -468,7 +468,7 @@ class DescribeTextFrame(object):
         return property_mock(request, TextFrame, "text")
 
 
-class DescribeFont(object):
+class DescribeFont:
     """Unit-test suite for `pptx.text.text.Font` object."""
 
     def it_knows_its_bold_setting(self, bold_get_fixture):
@@ -500,7 +500,7 @@ class DescribeFont(object):
 
     def it_knows_its_underline_setting(self, underline_get_fixture):
         font, expected_value = underline_get_fixture
-        assert font.underline is expected_value, "got %s" % font.underline
+        assert font.underline is expected_value, f"got {font.underline}"
 
     def it_can_change_its_underline_setting(self, underline_set_fixture):
         font, new_value, expected_xml = underline_set_fixture
@@ -671,7 +671,7 @@ class DescribeFont(object):
         return Font(element("a:rPr"))
 
 
-class Describe_Hyperlink(object):
+class Describe_Hyperlink:
     """Unit-test suite for `pptx.text.text._Hyperlink` object."""
 
     def it_knows_the_target_url_of_the_hyperlink(self, hlink_with_url_):
@@ -785,7 +785,7 @@ class Describe_Hyperlink(object):
         return "https://pypi.python.org/pypi/python-pptx"
 
 
-class Describe_Paragraph(object):
+class Describe_Paragraph:
     """Unit test suite for pptx.text.text._Paragraph object."""
 
     def it_can_add_a_line_break(self, line_break_fixture):
@@ -1139,7 +1139,7 @@ class Describe_Paragraph(object):
         return _Paragraph(p_bldr.element, None)
 
 
-class Describe_Run(object):
+class Describe_Run:
     """Unit-test suite for `pptx.text.text._Run` object."""
 
     def it_provides_access_to_its_font(self, font_fixture):

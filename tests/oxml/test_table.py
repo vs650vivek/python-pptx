@@ -10,15 +10,15 @@ from pptx.oxml.table import CT_Table, TcRange
 from ..unitutil.cxml import element
 
 
-class DescribeCT_Table(object):
+class DescribeCT_Table:
     def it_can_create_a_new_tbl_element_tree(self):
         """
         Indirectly tests that column widths are a proportional split of total
         width and that row heights a proportional split of total height.
         """
         expected_xml = (
-            '<a:tbl %s>\n  <a:tblPr firstRow="1" bandRow="1">\n    <a:tableSt'
-            "yleId>{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}</a:tableStyleId>\n "
+            '<a:tbl {}>\n  <a:tblPr firstRow="1" bandRow="1">\n    <a:tableSt'
+            "yleId>{{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}}</a:tableStyleId>\n "
             ' </a:tblPr>\n  <a:tblGrid>\n    <a:gridCol w="111"/>\n    <a:gri'
             'dCol w="111"/>\n    <a:gridCol w="112"/>\n  </a:tblGrid>\n  <a:t'
             'r h="222">\n    <a:tc>\n      <a:txBody>\n        <a:bodyPr/>\n '
@@ -34,7 +34,7 @@ class DescribeCT_Table(object):
             "dyPr/>\n        <a:lstStyle/>\n        <a:p/>\n      </a:txBody>"
             "\n      <a:tcPr/>\n    </a:tc>\n    <a:tc>\n      <a:txBody>\n  "
             "      <a:bodyPr/>\n        <a:lstStyle/>\n        <a:p/>\n      "
-            "</a:txBody>\n      <a:tcPr/>\n    </a:tc>\n  </a:tr>\n</a:tbl>\n" % nsdecls("a")
+            "</a:txBody>\n      <a:tcPr/>\n    </a:tc>\n  </a:tr>\n</a:tbl>\n".format(nsdecls("a"))
         )
         tbl = CT_Table.new_tbl(2, 3, 334, 445)
         assert tbl.xml == expected_xml
@@ -50,7 +50,7 @@ class DescribeCT_Table(object):
         assert tbl.tc(1, 1) is tcs[3]
 
 
-class DescribeTcRange(object):
+class DescribeTcRange:
     def it_knows_when_the_range_contains_a_merged_cell(self, contains_merge_fixture):
         tc, other_tc, expected_value = contains_merge_fixture
         tc_range = TcRange(tc, other_tc)
@@ -151,7 +151,7 @@ class DescribeTcRange(object):
             ("a:tbl/(a:tr/a:tc,a:tr/a:tc)", [0, 1], []),
             ("a:tbl/(a:tr/(a:tc,a:tc),a:tr/(a:tc,a:tc))", [2, 1], [1, 3]),
             (
-                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc" ",a:tc))",
+                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc))",
                 [0, 8],
                 [1, 2, 4, 5, 7, 8],
             ),
@@ -170,7 +170,7 @@ class DescribeTcRange(object):
             ("a:tbl/(a:tr/a:tc,a:tr/a:tc)", [0, 1], [1]),
             ("a:tbl/(a:tr/(a:tc,a:tc),a:tr/(a:tc,a:tc))", [2, 1], [2, 3]),
             (
-                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc" ",a:tc))",
+                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc))",
                 [0, 8],
                 [3, 4, 5, 6, 7, 8],
             ),
@@ -198,7 +198,7 @@ class DescribeTcRange(object):
             ("a:tbl/(a:tr/a:tc,a:tr/a:tc)", (0, 1), (0, 1)),
             ("a:tbl/(a:tr/(a:tc,a:tc),a:tr/(a:tc,a:tc))", (2, 1), (0, 2)),
             (
-                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc" ",a:tc))",
+                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc))",
                 (4, 8),
                 (4, 7),
             ),
@@ -217,7 +217,7 @@ class DescribeTcRange(object):
             ('a:tbl/a:tr/(a:tc/a:txBody/a:p,a:tc/a:txBody/a:p/a:r/a:t"b")', "b"),
             ('a:tbl/a:tr/(a:tc/a:txBody/a:p/a:r/a:t"a",a:tc/a:txBody/a:p)', "a"),
             (
-                'a:tbl/a:tr/(a:tc/a:txBody/a:p/a:r/a:t"a",a:tc/a:txBody/a:p/a:r/a:t' '"b")',
+                'a:tbl/a:tr/(a:tc/a:txBody/a:p/a:r/a:t"a",a:tc/a:txBody/a:p/a:r/a:t"b")',
                 "a\nb",
             ),
             (
@@ -241,7 +241,7 @@ class DescribeTcRange(object):
             ("a:tbl/(a:tr/a:tc,a:tr/a:tc)", (0, 1), (0,)),
             ("a:tbl/(a:tr/(a:tc,a:tc),a:tr/(a:tc,a:tc))", (2, 1), (0, 1)),
             (
-                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc" ",a:tc))",
+                "a:tbl/(a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc),a:tr/(a:tc,a:tc,a:tc))",
                 (4, 8),
                 (4, 5),
             ),

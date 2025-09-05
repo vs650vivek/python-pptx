@@ -198,7 +198,7 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
         such as a table.
         """
         return cast(
-            CT_GraphicalObjectFrame,
+            "CT_GraphicalObjectFrame",
             parse_xml(
                 f"<p:graphicFrame {nsdecls('a', 'p')}>\n"
                 f"  <p:nvGraphicFramePr>\n"
@@ -245,7 +245,7 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
         an icon (vs. a preview).
         """
         return cast(
-            CT_GraphicalObjectFrame,
+            "CT_GraphicalObjectFrame",
             parse_xml(
                 f"<p:graphicFrame {nsdecls('a', 'p', 'r')}>\n"
                 f"  <p:nvGraphicFramePr>\n"

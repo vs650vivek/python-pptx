@@ -7,7 +7,7 @@ import pytest
 from pptx.util import Centipoints, Cm, Emu, Inches, Length, Mm, Pt
 
 
-class DescribeLength(object):
+class DescribeLength:
     def it_can_construct_from_convenient_units(self, construct_fixture):
         UnitCls, units_val, emu = construct_fixture
         length = UnitCls(units_val)

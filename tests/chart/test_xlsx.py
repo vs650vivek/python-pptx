@@ -27,7 +27,7 @@ from pptx.chart.xlsx import (
 from ..unitutil.mock import ANY, call, class_mock, instance_mock, method_mock
 
 
-class Describe_BaseWorkbookWriter(object):
+class Describe_BaseWorkbookWriter:
     """Unit-test suite for `pptx.chart.xlsx._BaseWorkbookWriter` objects."""
 
     def it_can_generate_a_chart_data_Excel_blob(
@@ -98,7 +98,7 @@ class Describe_BaseWorkbookWriter(object):
         return instance_mock(request, io.BytesIO)
 
 
-class DescribeCategoryWorkbookWriter(object):
+class DescribeCategoryWorkbookWriter:
     """Unit-test suite for `pptx.chart.xlsx.CategoryWorkbookWriter` objects."""
 
     def it_knows_the_categories_range_ref(self, categories_ref_fixture):
@@ -335,7 +335,7 @@ class DescribeCategoryWorkbookWriter(object):
         return method_mock(request, CategoryWorkbookWriter, "_write_series", autospec=True)
 
 
-class DescribeBubbleWorkbookWriter(object):
+class DescribeBubbleWorkbookWriter:
     """Unit-test suite for `pptx.chart.xlsx.BubbleWorkbookWriter` objects."""
 
     def it_can_populate_a_worksheet_with_chart_data(self, populate_fixture):
@@ -382,7 +382,7 @@ class DescribeBubbleWorkbookWriter(object):
         return instance_mock(request, Worksheet)
 
 
-class DescribeXyWorkbookWriter(object):
+class DescribeXyWorkbookWriter:
     """Unit-test suite for `pptx.chart.xlsx.XyWorkbookWriter` objects."""
 
     def it_can_populate_a_worksheet_with_chart_data(self, populate_fixture):

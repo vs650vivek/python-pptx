@@ -30,7 +30,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock
 
 
-class Describe_BaseAxis(object):
+class Describe_BaseAxis:
     """Unit-test suite for `pptx.chart.axis._BaseAxis` objects."""
 
     def it_provides_access_to_its_title(self, title_fixture):
@@ -688,7 +688,7 @@ class Describe_BaseAxis(object):
         return instance_mock(request, TickLabels)
 
 
-class DescribeAxisTitle(object):
+class DescribeAxisTitle:
     def it_knows_whether_it_has_a_text_frame(self, has_tf_get_fixture):
         axis_title, expected_value = has_tf_get_fixture
         value = axis_title.has_text_frame
@@ -736,17 +736,17 @@ class DescribeAxisTitle(object):
             (
                 "c:title{a:b=c}",
                 True,
-                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             (
                 "c:title{a:b=c}/c:tx",
                 True,
-                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             (
                 "c:title{a:b=c}/c:tx/c:strRef",
                 True,
-                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             ("c:title/c:tx/c:rich", True, "c:title/c:tx/c:rich"),
             ("c:title", False, "c:title"),
@@ -782,7 +782,7 @@ class DescribeAxisTitle(object):
         return class_mock(request, "pptx.chart.axis.TextFrame")
 
 
-class DescribeCategoryAxis(object):
+class DescribeCategoryAxis:
     def it_knows_its_category_type(self, cat_type_get_fixture):
         category_axis, expected_value = cat_type_get_fixture
         assert category_axis.category_type is expected_value
@@ -796,7 +796,7 @@ class DescribeCategoryAxis(object):
         return category_axis, expected_value
 
 
-class DescribeDateAxis(object):
+class DescribeDateAxis:
     def it_knows_its_category_type(self, cat_type_get_fixture):
         date_axis, expected_value = cat_type_get_fixture
         assert date_axis.category_type is expected_value
@@ -810,7 +810,7 @@ class DescribeDateAxis(object):
         return date_axis, expected_value
 
 
-class DescribeMajorGridlines(object):
+class DescribeMajorGridlines:
     def it_provides_access_to_its_format(self, format_fixture):
         gridlines, expected_xml, ChartFormat_, format_ = format_fixture
         format = gridlines.format
@@ -843,7 +843,7 @@ class DescribeMajorGridlines(object):
         return instance_mock(request, ChartFormat)
 
 
-class DescribeTickLabels(object):
+class DescribeTickLabels:
     def it_provides_access_to_its_font(self, font_fixture):
         tick_labels, Font_, defRPr, font_ = font_fixture
         font = tick_labels.font
@@ -1016,7 +1016,7 @@ class DescribeTickLabels(object):
         return instance_mock(request, Font)
 
 
-class DescribeValueAxis(object):
+class DescribeValueAxis:
     def it_knows_the_other_axis_crossing_type(self, crosses_get_fixture):
         value_axis, expected_value = crosses_get_fixture
         assert value_axis.crosses == expected_value

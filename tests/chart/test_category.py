@@ -12,7 +12,7 @@ from ..unitutil.file import snippet_seq
 from ..unitutil.mock import call, class_mock, instance_mock
 
 
-class DescribeCategories(object):
+class DescribeCategories:
     def it_knows_its_length(self, len_fixture):
         categories, expected_len = len_fixture
         assert len(categories) == expected_len
@@ -163,7 +163,7 @@ class DescribeCategories(object):
         return instance_mock(request, CategoryLevel)
 
 
-class DescribeCategory(object):
+class DescribeCategory:
     def it_extends_str(self, base_class_fixture):
         category, str_value = base_class_fixture
         assert isinstance(category, str)
@@ -203,7 +203,7 @@ class DescribeCategory(object):
         return category, expected_value
 
 
-class DescribeCategoryLevel(object):
+class DescribeCategoryLevel:
     def it_knows_its_length(self, len_fixture):
         category_level, expected_len = len_fixture
         assert len(category_level) == expected_len

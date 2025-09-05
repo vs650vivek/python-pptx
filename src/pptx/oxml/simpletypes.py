@@ -30,21 +30,20 @@ class BaseSimpleType:
     @classmethod
     def validate_float(cls, value: Any):
         """Note that int values are accepted."""
-        if not isinstance(value, (int, float)):
-            raise TypeError("value must be a number, got %s" % type(value))
+        if not isinstance(value, int | float):
+            raise TypeError(f"value must be a number, got {type(value)}")
 
     @classmethod
     def validate_int(cls, value):
         if not isinstance(value, numbers.Integral):
-            raise TypeError("value must be an integral type, got %s" % type(value))
+            raise TypeError(f"value must be an integral type, got {type(value)}")
 
     @classmethod
     def validate_float_in_range(cls, value, min_inclusive, max_inclusive):
         cls.validate_float(value)
         if value < min_inclusive or value > max_inclusive:
             raise ValueError(
-                "value must be in range %s to %s inclusive, got %s"
-                % (min_inclusive, max_inclusive, value)
+                f"value must be in range {min_inclusive} to {max_inclusive} inclusive, got {value}"
             )
 
     @classmethod
@@ -65,7 +64,7 @@ class BaseSimpleType:
                 return value
         except NameError:  # means we're on Python 3
             pass
-        raise TypeError("value must be a string, got %s" % type(value))
+        raise TypeError(f"value must be a string, got {type(value)}")
 
 
 class BaseFloatType(BaseSimpleType):
@@ -79,8 +78,8 @@ class BaseFloatType(BaseSimpleType):
 
     @classmethod
     def validate(cls, value):
-        if not isinstance(value, (int, float)):
-            raise TypeError("value must be a number, got %s" % type(value))
+        if not isinstance(value, int | float):
+            raise TypeError(f"value must be a number, got {type(value)}")
 
 
 class BaseIntType(BaseSimpleType):
@@ -121,7 +120,7 @@ class BaseStringEnumerationType(BaseStringType):
     def validate(cls, value):
         cls.validate_string(value)
         if value not in cls._members:
-            raise ValueError("must be one of %s, got '%s'" % (cls._members, value))
+            raise ValueError(f"must be one of {cls._members}, got '{value}'")
 
 
 class XsdAnyUri(BaseStringType):
@@ -137,7 +136,7 @@ class XsdBoolean(BaseSimpleType):
     def convert_from_xml(cls, str_value):
         if str_value not in ("1", "0", "true", "false"):
             raise InvalidXmlError(
-                "value must be one of '1', '0', 'true' or 'false', got '%s'" % str_value
+                f"value must be one of '1', '0', 'true' or 'false', got '{str_value}'"
             )
         return str_value in ("1", "true")
 
@@ -149,7 +148,7 @@ class XsdBoolean(BaseSimpleType):
     def validate(cls, value):
         if value not in (True, False):
             raise TypeError(
-                "only True or False (and possibly None) may be assigned, got" " '%s'" % value
+                f"only True or False (and possibly None) may be assigned, got '{value}'"
             )
 
 
@@ -254,9 +253,9 @@ class ST_AxisUnit(XsdDouble):
 
     @classmethod
     def validate(cls, value):
-        super(ST_AxisUnit, cls).validate(value)
+        super().validate(value)
         if value <= 0.0:
-            raise ValueError("must be positive numeric value, got %s" % value)
+            raise ValueError(f"must be positive numeric value, got {value}")
 
 
 class ST_BarDir(XsdStringEnumeration):
@@ -280,7 +279,7 @@ class ST_BubbleScale(BaseIntType):
     def convert_from_xml(cls, str_value):
         if "%" in str_value:
             return cls.convert_from_percent_literal(str_value)
-        return super(ST_BubbleScale, cls).convert_from_xml(str_value)
+        return super().convert_from_xml(str_value)
 
     @classmethod
     def validate(cls, value):
@@ -378,7 +377,7 @@ class ST_GapAmount(BaseIntType):
     def convert_from_xml(cls, str_value):
         if "%" in str_value:
             return cls.convert_from_percent_literal(str_value)
-        return super(ST_GapAmount, cls).convert_from_xml(str_value)
+        return super().convert_from_xml(str_value)
 
     @classmethod
     def validate(cls, value):
@@ -414,13 +413,13 @@ class ST_HexColorRGB(BaseStringType):
 
         # must be 6 chars long----------
         if len(str_value) != 6:
-            raise ValueError("RGB string must be six characters long, got '%s'" % str_value)
+            raise ValueError(f"RGB string must be six characters long, got '{str_value}'")
 
         # must parse as hex int --------
         try:
             int(str_value, 16)
         except ValueError:
-            raise ValueError("RGB string must be valid hex string, got '%s'" % str_value)
+            raise ValueError(f"RGB string must be valid hex string, got '{str_value}'")
 
 
 class ST_LayoutMode(XsdStringEnumeration):
@@ -459,10 +458,10 @@ class ST_LineWidth(XsdInt):
 
     @classmethod
     def validate(cls, value):
-        super(ST_LineWidth, cls).validate(value)
+        super().validate(value)
         if value < 0 or value > 20116800:
             raise ValueError(
-                "value must be in range 0-20116800 inclusive (0-1584 points)" ", got %d" % value
+                "value must be in range 0-20116800 inclusive (0-1584 points), got %d" % value
             )
 
 
@@ -491,7 +490,7 @@ class ST_Overlap(BaseIntType):
     def convert_from_xml(cls, str_value):
         if "%" in str_value:
             return cls.convert_from_percent_literal(str_value)
-        return super(ST_Overlap, cls).convert_from_xml(str_value)
+        return super().convert_from_xml(str_value)
 
     @classmethod
     def validate(cls, value):
@@ -541,7 +540,7 @@ class ST_PlaceholderSize(XsdTokenEnumeration):
 class ST_PositiveCoordinate(XsdLong):
     @classmethod
     def convert_from_xml(cls, str_value):
-        int_value = super(ST_PositiveCoordinate, cls).convert_from_xml(str_value)
+        int_value = super().convert_from_xml(str_value)
         return Emu(int_value)
 
     @classmethod
@@ -605,7 +604,7 @@ class ST_SlideSizeCoordinate(BaseIntType):
         cls.validate_int(value)
         if value < 914400 or value > 51206400:
             raise ValueError(
-                "value must be in range(914400, 51206400) (1-56 inches), got" " %d" % value
+                "value must be in range(914400, 51206400) (1-56 inches), got %d" % value
             )
 
 
@@ -625,7 +624,7 @@ class ST_TargetMode(XsdString):
     def validate(cls, value):
         cls.validate_string(value)
         if value not in ("External", "Internal"):
-            raise ValueError("must be one of 'Internal' or 'External', got '%s'" % value)
+            raise ValueError(f"must be one of 'Internal' or 'External', got '{value}'")
 
 
 class ST_TextFontScalePercentOrPercentString(BaseFloatType):
@@ -648,7 +647,7 @@ class ST_TextFontScalePercentOrPercentString(BaseFloatType):
     def validate(cls, value):
         BaseFloatType.validate(value)
         if value < 1.0 or value > 100.0:
-            raise ValueError("value must be in range 1.0..100.0 (percent), got %s" % value)
+            raise ValueError(f"value must be in range 1.0..100.0 (percent), got {value}")
 
 
 class ST_TextFontSize(BaseIntType):

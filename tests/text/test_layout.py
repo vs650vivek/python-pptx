@@ -20,7 +20,7 @@ from ..unitutil.mock import (
 )
 
 
-class DescribeTextFitter(object):
+class DescribeTextFitter:
     """Unit-test suite for `pptx.text.layout.TextFitter` object."""
 
     def it_can_determine_the_best_fit_font_size(self, request, line_source_):
@@ -166,7 +166,7 @@ class DescribeTextFitter(object):
         return function_mock(request, "pptx.text.layout._rendered_size")
 
 
-class Describe_BinarySearchTree(object):
+class Describe_BinarySearchTree:
     """Unit-test suite for `pptx.text.layout._BinarySearchTree` object."""
 
     def it_can_construct_from_an_ordered_sequence(self):
@@ -209,7 +209,7 @@ class Describe_BinarySearchTree(object):
         return bst, predicate, expected_value
 
 
-class Describe_LineSource(object):
+class Describe_LineSource:
     """Unit-test suite for `pptx.text.layout._LineSource` object."""
 
     def it_generates_text_remainder_pairs(self):

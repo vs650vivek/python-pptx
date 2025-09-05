@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import IO, TYPE_CHECKING, Iterable
+from typing import IO, TYPE_CHECKING
 
 from pptx.opc.constants import RELATIONSHIP_TYPE as RT
 from pptx.opc.package import XmlPart
@@ -12,6 +12,8 @@ from pptx.presentation import Presentation
 from pptx.util import lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from pptx.parts.coreprops import CorePropertiesPart
     from pptx.slide import NotesMaster, Slide, SlideLayout, SlideMaster
 

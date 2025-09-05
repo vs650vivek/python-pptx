@@ -41,7 +41,7 @@ class CT_TextCharacterPropertiesBuilder(BaseBuilder):
 
     def __init__(self, tag):
         self.__tag__ = tag
-        super(CT_TextCharacterPropertiesBuilder, self).__init__()
+        super().__init__()
 
 
 class CT_TextParagraphBuilder(BaseBuilder):
@@ -61,7 +61,7 @@ class XsdString(BaseBuilder):
     def __init__(self, tag, nspfxs):
         self.__tag__ = tag
         self.__nspfxs__ = nspfxs
-        super(XsdString, self).__init__()
+        super().__init__()
 
 
 def a_p():

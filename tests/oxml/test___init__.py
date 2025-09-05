@@ -12,13 +12,13 @@ from pptx.oxml.xmlchemy import BaseOxmlElement
 from ..unitutil.mock import function_mock, loose_mock, var_mock
 
 
-class DescribeOxmlParser(object):
+class DescribeOxmlParser:
     def it_strips_whitespace_between_elements(self, foo, stripped_xml_bytes):
         xml_bytes = etree.tostring(foo)
         assert xml_bytes == stripped_xml_bytes
 
 
-class DescribeParseXml(object):
+class DescribeParseXml:
     def it_uses_oxml_configured_parser_to_parse_xml(
         self, mock_xml_bytes, fromstring, mock_oxml_parser
     ):
@@ -36,15 +36,15 @@ class DescribeParseXml(object):
         # unicode body by itself doesn't raise
         parse_xml(xml_body)
         # adding XML decl without encoding attr doesn't raise either
-        xml_text = "%s\n%s" % (non_enc_decl, xml_body)
+        xml_text = f"{non_enc_decl}\n{xml_body}"
         parse_xml(xml_text)
         # but adding encoding in the declaration raises ValueError
-        xml_text = "%s\n%s" % (enc_decl, xml_body)
+        xml_text = f"{enc_decl}\n{xml_body}"
         with pytest.raises(ValueError):
             parse_xml(xml_text)
 
 
-class DescribeRegisterCustomElementClass(object):
+class DescribeRegisterCustomElementClass:
     def it_determines_cust_elm_class_constructed_for_specified_tag(self, xml_bytes):
         register_element_cls("a:foo", CustElmCls)
         foo = etree.fromstring(xml_bytes, oxml_parser)
@@ -84,9 +84,9 @@ def mock_xml_bytes(request):
 @pytest.fixture
 def stripped_xml_bytes():
     return (
-        '<a:foo xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/ma'
-        'in"><a:bar>foobar</a:bar></a:foo>'
-    ).encode("utf-8")
+        b'<a:foo xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/ma'
+        b'in"><a:bar>foobar</a:bar></a:foo>'
+    )
 
 
 @pytest.fixture

@@ -13,7 +13,7 @@ def absjoin(*paths: str):
 
 def snippet_bytes(snippet_file_name: str):
     """Return bytes read from snippet file having `snippet_file_name`."""
-    snippet_file_path = os.path.join(test_file_dir, "snippets", "%s.txt" % snippet_file_name)
+    snippet_file_path = os.path.join(test_file_dir, "snippets", f"{snippet_file_name}.txt")
     with open(snippet_file_path, "rb") as f:
         return f.read().strip()
 
@@ -24,7 +24,7 @@ def snippet_seq(name: str, offset: int = 0, count: int = sys.maxsize):
     file having *name*. Snippets are delimited by a blank line. If specified,
     *count* snippets starting at *offset* are returned.
     """
-    path = os.path.join(test_file_dir, "snippets", "%s.txt" % name)
+    path = os.path.join(test_file_dir, "snippets", f"{name}.txt")
     with open(path, "rb") as f:
         text = f.read().decode("utf-8")
     snippets = text.split("\n\n")
@@ -37,7 +37,7 @@ def snippet_text(snippet_file_name: str):
     Return the unicode text read from the test snippet file having
     *snippet_file_name*.
     """
-    snippet_file_path = os.path.join(test_file_dir, "snippets", "%s.txt" % snippet_file_name)
+    snippet_file_path = os.path.join(test_file_dir, "snippets", f"{snippet_file_name}.txt")
     with open(snippet_file_path, "rb") as f:
         snippet_bytes = f.read()
     return snippet_bytes.decode("utf-8")

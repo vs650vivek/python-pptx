@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from pptx.spec import AdjustmentValue
 
 
-class DescribeAdjustment(object):
+class DescribeAdjustment:
     """Unit-test suite for `pptx.shapes.autoshape.Adjustment`."""
 
     @pytest.mark.parametrize(
@@ -56,7 +56,7 @@ class DescribeAdjustment(object):
         assert Adjustment("foobar", def_val, actual).effective_value == expected_value
 
 
-class DescribeAdjustmentCollection(object):
+class DescribeAdjustmentCollection:
     """Unit-test suite for `pptx.shapes.autoshape.AdjustmentCollection`."""
 
     @pytest.mark.parametrize(
@@ -92,7 +92,7 @@ class DescribeAdjustmentCollection(object):
     def it_should_load_default_adjustment_values(
         self, prst: str, expected_values: tuple[str, tuple[tuple[str, int], ...]]
     ):
-        prstGeom = cast(CT_PresetGeometry2D, element(f"a:prstGeom{{prst={prst}}}/a:avLst"))
+        prstGeom = cast("CT_PresetGeometry2D", element(f"a:prstGeom{{prst={prst}}}/a:avLst"))
 
         adjustments = AdjustmentCollection(prstGeom)._adjustments
 
@@ -244,7 +244,7 @@ class DescribeAdjustmentCollection(object):
         return adjustments, idx, new_val, expected
 
 
-class DescribeAutoShapeType(object):
+class DescribeAutoShapeType:
     """Unit-test suite for `pptx.shapes.autoshape.AutoShapeType`"""
 
     def it_knows_the_details_of_the_auto_shape_type_it_represents(self):
@@ -300,7 +300,7 @@ class DescribeAutoShapeType(object):
             AutoShapeType(9999)
 
 
-class DescribeShape(object):
+class DescribeShape:
     """Unit-test suite for `pptx.shapes.autoshape.Shape` object."""
 
     def it_initializes_adjustments_on_first_ref(self, init_adjs_fixture_):

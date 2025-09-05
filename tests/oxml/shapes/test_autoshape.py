@@ -13,7 +13,7 @@ from ...unitutil.cxml import element
 from ..unitdata.shape import a_gd, a_prstGeom, an_avLst
 
 
-class DescribeCT_PresetGeometry2D(object):
+class DescribeCT_PresetGeometry2D:
     def it_can_get_the_gd_elms_as_a_sequence(self, gd_lst_fixture):
         prstGeom, expected_vals = gd_lst_fixture
         actual_vals = [(gd.name, gd.fmla) for gd in prstGeom.gd_lst]
@@ -77,7 +77,7 @@ class DescribeCT_PresetGeometry2D(object):
         return prstGeom_bldr
 
 
-class DescribeCT_Shape(object):
+class DescribeCT_Shape:
     def it_knows_how_to_create_a_new_autoshape_sp(self):
         # setup ------------------------
         id_ = 9
@@ -239,26 +239,22 @@ class DescribeCT_Shape(object):
     def new_ph_sp_fixture(self, request):
         id_, name, ph_type, orient, sz, idx, expected_attrs = request.param
         expected_xml_tmpl = (
-            "<p:sp %s>\n"
+            "<p:sp {}>\n"
             "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
+            '    <p:cNvPr id="{}" name="{}"/>\n'
             "    <p:cNvSpPr>\n"
             '      <a:spLocks noGrp="1"/>\n'
             "    </p:cNvSpPr>\n"
             "    <p:nvPr>\n"
-            "      <p:ph%s/>\n"
+            "      <p:ph{}/>\n"
             "    </p:nvPr>\n"
             "  </p:nvSpPr>\n"
             "  <p:spPr/>\n"
-            "%s"
-            "</p:sp>\n" % (nsdecls("a", "p"), "%d", "%s", "%s", "%s")
+            "{}"
+            "</p:sp>\n".format(nsdecls("a", "p"), "%d", "%s", "%s", "%s")
         )
         txBody_snippet = (
-            "  <p:txBody>\n"
-            "    <a:bodyPr/>\n"
-            "    <a:lstStyle/>\n"
-            "    <a:p/>\n"
-            "  </p:txBody>\n"
+            "  <p:txBody>\n    <a:bodyPr/>\n    <a:lstStyle/>\n    <a:p/>\n  </p:txBody>\n"
         )
         txBody_str = txBody_snippet if id_ in (2, 4, 8) else ""
         expected_values = (id_, name, expected_attrs, txBody_str)

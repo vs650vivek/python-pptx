@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Callable, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.enum.lang import MSO_LANGUAGE_ID
 from pptx.enum.text import (
@@ -41,6 +41,8 @@ from pptx.oxml.xmlchemy import (
 from pptx.util import Emu, Length
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pptx.oxml.action import CT_Hyperlink
 
 
@@ -73,7 +75,7 @@ class CT_RegularTextRun(BaseOxmlElement):
         (x09) and line-feed (x0A) are not escaped. All other characters in the range
         x00-x1F are escaped.
         """
-        return re.sub(r"([\x00-\x08\x0B-\x1F])", lambda match: "_x%04X_" % ord(match.group(1)), s)
+        return re.sub(r"([\x00-\x08\x0B-\x1F])", lambda match: f"_x{ord(match.group(1)):04X}_", s)
 
 
 class CT_TextBody(BaseOxmlElement):
@@ -120,9 +122,7 @@ class CT_TextBody(BaseOxmlElement):
         if not ps:
             raise InvalidXmlError("p:txBody must have at least one a:p")
 
-        if ps[0].text != "":
-            return False
-        return True
+        return ps[0].text == ""
 
     @classmethod
     def new(cls):
@@ -138,7 +138,7 @@ class CT_TextBody(BaseOxmlElement):
         Suitable for use in a table cell and possibly other situations.
         """
         xml = cls._a_txBody_tmpl()
-        txBody = cast(CT_TextBody, parse_xml(xml))
+        txBody = cast("CT_TextBody", parse_xml(xml))
         return txBody
 
     @classmethod
@@ -154,7 +154,7 @@ class CT_TextBody(BaseOxmlElement):
         Suitable for use in a chart object like data labels or tick labels.
         """
         xml = (
-            "<c:txPr %s>\n"
+            "<c:txPr {}>\n"
             "  <a:bodyPr/>\n"
             "  <a:lstStyle/>\n"
             "  <a:p>\n"
@@ -163,7 +163,7 @@ class CT_TextBody(BaseOxmlElement):
             "    </a:pPr>\n"
             "  </a:p>\n"
             "</c:txPr>\n"
-        ) % nsdecls("c", "a")
+        ).format(nsdecls("c", "a"))
         txPr = parse_xml(xml)
         return txPr
 
@@ -179,22 +179,16 @@ class CT_TextBody(BaseOxmlElement):
 
     @classmethod
     def _a_txBody_tmpl(cls):
-        return "<a:txBody %s>\n" "  <a:bodyPr/>\n" "  <a:p/>\n" "</a:txBody>\n" % (nsdecls("a"))
+        return "<a:txBody {}>\n  <a:bodyPr/>\n  <a:p/>\n</a:txBody>\n".format(nsdecls("a"))
 
     @classmethod
     def _p_txBody_tmpl(cls):
-        return (
-            "<p:txBody %s>\n" "  <a:bodyPr/>\n" "  <a:p/>\n" "</p:txBody>\n" % (nsdecls("p", "a"))
-        )
+        return "<p:txBody {}>\n  <a:bodyPr/>\n  <a:p/>\n</p:txBody>\n".format(nsdecls("p", "a"))
 
     @classmethod
     def _txBody_tmpl(cls):
-        return (
-            "<p:txBody %s>\n"
-            "  <a:bodyPr/>\n"
-            "  <a:lstStyle/>\n"
-            "  <a:p/>\n"
-            "</p:txBody>\n" % (nsdecls("a", "p"))
+        return "<p:txBody {}>\n  <a:bodyPr/>\n  <a:lstStyle/>\n  <a:p/>\n</p:txBody>\n".format(
+            nsdecls("a", "p")
         )
 
 
@@ -445,7 +439,7 @@ class CT_TextParagraph(BaseOxmlElement):
         These include `a:r`, `a:br`, and `a:fld`.
         """
         return tuple(
-            e for e in self if isinstance(e, (CT_RegularTextRun, CT_TextLineBreak, CT_TextField))
+            e for e in self if isinstance(e, CT_RegularTextRun | CT_TextLineBreak | CT_TextField)
         )
 
     @property
@@ -455,7 +449,7 @@ class CT_TextParagraph(BaseOxmlElement):
         return "".join([child.text for child in self.content_children])
 
     def _new_r(self):
-        r_xml = "<a:r %s><a:t/></a:r>" % nsdecls("a")
+        r_xml = "<a:r {}><a:t/></a:r>".format(nsdecls("a"))
         return parse_xml(r_xml)
 
 
@@ -522,7 +516,7 @@ class CT_TextParagraphProperties(BaseOxmlElement):
             return None
         if lnSpc.spcPts is not None:
             return lnSpc.spcPts.val
-        return cast(CT_TextSpacingPercent, lnSpc.spcPct).val
+        return cast("CT_TextSpacingPercent", lnSpc.spcPct).val
 
     @line_spacing.setter
     def line_spacing(self, value: float | Length | None):

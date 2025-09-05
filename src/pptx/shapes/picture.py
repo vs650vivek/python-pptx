@@ -20,7 +20,7 @@ class _BasePicture(BaseShape):
     """Base class for shapes based on a `p:pic` element."""
 
     def __init__(self, pic: CT_Picture, parent: ProvidesPart):
-        super(_BasePicture, self).__init__(pic, parent)
+        super().__init__(pic, parent)
         self._pic = pic
 
     @property

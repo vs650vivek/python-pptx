@@ -13,14 +13,14 @@ from pptx.oxml.dml.color import (
 )
 
 
-class ColorFormat(object):
+class ColorFormat:
     """
     Provides access to color settings such as RGB color, theme color, and
     luminance adjustments.
     """
 
     def __init__(self, eg_colorChoice_parent, color):
-        super(ColorFormat, self).__init__()
+        super().__init__()
         self._xFill = eg_colorChoice_parent
         self._color = color
 
@@ -101,13 +101,12 @@ class ColorFormat(object):
             raise ValueError("brightness must be number in range -1.0 to 1.0")
         if isinstance(self._color, _NoneColor):
             msg = (
-                "can't set brightness when color.type is None. Set color.rgb"
-                " or .theme_color first."
+                "can't set brightness when color.type is None. Set color.rgb or .theme_color first."
             )
             raise ValueError(msg)
 
 
-class _Color(object):
+class _Color:
     """
     Object factory for color object of the appropriate type, also the base
     class for all color type classes such as SRgbColor.
@@ -123,10 +122,10 @@ class _Color(object):
             CT_SRgbColor: _SRgbColor,
             CT_SystemColor: _SysColor,
         }[type(xClr)]
-        return super(_Color, cls).__new__(color_cls)
+        return super().__new__(color_cls)
 
     def __init__(self, xClr):
-        super(_Color, self).__init__()
+        super().__init__()
         self._xClr = xClr
 
     @property
@@ -215,7 +214,7 @@ class _PrstColor(_Color):
 
 class _SchemeColor(_Color):
     def __init__(self, schemeClr):
-        super(_SchemeColor, self).__init__(schemeClr)
+        super().__init__(schemeClr)
         self._schemeClr = schemeClr
 
     @property
@@ -246,7 +245,7 @@ class _ScRgbColor(_Color):
 
 class _SRgbColor(_Color):
     def __init__(self, srgbClr):
-        super(_SRgbColor, self).__init__(srgbClr)
+        super().__init__(srgbClr)
         self._srgbClr = srgbClr
 
     @property
@@ -282,13 +281,13 @@ class RGBColor(tuple):
         for val in (r, g, b):
             if not isinstance(val, int) or val < 0 or val > 255:
                 raise ValueError(msg)
-        return super(RGBColor, cls).__new__(cls, (r, g, b))
+        return super().__new__(cls, (r, g, b))
 
     def __str__(self):
         """
         Return a hex string rgb value, like '3C2F80'
         """
-        return "%02X%02X%02X" % self
+        return "{:02X}{:02X}{:02X}".format(*self)
 
     @classmethod
     def from_string(cls, rgb_hex_str):

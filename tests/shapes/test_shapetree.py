@@ -72,7 +72,7 @@ from ..unitutil.mock import (
 )
 
 
-class DescribeBaseShapeFactory(object):
+class DescribeBaseShapeFactory:
     def it_constructs_the_right_shape_for_an_element(self, factory_fixture):
         shape_elm, parent_, ShapeClass_, shape_ = factory_fixture
         shape = BaseShapeFactory(shape_elm, parent_)
@@ -97,7 +97,7 @@ class DescribeBaseShapeFactory(object):
         shape_mock = instance_mock(request, ShapeCls)
         ShapeClass_ = class_mock(
             request,
-            "pptx.shapes.shapetree.%s" % ShapeCls.__name__,
+            f"pptx.shapes.shapetree.{ShapeCls.__name__}",
             return_value=shape_mock,
         )
         return shape_elm, parent_, ShapeClass_, shape_mock
@@ -109,7 +109,7 @@ class DescribeBaseShapeFactory(object):
         return instance_mock(request, SlideShapes)
 
 
-class Describe_BaseShapes(object):
+class Describe_BaseShapes:
     """Unit-test suite for `pptx.shapes.shapetree._BaseShapes` objects."""
 
     def it_knows_how_many_shapes_it_contains(self, len_fixture):
@@ -170,7 +170,7 @@ class Describe_BaseShapes(object):
             "chart,idx=42,orient=vert,sz=half}),p:spPr)"
         )
         placeholder_.element = element(
-            "p:sp/p:nvSpPr/p:nvPr/p:ph{type=chart,idx=42,orient=vert,sz=half" "}"
+            "p:sp/p:nvSpPr/p:nvPr/p:ph{type=chart,idx=42,orient=vert,sz=half}"
         )
         return shapes, placeholder_, expected_xml
 
@@ -221,7 +221,7 @@ class Describe_BaseShapes(object):
             ("p:spTree/p:nvSpPr/(p:cNvPr{id=foo},p:cNvPr{id=2})", 3),
             ("p:spTree/p:nvSpPr/(p:cNvPr{id=1fo},p:cNvPr{id=2})", 3),
             (
-                "p:spTree/p:nvSpPr/(p:cNvPr{id=1},p:cNvPr{id=1},p:" "cNvPr{id=1},p:cNvPr{id=4})",
+                "p:spTree/p:nvSpPr/(p:cNvPr{id=1},p:cNvPr{id=1},p:cNvPr{id=1},p:cNvPr{id=4})",
                 5,
             ),
         ]
@@ -246,7 +246,7 @@ class Describe_BaseShapes(object):
     )
     def ph_name_fixture(self, request):
         ph_type, sp_id, orient, expected_name = request.param
-        spTree = element("p:spTree/(p:cNvPr{name=Title 1},p:cNvPr{name=Table Placeholder " "3})")
+        spTree = element("p:spTree/(p:cNvPr{name=Title 1},p:cNvPr{name=Table Placeholder 3})")
         shapes = SlideShapes(spTree, None)
         return shapes, ph_type, sp_id, orient, expected_name
 
@@ -264,7 +264,7 @@ class Describe_BaseShapes(object):
             ("p:spTree/p:nvSpPr/p:cNvPr{id=2}", True),
             ("p:spTree/p:nvSpPr/(p:cNvPr{id=1},p:cNvPr{id=3})", False),
             (
-                "p:spTree/p:nvSpPr/(p:cNvPr{id=1},p:cNvPr{id=1},p:" "cNvPr{id=1},p:cNvPr{id=4})",
+                "p:spTree/p:nvSpPr/(p:cNvPr{id=1},p:cNvPr{id=1},p:cNvPr{id=1},p:cNvPr{id=4})",
                 True,
             ),
         ]
@@ -295,7 +295,7 @@ class Describe_BaseShapes(object):
         return instance_mock(request, BaseShape)
 
 
-class Describe_BaseGroupShapes(object):
+class Describe_BaseGroupShapes:
     """Unit-test suite for `pptx.shapes.shapetree._BaseGroupShapes`."""
 
     def it_can_add_a_chart(
@@ -856,7 +856,7 @@ class Describe_BaseGroupShapes(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribeGroupShapes(object):
+class DescribeGroupShapes:
     def it_recalculates_its_extents_to_help(self, recalc_fixture):
         shapes = recalc_fixture
         shapes._recalculate_extents()
@@ -875,7 +875,7 @@ class DescribeGroupShapes(object):
         return instance_mock(request, CT_GroupShape)
 
 
-class DescribeBasePlaceholders(object):
+class DescribeBasePlaceholders:
     def it_contains_only_placeholder_shapes(self, member_fixture):
         shape_elm_, is_ph_shape = member_fixture
         _is_ph_shape = BasePlaceholders._is_member_elm(shape_elm_)
@@ -896,7 +896,7 @@ class DescribeBasePlaceholders(object):
         return instance_mock(request, BaseShapeElement)
 
 
-class DescribeNotesSlidePlaceholders(object):
+class DescribeNotesSlidePlaceholders:
     def it_brokers_access_to_its_shape_factory(self, factory_fixture):
         placeholders, sp, _NotesSlideShapeFactory_, placeholder_ = factory_fixture
         placeholder = placeholders._shape_factory(sp)
@@ -927,7 +927,7 @@ class DescribeNotesSlidePlaceholders(object):
         return instance_mock(request, NotesSlidePlaceholder)
 
 
-class DescribeNotesSlideShapes(object):
+class DescribeNotesSlideShapes:
     def it_knows_notes_slide_placeholder_basenames(self, basename_fixture):
         notes_slide_shapes, ph_type, expected_value = basename_fixture
         assert notes_slide_shapes.ph_basename(ph_type) == expected_value
@@ -973,7 +973,7 @@ class DescribeNotesSlideShapes(object):
         return instance_mock(request, Shape)
 
 
-class DescribeSlidePlaceholders(object):
+class DescribeSlidePlaceholders:
     def it_can_get_a_placeholder_by_idx(self, getitem_fixture):
         placeholders, idx, SlideShapeFactory_ = getitem_fixture[:3]
         shape_elm, placeholder_ = getitem_fixture[3:]
@@ -1074,7 +1074,7 @@ class DescribeSlidePlaceholders(object):
         )
 
 
-class Describe_SlidePlaceholderFactory(object):
+class Describe_SlidePlaceholderFactory:
     def it_constructs_the_right_type_of_placeholder(self, factory_fixture):
         element, parent_, Constructor_, placeholder_ = factory_fixture
         placeholder = _SlidePlaceholderFactory(element, parent_)
@@ -1168,7 +1168,7 @@ class Describe_SlidePlaceholderFactory(object):
         )
 
 
-class DescribeSlideShapeFactory(object):
+class DescribeSlideShapeFactory:
     def it_constructs_the_right_type_of_shape(self, factory_fixture):
         element, parent_, Constructor_, shape_ = factory_fixture
         shape = SlideShapeFactory(element, parent_)
@@ -1226,7 +1226,7 @@ class DescribeSlideShapeFactory(object):
         )
 
 
-class DescribeSlideShapes(object):
+class DescribeSlideShapes:
     def it_provides_access_to_its_shape_factory(self, factory_fixture):
         shapes, sp, SlideShapeFactory_, shape_ = factory_fixture
         shape = shapes._shape_factory(sp)
@@ -1444,7 +1444,7 @@ class DescribeSlideShapes(object):
         return instance_mock(request, Table)
 
 
-class DescribeLayoutShapes(object):
+class DescribeLayoutShapes:
     def it_provides_access_to_its_shape_factory(self, factory_fixture):
         shapes, sp, _LayoutShapeFactory_, placeholder_ = factory_fixture
         placeholder = shapes._shape_factory(sp)
@@ -1475,7 +1475,7 @@ class DescribeLayoutShapes(object):
         return instance_mock(request, LayoutPlaceholder)
 
 
-class Describe_LayoutShapeFactory(object):
+class Describe_LayoutShapeFactory:
     def it_constructs_the_right_shape_for_an_element(self, factory_fixture):
         shape_elm, parent_, ShapeConstructor_, shape_ = factory_fixture
         shape = _LayoutShapeFactory(shape_elm, parent_)
@@ -1536,7 +1536,7 @@ class Describe_LayoutShapeFactory(object):
         return an_sp().with_child(an_nvSpPr().with_child(an_nvPr().with_child(a_ph().with_idx(1))))
 
 
-class DescribeLayoutPlaceholders(object):
+class DescribeLayoutPlaceholders:
     def it_provides_access_to_its_shape_factory(self, factory_fixture):
         placeholders, sp, _LayoutShapeFactory_, placeholder_ = factory_fixture
         placeholder = placeholders._shape_factory(sp)
@@ -1602,7 +1602,7 @@ class DescribeLayoutPlaceholders(object):
         return instance_mock(request, LayoutPlaceholder)
 
 
-class Describe_MasterShapeFactory(object):
+class Describe_MasterShapeFactory:
     def it_constructs_a_master_placeholder_for_a_shape_element(self, factory_fixture):
         shape_elm, parent_, ShapeConstructor_, shape_ = factory_fixture
         shape = _MasterShapeFactory(shape_elm, parent_)
@@ -1663,7 +1663,7 @@ class Describe_MasterShapeFactory(object):
         return instance_mock(request, SlideMaster)
 
 
-class DescribeMasterShapes(object):
+class DescribeMasterShapes:
     def it_provides_access_to_its_shape_factory(self, factory_fixture):
         shapes, sp, _MasterShapeFactory_, placeholder_ = factory_fixture
         placeholder = shapes._shape_factory(sp)
@@ -1694,7 +1694,7 @@ class DescribeMasterShapes(object):
         return instance_mock(request, MasterPlaceholder)
 
 
-class DescribeMasterPlaceholders(object):
+class DescribeMasterPlaceholders:
     def it_provides_access_to_its_shape_factory(self, factory_fixture):
         placeholders, sp, _MasterShapeFactory_, placeholder_ = factory_fixture
         placeholder = placeholders._shape_factory(sp)
@@ -1759,7 +1759,7 @@ class DescribeMasterPlaceholders(object):
         return instance_mock(request, MasterPlaceholder, ph_type="body")
 
 
-class Describe_MoviePicElementCreator(object):
+class Describe_MoviePicElementCreator:
     def it_creates_a_new_movie_pic_element(self, movie_pic_fixture):
         shapes_, shape_id, movie_file, x, y, cx, cy = movie_pic_fixture[:7]
         poster_frame_image, mime_type = movie_pic_fixture[7:9]
@@ -1831,7 +1831,15 @@ class Describe_MoviePicElementCreator(object):
     ):
         BytesIO_ = class_mock(request, "pptx.shapes.shapetree.io.BytesIO")
         movie_pic_element_creator = _MoviePicElementCreator(
-            None, None, None, None, None, None, None, "image.png", None  # type: ignore
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            "image.png",
+            None,  # type: ignore
         )
 
         image_file = movie_pic_element_creator._poster_frame_image_file
@@ -1845,7 +1853,15 @@ class Describe_MoviePicElementCreator(object):
         stream_ = instance_mock(request, io.BytesIO)
         BytesIO_ = class_mock(request, "pptx.shapes.shapetree.io.BytesIO", return_value=stream_)
         movie_pic_element_creator = _MoviePicElementCreator(
-            None, None, None, None, None, None, None, None, None  # type: ignore
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,  # type: ignore
         )
 
         image_file = movie_pic_element_creator._poster_frame_image_file
@@ -2060,7 +2076,7 @@ class Describe_MoviePicElementCreator(object):
         return property_mock(request, _MoviePicElementCreator, "_video_part_rIds")
 
 
-class Describe_OleObjectElementCreator(object):
+class Describe_OleObjectElementCreator:
     """Unit-test suite for `pptx.shapes.shapetree._OleObjectElementCreator` objects."""
 
     def it_provides_a_graphicFrame_interface_method(self, request, shapes_):
@@ -2331,7 +2347,7 @@ class Describe_OleObjectElementCreator(object):
         return property_mock(request, _OleObjectElementCreator, "_slide_part")
 
 
-class Describe_NotesSlideShapeFactory(object):
+class Describe_NotesSlideShapeFactory:
     def it_constructs_the_right_shape_for_an_element(self, factory_fixture):
         shape_elm, parent_, ShapeConstructor_, shape_ = factory_fixture
         shape = _NotesSlideShapeFactory(shape_elm, parent_)
@@ -2350,7 +2366,7 @@ class Describe_NotesSlideShapeFactory(object):
         sp_cxml, shape_cls_name = request.param
         shape_elm = element(sp_cxml)
         ShapeConstructor_ = class_mock(
-            request, "pptx.shapes.shapetree.%s" % shape_cls_name, return_value=shape_
+            request, f"pptx.shapes.shapetree.{shape_cls_name}", return_value=shape_
         )
         return shape_elm, shapes_, ShapeConstructor_, shape_
 

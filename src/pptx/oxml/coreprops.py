@@ -4,13 +4,16 @@ from __future__ import annotations
 
 import datetime as dt
 import re
-from typing import Callable, cast
-
-from lxml.etree import _Element  # pyright: ignore[reportPrivateUsage]
+from typing import TYPE_CHECKING, cast
 
 from pptx.oxml import parse_xml
 from pptx.oxml.ns import nsdecls, qn
 from pptx.oxml.xmlchemy import BaseOxmlElement, ZeroOrOne
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from lxml.etree import _Element
 
 
 class CT_CoreProperties(BaseOxmlElement):
@@ -42,12 +45,12 @@ class CT_CoreProperties(BaseOxmlElement):
     title = ZeroOrOne("dc:title", successors=())
     version = ZeroOrOne("cp:version", successors=())
 
-    _coreProperties_tmpl = "<cp:coreProperties %s/>\n" % nsdecls("cp", "dc", "dcterms")
+    _coreProperties_tmpl = "<cp:coreProperties {}/>\n".format(nsdecls("cp", "dc", "dcterms"))
 
     @staticmethod
     def new_coreProperties() -> CT_CoreProperties:
         """Return a new `cp:coreProperties` element"""
-        return cast(CT_CoreProperties, parse_xml(CT_CoreProperties._coreProperties_tmpl))
+        return cast("CT_CoreProperties", parse_xml(CT_CoreProperties._coreProperties_tmpl))
 
     @property
     def author_text(self) -> str:
@@ -204,7 +207,7 @@ class CT_CoreProperties(BaseOxmlElement):
 
     def _get_or_add(self, prop_name: str):
         """Return element returned by 'get_or_add_' method for `prop_name`."""
-        get_or_add_method_name = "get_or_add_%s" % prop_name
+        get_or_add_method_name = f"get_or_add_{prop_name}"
         get_or_add_method = getattr(self, get_or_add_method_name)
         element = get_or_add_method()
         return element

@@ -5,7 +5,7 @@ Some of these are inferred from PowerPoint application behavior
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypedDict
+from typing import TypedDict
 
 from pptx.enum.shapes import MSO_SHAPE
 
@@ -13,10 +13,8 @@ GRAPHIC_DATA_URI_CHART = "http://schemas.openxmlformats.org/drawingml/2006/chart
 GRAPHIC_DATA_URI_OLEOBJ = "http://schemas.openxmlformats.org/presentationml/2006/ole"
 GRAPHIC_DATA_URI_TABLE = "http://schemas.openxmlformats.org/drawingml/2006/table"
 
-if TYPE_CHECKING:
-    from typing_extensions import TypeAlias
 
-AdjustmentValue: TypeAlias = "tuple[str, int]"
+type AdjustmentValue = "tuple[str, int]"
 
 
 class ShapeSpec(TypedDict):

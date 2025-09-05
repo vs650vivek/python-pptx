@@ -41,7 +41,7 @@ from ..unitutil.mock import (
 )
 
 
-class DescribeBaseSlidePart(object):
+class DescribeBaseSlidePart:
     """Unit-test suite for `pptx.parts.slide.BaseSlidePart` objects."""
 
     def it_knows_its_name(self):
@@ -81,7 +81,7 @@ class DescribeBaseSlidePart(object):
         return instance_mock(request, ImagePart)
 
 
-class DescribeNotesMasterPart(object):
+class DescribeNotesMasterPart:
     """Unit-test suite for `pptx.parts.slide.NotesMasterPart` objects."""
 
     def it_can_create_a_notes_master_part(self, request, package_, notes_master_part_, theme_part_):
@@ -179,7 +179,7 @@ class DescribeNotesMasterPart(object):
         return instance_mock(request, Part)
 
 
-class DescribeNotesSlidePart(object):
+class DescribeNotesSlidePart:
     """Unit-test suite for `pptx.parts.slide.NotesSlidePart` objects."""
 
     def it_can_create_a_notes_slide_part(
@@ -288,7 +288,7 @@ class DescribeNotesSlidePart(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribeSlidePart(object):
+class DescribeSlidePart:
     """Unit-test suite for `pptx.parts.slide.SlidePart` objects."""
 
     def it_knows_its_slide_id(self, slide_id_fixture):
@@ -527,7 +527,7 @@ class DescribeSlidePart(object):
         return instance_mock(request, Video)
 
 
-class DescribeSlideLayoutPart(object):
+class DescribeSlideLayoutPart:
     """Unit-test suite for `pptx.parts.slide.SlideLayoutPart` objects."""
 
     def it_provides_access_to_its_slide_master(self, request):
@@ -557,7 +557,7 @@ class DescribeSlideLayoutPart(object):
         assert slide_layout is slide_layout_
 
 
-class DescribeSlideMasterPart(object):
+class DescribeSlideMasterPart:
     """Unit-test suite for `pptx.parts.slide.SlideMasterPart` objects."""
 
     def it_provides_access_to_its_slide_master(self, request):

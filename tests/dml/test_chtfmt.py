@@ -12,7 +12,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock
 
 
-class DescribeChartFormat(object):
+class DescribeChartFormat:
     def it_provides_access_to_its_fill(self, fill_fixture):
         chart_format, FillFormat_, fill_, expected_xml = fill_fixture
         fill = chart_format.fill

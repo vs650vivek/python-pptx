@@ -61,11 +61,11 @@ def nsdecls(*nspfxs):
     """
     nsdecls = ""
     for nspfx in nspfxs:
-        nsdecls += ' xmlns:%s="%s"' % (nspfx, nsmap[nspfx])
+        nsdecls += f' xmlns:{nspfx}="{nsmap[nspfx]}"'
     return nsdecls
 
 
-class Element(object):
+class Element:
     """
     Represents an XML element, having a namespace, tagname, attributes, and
     may contain either text or children (but not both) or may be empty.
@@ -83,7 +83,7 @@ class Element(object):
         Provide a more meaningful repr value for an Element object, one that
         displays the tagname as a simple empty element, e.g. ``<w:pPr/>``.
         """
-        return "<%s/>" % self._tagname  # pragma: no cover
+        return f"<{self._tagname}/>"  # pragma: no cover
 
     def connect_children(self, child_node_list):
         """
@@ -191,12 +191,12 @@ class Element(object):
         cases.
         """
         _nsdecls = nsdecls(*self.nspfxs) if self.is_root else ""
-        tag = "%s<%s%s" % (self._indent_str, self._tagname, _nsdecls)
+        tag = f"{self._indent_str}<{self._tagname}{_nsdecls}"
         for attr in self._attrs:
             name, value = attr
-            tag += ' %s="%s"' % (name, value)
+            tag += f' {name}="{value}"'
         if self._text:
-            tag += ">%s" % self._text
+            tag += f">{self._text}"
         elif self._children:
             tag += ">\n"
         else:
@@ -210,9 +210,9 @@ class Element(object):
         element contains text, no leading indentation is included.
         """
         if self._text:
-            tag = "</%s>\n" % self._tagname
+            tag = f"</{self._tagname}>\n"
         elif self._children:
-            tag = "%s</%s>\n" % (self._indent_str, self._tagname)
+            tag = f"{self._indent_str}</{self._tagname}>\n"
         else:
             tag = ""
         return tag

@@ -16,7 +16,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import call, class_mock, instance_mock, property_mock
 
 
-class DescribeLineFormat(object):
+class DescribeLineFormat:
     def it_knows_its_dash_style(self, dash_style_get_fixture):
         line, expected_value = dash_style_get_fixture
         assert line.dash_style == expected_value

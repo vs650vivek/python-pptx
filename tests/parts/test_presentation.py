@@ -17,7 +17,7 @@ from ..unitutil.cxml import element
 from ..unitutil.mock import call, class_mock, instance_mock, method_mock, property_mock
 
 
-class DescribePresentationPart(object):
+class DescribePresentationPart:
     """Unit-test suite for `pptx.parts.presentation.PresentationPart` objects."""
 
     def it_provides_access_to_its_presentation(self, request):

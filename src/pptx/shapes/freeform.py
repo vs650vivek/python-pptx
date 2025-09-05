@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterable, Iterator, Sequence
+from collections.abc import Iterable, Iterator, Sequence
+from typing import TYPE_CHECKING
 
 from pptx.util import Emu, lazyproperty
 
 if TYPE_CHECKING:
-    from typing_extensions import TypeAlias
-
     from pptx.oxml.shapes.autoshape import (
         CT_Path2D,
         CT_Path2DClose,
@@ -19,8 +18,8 @@ if TYPE_CHECKING:
     from pptx.shapes.shapetree import _BaseGroupShapes  # pyright: ignore[reportPrivateUsage]
     from pptx.util import Length
 
-CT_DrawingOperation: TypeAlias = "CT_Path2DClose | CT_Path2DLineTo | CT_Path2DMoveTo"
-DrawingOperation: TypeAlias = "_LineSegment | _MoveTo | _Close"
+type CT_DrawingOperation = "CT_Path2DClose | CT_Path2DLineTo | CT_Path2DMoveTo"
+type DrawingOperation = "_LineSegment | _MoveTo | _Close"
 
 
 class FreeformBuilder(Sequence[DrawingOperation]):
@@ -44,7 +43,7 @@ class FreeformBuilder(Sequence[DrawingOperation]):
         x_scale: float,
         y_scale: float,
     ):
-        super(FreeformBuilder, self).__init__()
+        super().__init__()
         self._shapes = shapes
         self._start_x = start_x
         self._start_y = start_y
@@ -247,14 +246,14 @@ class FreeformBuilder(Sequence[DrawingOperation]):
         return int(round(self._dx * self._x_scale))
 
 
-class _BaseDrawingOperation(object):
+class _BaseDrawingOperation:
     """Base class for freeform drawing operations.
 
     A drawing operation has at least one location (x, y) in local coordinates.
     """
 
     def __init__(self, freeform_builder: FreeformBuilder, x: Length, y: Length):
-        super(_BaseDrawingOperation, self).__init__()
+        super().__init__()
         self._freeform_builder = freeform_builder
         self._x = x
         self._y = y
@@ -283,7 +282,7 @@ class _BaseDrawingOperation(object):
         return self._y
 
 
-class _Close(object):
+class _Close:
     """Specifies adding a `<a:close/>` element to the current contour."""
 
     @classmethod

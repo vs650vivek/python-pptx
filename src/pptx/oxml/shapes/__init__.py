@@ -5,8 +5,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing_extensions import TypeAlias
-
     from pptx.oxml.shapes.autoshape import CT_Shape
     from pptx.oxml.shapes.connector import CT_Connector
     from pptx.oxml.shapes.graphfrm import CT_GraphicalObjectFrame
@@ -14,6 +12,6 @@ if TYPE_CHECKING:
     from pptx.oxml.shapes.picture import CT_Picture
 
 
-ShapeElement: TypeAlias = (
+type ShapeElement = (
     "CT_Connector | CT_GraphicalObjectFrame |  CT_GroupShape | CT_Picture | CT_Shape"
 )

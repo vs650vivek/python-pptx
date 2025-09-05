@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.oxml import parse_from_template, parse_xml
 from pptx.oxml.dml.fill import CT_GradientFillProperties
@@ -20,6 +20,8 @@ from pptx.oxml.xmlchemy import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pptx.oxml.shapes.groupshape import CT_GroupShape
 
 
@@ -50,8 +52,8 @@ class CT_Background(BaseOxmlElement):
 
     def add_noFill_bgPr(self):
         """Return a new `p:bgPr` element with noFill properties."""
-        xml = "<p:bgPr %s>\n" "  <a:noFill/>\n" "  <a:effectLst/>\n" "</p:bgPr>" % nsdecls("a", "p")
-        bgPr = cast(CT_BackgroundProperties, parse_xml(xml))
+        xml = "<p:bgPr {}>\n  <a:noFill/>\n  <a:effectLst/>\n</p:bgPr>".format(nsdecls("a", "p"))
+        bgPr = cast("CT_BackgroundProperties", parse_xml(xml))
         self._insert_bgPr(bgPr)
         return bgPr
 
@@ -113,7 +115,7 @@ class CT_CommonSlideData(BaseOxmlElement):
         bg = self.bg
         if bg is None or bg.bgPr is None:
             bg = self._change_to_noFill_bg()
-        return cast(CT_BackgroundProperties, bg.bgPr)
+        return cast("CT_BackgroundProperties", bg.bgPr)
 
     def _change_to_noFill_bg(self) -> CT_Background:
         """Establish a `p:bg` child with no-fill settings.
@@ -136,7 +138,7 @@ class CT_NotesMaster(_BaseSlideElement):
     @classmethod
     def new_default(cls) -> CT_NotesMaster:
         """Return a new `p:notesMaster` element based on the built-in default template."""
-        return cast(CT_NotesMaster, parse_from_template("notesMaster"))
+        return cast("CT_NotesMaster", parse_from_template("notesMaster"))
 
 
 class CT_NotesSlide(_BaseSlideElement):
@@ -153,7 +155,7 @@ class CT_NotesSlide(_BaseSlideElement):
         Note that the template does not include placeholders, which must be subsequently cloned
         from the notes master.
         """
-        return cast(CT_NotesSlide, parse_from_template("notes"))
+        return cast("CT_NotesSlide", parse_from_template("notes"))
 
 
 class CT_Slide(_BaseSlideElement):
@@ -168,7 +170,7 @@ class CT_Slide(_BaseSlideElement):
     @classmethod
     def new(cls) -> CT_Slide:
         """Return new `p:sld` element configured as base slide shape."""
-        return cast(CT_Slide, parse_xml(cls._sld_xml()))
+        return cast("CT_Slide", parse_xml(cls._sld_xml()))
 
     @property
     def bg(self):
@@ -218,7 +220,7 @@ class CT_Slide(_BaseSlideElement):
     @staticmethod
     def _childTnLst_timing_xml():
         return (
-            "<p:timing %s>\n"
+            "<p:timing {}>\n"
             "  <p:tnLst>\n"
             "    <p:par>\n"
             '      <p:cTn id="1" dur="indefinite" restart="never" nodeType="'
@@ -227,13 +229,13 @@ class CT_Slide(_BaseSlideElement):
             "      </p:cTn>\n"
             "    </p:par>\n"
             "  </p:tnLst>\n"
-            "</p:timing>" % nsdecls("p")
+            "</p:timing>".format(nsdecls("p"))
         )
 
     @staticmethod
     def _sld_xml():
         return (
-            "<p:sld %s>\n"
+            "<p:sld {}>\n"
             "  <p:cSld>\n"
             "    <p:spTree>\n"
             "      <p:nvGrpSpPr>\n"
@@ -247,7 +249,7 @@ class CT_Slide(_BaseSlideElement):
             "  <p:clrMapOvr>\n"
             "    <a:masterClrMapping/>\n"
             "  </p:clrMapOvr>\n"
-            "</p:sld>" % nsdecls("a", "p", "r")
+            "</p:sld>".format(nsdecls("a", "p", "r"))
         )
 
 

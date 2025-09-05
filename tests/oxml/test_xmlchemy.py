@@ -27,12 +27,12 @@ from pptx.oxml.xmlchemy import (
 from ..unitdata import BaseBuilder
 
 
-class DescribeCustomElementClass(object):
+class DescribeCustomElementClass:
     def it_has_the_MetaOxmlElement_metaclass(self):
         assert type(CT_Parent).__name__ == "MetaOxmlElement"
 
 
-class DescribeChoice(object):
+class DescribeChoice:
     def it_adds_a_getter_property_for_the_choice_element(self, getter_fixture):
         parent, expected_choice = getter_fixture
         assert parent.choice is expected_choice
@@ -115,7 +115,7 @@ class DescribeChoice(object):
         return parent_bldr
 
 
-class DescribeOneAndOnlyOne(object):
+class DescribeOneAndOnlyOne:
     def it_adds_a_getter_property_for_the_child_element(self, getter_fixture):
         parent, oooChild = getter_fixture
         assert parent.oooChild is oooChild
@@ -129,7 +129,7 @@ class DescribeOneAndOnlyOne(object):
         return parent, oooChild
 
 
-class DescribeOneOrMore(object):
+class DescribeOneOrMore:
     def it_adds_a_getter_property_for_the_child_element_list(self, getter_fixture):
         parent, oomChild = getter_fixture
         assert parent.oomChild_lst[0] is oomChild
@@ -208,7 +208,7 @@ class DescribeOneOrMore(object):
         return parent_bldr
 
 
-class DescribeOptionalAttribute(object):
+class DescribeOptionalAttribute:
     def it_adds_a_getter_property_for_the_attr_value(self, getter_fixture):
         parent, optAttr_python_value = getter_fixture
         assert parent.optAttr == optAttr_python_value
@@ -239,7 +239,7 @@ class DescribeOptionalAttribute(object):
         return parent, value, expected_xml
 
 
-class DescribeRequiredAttribute(object):
+class DescribeRequiredAttribute:
     def it_adds_a_getter_property_for_the_attr_value(self, getter_fixture):
         parent, reqAttr_python_value = getter_fixture
         assert parent.reqAttr == reqAttr_python_value
@@ -283,7 +283,7 @@ class DescribeRequiredAttribute(object):
         return parent, value, expected_xml
 
 
-class DescribeZeroOrMore(object):
+class DescribeZeroOrMore:
     def it_adds_a_getter_property_for_the_child_element_list(self, getter_fixture):
         parent, zomChild = getter_fixture
         assert parent.zomChild_lst[0] is zomChild
@@ -356,7 +356,7 @@ class DescribeZeroOrMore(object):
         return parent_bldr
 
 
-class DescribeZeroOrOne(object):
+class DescribeZeroOrOne:
     def it_adds_a_getter_property_for_the_child_element(self, getter_fixture):
         parent, zooChild = getter_fixture
         assert parent.zooChild is zooChild
@@ -443,7 +443,7 @@ class DescribeZeroOrOne(object):
         return parent_bldr
 
 
-class DescribeZeroOrOneChoice(object):
+class DescribeZeroOrOneChoice:
     def it_adds_a_getter_for_the_current_choice(self, getter_fixture):
         parent, expected_choice = getter_fixture
         assert parent.eg_zooChoice is expected_choice
@@ -454,7 +454,7 @@ class DescribeZeroOrOneChoice(object):
     def getter_fixture(self, request):
         choice_tag = request.param
         parent = self.parent_bldr(choice_tag).element
-        tagname = "p:%s" % choice_tag
+        tagname = f"p:{choice_tag}"
         expected_choice = parent.find(qn(tagname))  # None if not found
         return parent, expected_choice
 

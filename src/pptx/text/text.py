@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.dml.fill import FillFormat
 from pptx.enum.dml import MSO_FILL
@@ -16,6 +16,8 @@ from pptx.text.layout import TextFitter
 from pptx.util import Centipoints, Emu, Length, Pt, lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from pptx.dml.color import ColorFormat
     from pptx.enum.text import (
         MSO_TEXT_UNDERLINE_TYPE,
@@ -41,7 +43,7 @@ class TextFrame(Subshape):
     """
 
     def __init__(self, txBody: CT_TextBody, parent: ProvidesPart):
-        super(TextFrame, self).__init__(parent)
+        super().__init__(parent)
         self._element = self._txBody = txBody
         self._parent = parent
 
@@ -208,7 +210,7 @@ class TextFrame(Subshape):
     def word_wrap(self, value: bool | None):
         if value not in (True, False, None):
             raise ValueError(  # pragma: no cover
-                "assigned value must be True, False, or None, got %s" % value
+                f"assigned value must be True, False, or None, got {value}"
             )
         self._txBody.bodyPr.wrap = {
             True: ST_TextWrappingType.SQUARE,
@@ -277,7 +279,7 @@ class TextFrame(Subshape):
             set_rPr_font(rPr, family, size, bold, italic)
 
 
-class Font(object):
+class Font:
     """Character properties object, providing font size, font name, bold, italic, etc.
 
     Corresponds to `a:rPr` child element of a run. Also appears as `a:defRPr` and
@@ -285,7 +287,7 @@ class Font(object):
     """
 
     def __init__(self, rPr: CT_TextCharacterProperties):
-        super(Font, self).__init__()
+        super().__init__()
         self._element = self._rPr = rPr
 
     @property
@@ -429,7 +431,7 @@ class _Hyperlink(Subshape):
     """
 
     def __init__(self, rPr: CT_TextCharacterProperties, parent: ProvidesPart):
-        super(_Hyperlink, self).__init__(parent)
+        super().__init__(parent)
         self._rPr = rPr
 
     @property
@@ -468,7 +470,7 @@ class _Paragraph(Subshape):
     """Paragraph object. Not intended to be constructed directly."""
 
     def __init__(self, p: CT_TextParagraph, parent: ProvidesPart):
-        super(_Paragraph, self).__init__(parent)
+        super().__init__(parent)
         self._element = self._p = p
 
     def add_line_break(self):
@@ -636,7 +638,7 @@ class _Run(Subshape):
     """Text run object. Corresponds to `a:r` child element in a paragraph."""
 
     def __init__(self, r: CT_RegularTextRun, parent: ProvidesPart):
-        super(_Run, self).__init__(parent)
+        super().__init__(parent)
         self._r = r
 
     @property

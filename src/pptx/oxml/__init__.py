@@ -6,7 +6,7 @@ Also makes available a handful of functions that wrap its typical uses.
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 from lxml import etree
 
@@ -25,7 +25,7 @@ oxml_parser.set_element_class_lookup(element_class_lookup)
 def parse_from_template(template_file_name: str):
     """Return an element loaded from the XML in the template file identified by `template_name`."""
     thisdir = os.path.split(__file__)[0]
-    filename = os.path.join(thisdir, "..", "templates", "%s.xml" % template_file_name)
+    filename = os.path.join(thisdir, "..", "templates", f"{template_file_name}.xml")
     with open(filename, "rb") as f:
         xml = f.read()
     return parse_xml(xml)
@@ -36,7 +36,7 @@ def parse_xml(xml: str | bytes):
     return etree.fromstring(xml, oxml_parser)
 
 
-def register_element_cls(nsptagname: str, cls: Type[BaseOxmlElement]):
+def register_element_cls(nsptagname: str, cls: type[BaseOxmlElement]):
     """Register `cls` to be constructed when oxml parser encounters element having `nsptag_name`.
 
     `nsptag_name` is a string of the form `nspfx:tagroot`, e.g. `"w:document"`.

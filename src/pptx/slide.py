@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.dml.fill import FillFormat
 from pptx.enum.shapes import PP_PLACEHOLDER
@@ -20,6 +20,8 @@ from pptx.shared import ElementProxy, ParentedElementProxy, PartElementProxy
 from pptx.util import lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from pptx.oxml.presentation import CT_SlideIdList, CT_SlideMasterIdList
     from pptx.oxml.slide import (
         CT_CommonSlideData,
@@ -245,7 +247,7 @@ class Slides(ParentedElementProxy):
     part: PresentationPart  # pyright: ignore[reportIncompatibleMethodOverride]
 
     def __init__(self, sldIdLst: CT_SlideIdList, prs: Presentation):
-        super(Slides, self).__init__(sldIdLst, prs)
+        super().__init__(sldIdLst, prs)
         self._sldIdLst = sldIdLst
 
     def __getitem__(self, idx: int) -> Slide:
@@ -290,7 +292,7 @@ class Slides(ParentedElementProxy):
         for idx, this_slide in enumerate(self):
             if this_slide == slide:
                 return idx
-        raise ValueError("%s is not in slide collection" % slide)
+        raise ValueError(f"{slide} is not in slide collection")
 
 
 class SlideLayout(_BaseSlide):
@@ -350,7 +352,7 @@ class SlideLayouts(ParentedElementProxy):
     part: SlideMasterPart  # pyright: ignore[reportIncompatibleMethodOverride]
 
     def __init__(self, sldLayoutIdLst: CT_SlideLayoutIdList, parent: SlideMaster):
-        super(SlideLayouts, self).__init__(sldLayoutIdLst, parent)
+        super().__init__(sldLayoutIdLst, parent)
         self._sldLayoutIdLst = sldLayoutIdLst
 
     def __getitem__(self, idx: int) -> SlideLayout:
@@ -435,7 +437,7 @@ class SlideMasters(ParentedElementProxy):
     part: PresentationPart  # pyright: ignore[reportIncompatibleMethodOverride]
 
     def __init__(self, sldMasterIdLst: CT_SlideMasterIdList, parent: Presentation):
-        super(SlideMasters, self).__init__(sldMasterIdLst, parent)
+        super().__init__(sldMasterIdLst, parent)
         self._sldMasterIdLst = sldMasterIdLst
 
     def __getitem__(self, idx: int) -> SlideMaster:
@@ -465,7 +467,7 @@ class _Background(ElementProxy):
     """
 
     def __init__(self, cSld: CT_CommonSlideData):
-        super(_Background, self).__init__(cSld)
+        super().__init__(cSld)
         self._cSld = cSld
 
     @lazyproperty

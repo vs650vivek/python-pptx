@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from pptx.types import ProvidesPart
 
 
-class ElementProxy(object):
+class ElementProxy:
     """Base class for lxml element proxy classes.
 
     An element proxy class is one whose primary responsibilities are fulfilled by manipulating the
@@ -52,7 +52,7 @@ class ParentedElementProxy(ElementProxy):
     """
 
     def __init__(self, element: BaseOxmlElement, parent: ProvidesPart):
-        super(ParentedElementProxy, self).__init__(element)
+        super().__init__(element)
         self._parent = parent
 
     @property
@@ -73,7 +73,7 @@ class PartElementProxy(ElementProxy):
     """Provides common members for proxy-objects that wrap a part's root element, e.g. `p:sld`."""
 
     def __init__(self, element: BaseOxmlElement, part: XmlPart):
-        super(PartElementProxy, self).__init__(element)
+        super().__init__(element)
         self._part = part
 
     @property

@@ -13,7 +13,7 @@ from ..unitutil.cxml import element
 from ..unitutil.mock import class_mock, initializer_mock, instance_mock
 
 
-class DescribeGroupShape(object):
+class DescribeGroupShape:
     def it_raises_on_access_click_action(self, click_action_fixture):
         group = click_action_fixture
         with pytest.raises(TypeError):

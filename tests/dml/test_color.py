@@ -20,7 +20,7 @@ from ..oxml.unitdata.dml import (
 )
 
 
-class DescribeColorFormat(object):
+class DescribeColorFormat:
     def it_knows_the_type_of_its_color(self, color_type_fixture_):
         color_format, color_type = color_type_fixture_
         assert color_format.type == color_type
@@ -262,7 +262,7 @@ class DescribeColorFormat(object):
         return color_format, theme_color
 
 
-class DescribeRGBColor(object):
+class DescribeRGBColor:
     def it_is_natively_constructed_using_three_ints_0_to_255(self):
         RGBColor(0x12, 0x34, 0x56)
         with pytest.raises(ValueError):

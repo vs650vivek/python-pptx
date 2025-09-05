@@ -33,7 +33,7 @@ class ImagePart(Part):
         blob: bytes,
         filename: str | None = None,
     ):
-        super(ImagePart, self).__init__(partname, content_type, package, blob)
+        super().__init__(partname, content_type, package, blob)
         self._blob = blob
         self._filename = filename
 
@@ -139,11 +139,11 @@ class ImagePart(Part):
         return image.size
 
 
-class Image(object):
+class Image:
     """Immutable value object representing an image such as a JPEG, PNG, or GIF."""
 
     def __init__(self, blob: bytes, filename: str | None):
-        super(Image, self).__init__()
+        super().__init__()
         self._blob = blob
         self._filename = filename
 

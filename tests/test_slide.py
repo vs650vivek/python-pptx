@@ -43,7 +43,7 @@ from .unitutil.cxml import element, xml
 from .unitutil.mock import call, class_mock, instance_mock, method_mock, property_mock
 
 
-class Describe_BaseSlide(object):
+class Describe_BaseSlide:
     """Unit-test suite for `pptx.slide._BaseSlide` objects."""
 
     def it_knows_its_name(self, name_get_fixture):
@@ -106,7 +106,7 @@ class Describe_BaseSlide(object):
         return instance_mock(request, _Background)
 
 
-class Describe_BaseMaster(object):
+class Describe_BaseMaster:
     """Unit-test suite for `pptx.slide._BaseMaster` objects."""
 
     def it_is_a_BaseSlide_subclass(self, subclass_fixture):
@@ -164,7 +164,7 @@ class Describe_BaseMaster(object):
         return instance_mock(request, MasterShapes)
 
 
-class DescribeNotesSlide(object):
+class DescribeNotesSlide:
     """Unit-test suite for `pptx.slide.NotesSlide` objects."""
 
     def it_can_clone_the_notes_master_placeholders(self, request, notes_master_, shapes_):
@@ -220,7 +220,7 @@ class DescribeNotesSlide(object):
         placeholders_ = []
         for type_name in type_names:
             placeholder_ = instance_mock(
-                request, NotesSlidePlaceholder, name="%s-placeholder" % type_name
+                request, NotesSlidePlaceholder, name=f"{type_name}-placeholder"
             )
             placeholder_.placeholder_format.type = getattr(PP_PLACEHOLDER, type_name)
             placeholders_.append(placeholder_)
@@ -294,7 +294,7 @@ class DescribeNotesSlide(object):
         return instance_mock(request, TextFrame)
 
 
-class DescribeSlide(object):
+class DescribeSlide:
     """Unit-test suite for `pptx.slide.Slide` objects."""
 
     def it_is_a_BaseSlide_subclass(self, subclass_fixture):
@@ -443,7 +443,7 @@ class DescribeSlide(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribeSlides(object):
+class DescribeSlides:
     """Unit-test suite for `pptx.slide.Slides` objects."""
 
     def it_supports_indexed_access(self, getitem_fixture):
@@ -590,7 +590,7 @@ class DescribeSlides(object):
         return instance_mock(request, SlideLayout)
 
 
-class DescribeSlideLayout(object):
+class DescribeSlideLayout:
     """Unit-test suite for `pptx.slide.SlideLayout` objects."""
 
     def it_is_a_BaseSlide_subclass(self):
@@ -743,7 +743,7 @@ class DescribeSlideLayout(object):
         return instance_mock(request, SlideMaster)
 
 
-class DescribeSlideLayouts(object):
+class DescribeSlideLayouts:
     """Unit-test suite for `pptx.slide.SlideLayouts` objects."""
 
     def it_supports_len(self, len_fixture):
@@ -898,7 +898,7 @@ class DescribeSlideLayouts(object):
         return instance_mock(request, SlideMasterPart)
 
 
-class DescribeSlideMaster(object):
+class DescribeSlideMaster:
     """Unit-test suite for `pptx.slide.SlideMaster` objects."""
 
     def it_is_a_BaseMaster_subclass(self, subclass_fixture):
@@ -935,7 +935,7 @@ class DescribeSlideMaster(object):
         return instance_mock(request, SlideLayouts)
 
 
-class DescribeSlideMasters(object):
+class DescribeSlideMasters:
     """Unit-test suite for `pptx.slide.SlideMasters` objects."""
 
     def it_knows_how_many_masters_it_contains(self, len_fixture):
@@ -1011,7 +1011,7 @@ class DescribeSlideMasters(object):
         return instance_mock(request, SlideMaster)
 
 
-class Describe_Background(object):
+class Describe_Background:
     """Unit-test suite for `pptx.slide._Background` objects."""
 
     @pytest.mark.parametrize(

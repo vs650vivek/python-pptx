@@ -12,7 +12,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock, method_mock
 
 
-class DescribeDataLabel(object):
+class DescribeDataLabel:
     def it_has_a_font(self, font_fixture):
         data_label, expected_xml = font_fixture
         font = data_label.font
@@ -66,8 +66,7 @@ class DescribeDataLabel(object):
             ),
             (
                 "c:ser{a:b=c}/c:dLbls/c:dLbl/(c:idx{val=9},c:txPr/(a:bodyPr,a:p))",
-                "c:ser{a:b=c}/c:dLbls/c:dLbl/(c:idx{val=9},c:txPr/(a:bodyPr,a:p/a:p"
-                "Pr/a:defRPr))",
+                "c:ser{a:b=c}/c:dLbls/c:dLbl/(c:idx{val=9},c:txPr/(a:bodyPr,a:p/a:pPr/a:defRPr))",
             ),
         ]
     )
@@ -256,7 +255,7 @@ class DescribeDataLabel(object):
         return class_mock(request, "pptx.chart.datalabel.TextFrame")
 
 
-class DescribeDataLabels(object):
+class DescribeDataLabels:
     def it_provides_access_to_its_font(self, font_fixture):
         data_labels, Font_, defRPr, font_ = font_fixture
         font = data_labels.font

@@ -19,7 +19,7 @@ class Categories(Sequence):
     """
 
     def __init__(self, xChart):
-        super(Categories, self).__init__()
+        super().__init__()
         self._xChart = xChart
 
     def __getitem__(self, idx):

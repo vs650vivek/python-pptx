@@ -15,7 +15,7 @@ from pptx.oxml.simpletypes import ST_BarDir, ST_Grouping
 from pptx.util import lazyproperty
 
 
-class _BasePlot(object):
+class _BasePlot:
     """
     A distinct plot that appears in the plot area of a chart. A chart may
     have more than one plot, in which case they appear as superimposed
@@ -23,7 +23,7 @@ class _BasePlot(object):
     """
 
     def __init__(self, xChart, chart):
-        super(_BasePlot, self).__init__()
+        super().__init__()
         self._element = xChart
         self._chart = chart
 
@@ -245,12 +245,12 @@ def PlotFactory(xChart, chart):
             qn("c:scatterChart"): XyPlot,
         }[xChart.tag]
     except KeyError:
-        raise ValueError("unsupported plot type %s" % xChart.tag)
+        raise ValueError(f"unsupported plot type {xChart.tag}")
 
     return PlotCls(xChart, chart)
 
 
-class PlotTypeInspector(object):
+class PlotTypeInspector:
     """
     "One-shot" service object that knows how to identify the type of a plot
     as a member of the XL_CHART_TYPE enumeration.
@@ -275,9 +275,7 @@ class PlotTypeInspector(object):
                 "XyPlot": cls._differentiate_xy_chart_type,
             }[plot.__class__.__name__]
         except KeyError:
-            raise NotImplementedError(
-                "chart_type() not implemented for %s" % plot.__class__.__name__
-            )
+            raise NotImplementedError(f"chart_type() not implemented for {plot.__class__.__name__}")
         return chart_type_method(plot)
 
     @classmethod
@@ -311,7 +309,7 @@ class PlotTypeInspector(object):
                 ST_Grouping.STACKED: XL.COLUMN_STACKED,
                 ST_Grouping.PERCENT_STACKED: XL.COLUMN_STACKED_100,
             }[barChart.grouping_val]
-        raise ValueError("invalid barChart.barDir value '%s'" % barChart.barDir.val)
+        raise ValueError(f"invalid barChart.barDir value '{barChart.barDir.val}'")
 
     @classmethod
     def _differentiate_bubble_chart_type(cls, plot):
@@ -340,9 +338,7 @@ class PlotTypeInspector(object):
 
         def has_line_markers():
             matches = lineChart.xpath('c:ser/c:marker/c:symbol[@val="none"]')
-            if matches:
-                return False
-            return True
+            return not matches
 
         if has_line_markers():
             return {
@@ -370,9 +366,7 @@ class PlotTypeInspector(object):
 
         def noMarkers():
             matches = radarChart.xpath("c:ser/c:marker/c:symbol")
-            if matches and matches[0].get("val") == "none":
-                return True
-            return False
+            return bool(matches and matches[0].get("val") == "none")
 
         if radar_style is None:
             return XL.RADAR
@@ -391,9 +385,7 @@ class PlotTypeInspector(object):
 
         def noMarkers():
             symbols = scatterChart.xpath("c:ser/c:marker/c:symbol")
-            if symbols and symbols[0].get("val") == "none":
-                return True
-            return False
+            return bool(symbols and symbols[0].get("val") == "none")
 
         scatter_style = scatterChart.xpath("c:scatterStyle")[0].get("val")
 

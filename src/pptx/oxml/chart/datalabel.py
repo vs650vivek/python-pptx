@@ -83,7 +83,7 @@ class CT_DLbl(BaseOxmlElement):
         changes not being visible and may result in a repair error on open.
         """
         return parse_xml(
-            "<c:dLbl %s>\n"
+            "<c:dLbl {}>\n"
             '  <c:idx val="666"/>\n'
             "  <c:spPr/>\n"
             "  <c:txPr>\n"
@@ -101,7 +101,7 @@ class CT_DLbl(BaseOxmlElement):
             '  <c:showSerName val="0"/>\n'
             '  <c:showPercent val="0"/>\n'
             '  <c:showBubbleSize val="0"/>\n'
-            "</c:dLbl>" % nsdecls("c", "a")
+            "</c:dLbl>".format(nsdecls("c", "a"))
         )
 
     def remove_tx_rich(self):
@@ -192,7 +192,7 @@ class CT_DLbls(BaseOxmlElement):
     def new_dLbls(cls):
         """Return a newly created "loose" `c:dLbls` element."""
         return parse_xml(
-            "<c:dLbls %s>\n"
+            "<c:dLbls {}>\n"
             '  <c:showLegendKey val="0"/>\n'
             '  <c:showVal val="0"/>\n'
             '  <c:showCatName val="0"/>\n'
@@ -200,7 +200,7 @@ class CT_DLbls(BaseOxmlElement):
             '  <c:showPercent val="0"/>\n'
             '  <c:showBubbleSize val="0"/>\n'
             '  <c:showLeaderLines val="1"/>\n'
-            "</c:dLbls>" % nsdecls("c")
+            "</c:dLbls>".format(nsdecls("c"))
         )
 
     def _insert_dLbl_in_sequence(self, idx):
@@ -234,19 +234,19 @@ class CT_DLbls(BaseOxmlElement):
         `val=true`, which is not what we need so we override to make val
         explicitly False.
         """
-        return parse_xml('<c:showCatName %s val="0"/>' % nsdecls("c"))
+        return parse_xml('<c:showCatName {} val="0"/>'.format(nsdecls("c")))
 
     def _new_showLegendKey(self):
-        return parse_xml('<c:showLegendKey %s val="0"/>' % nsdecls("c"))
+        return parse_xml('<c:showLegendKey {} val="0"/>'.format(nsdecls("c")))
 
     def _new_showPercent(self):
-        return parse_xml('<c:showPercent %s val="0"/>' % nsdecls("c"))
+        return parse_xml('<c:showPercent {} val="0"/>'.format(nsdecls("c")))
 
     def _new_showSerName(self):
-        return parse_xml('<c:showSerName %s val="0"/>' % nsdecls("c"))
+        return parse_xml('<c:showSerName {} val="0"/>'.format(nsdecls("c")))
 
     def _new_showVal(self):
-        return parse_xml('<c:showVal %s val="0"/>' % nsdecls("c"))
+        return parse_xml('<c:showVal {} val="0"/>'.format(nsdecls("c")))
 
     def _new_txPr(self):
         return CT_TextBody.new_txPr()

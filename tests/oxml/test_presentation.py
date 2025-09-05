@@ -4,20 +4,21 @@
 
 from __future__ import annotations
 
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import pytest
 
-from pptx.oxml.presentation import CT_SlideIdList
-
 from ..unitutil.cxml import element, xml
 
+if TYPE_CHECKING:
+    from pptx.oxml.presentation import CT_SlideIdList
 
-class DescribeCT_SlideIdList(object):
+
+class DescribeCT_SlideIdList:
     """Unit-test suite for `pptx.oxml.presentation.CT_SlideIdLst` objects."""
 
     def it_can_add_a_sldId_element_as_a_child(self):
-        sldIdLst = cast(CT_SlideIdList, element("p:sldIdLst/p:sldId{r:id=rId4,id=256}"))
+        sldIdLst = cast("CT_SlideIdList", element("p:sldIdLst/p:sldId{r:id=rId4,id=256}"))
 
         sldIdLst.add_sldId("rId1")
 
@@ -36,7 +37,7 @@ class DescribeCT_SlideIdList(object):
         ],
     )
     def it_knows_the_next_available_slide_id(self, sldIdLst_cxml: str, expected_value: int):
-        sldIdLst = cast(CT_SlideIdList, element(sldIdLst_cxml))
+        sldIdLst = cast("CT_SlideIdList", element(sldIdLst_cxml))
         assert sldIdLst._next_id == expected_value
 
     @pytest.mark.parametrize(
@@ -55,7 +56,7 @@ class DescribeCT_SlideIdList(object):
     def and_it_chooses_a_valid_slide_id_when_max_slide_id_is_used_for_a_slide(
         self, sldIdLst_cxml: str, expected_value: int
     ):
-        sldIdLst = cast(CT_SlideIdList, element(sldIdLst_cxml))
+        sldIdLst = cast("CT_SlideIdList", element(sldIdLst_cxml))
 
         slide_id = sldIdLst._next_id
 

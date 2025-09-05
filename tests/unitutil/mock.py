@@ -110,7 +110,7 @@ def method_mock(
 
 def open_mock(request: FixtureRequest, module_name: str, **kwargs: Any):
     """Return a mock for the builtin `open()` method in `module_name`."""
-    target = "%s.open" % module_name
+    target = f"{module_name}.open"
     _patch = patch(target, mock_open(), create=True, **kwargs)
     request.addfinalizer(_patch.stop)
     return _patch.start()

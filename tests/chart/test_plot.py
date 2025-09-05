@@ -30,7 +30,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock
 
 
-class Describe_BasePlot(object):
+class Describe_BasePlot:
     def it_knows_which_chart_it_belongs_to(self, chart_fixture):
         plot, expected_value = chart_fixture
         assert plot.chart == expected_value
@@ -199,7 +199,7 @@ class Describe_BasePlot(object):
         return instance_mock(request, SeriesCollection)
 
 
-class DescribeBarPlot(object):
+class DescribeBarPlot:
     def it_knows_its_gap_width(self, gap_width_get_fixture):
         bar_plot, expected_value = gap_width_get_fixture
         assert bar_plot.gap_width == expected_value
@@ -275,7 +275,7 @@ class DescribeBarPlot(object):
         return bar_plot, new_value, expected_xml
 
 
-class DescribeBubblePlot(object):
+class DescribeBubblePlot:
     def it_knows_its_bubble_scale(self, bubble_scale_get_fixture):
         bubble_plot, expected_value = bubble_scale_get_fixture
         assert bubble_plot.bubble_scale == expected_value
@@ -325,7 +325,7 @@ class DescribeBubblePlot(object):
         return bubble_plot, new_value, expected_xml
 
 
-class DescribePlotFactory(object):
+class DescribePlotFactory:
     def it_contructs_a_plot_object_from_a_plot_element(self, call_fixture):
         xChart, chart_, PlotClass_, plot_ = call_fixture
         plot = PlotFactory(xChart, chart_)
@@ -350,7 +350,7 @@ class DescribePlotFactory(object):
     def call_fixture(self, request, chart_):
         xChart_cxml, PlotCls = request.param
         plot_ = instance_mock(request, PlotCls, name="plot_")
-        class_spec = "pptx.chart.plot.%s" % PlotCls.__name__
+        class_spec = f"pptx.chart.plot.{PlotCls.__name__}"
         PlotClass_ = class_mock(request, class_spec, return_value=plot_)
         xChart = element(xChart_cxml)
         return xChart, chart_, PlotClass_, plot_
@@ -362,7 +362,7 @@ class DescribePlotFactory(object):
         return instance_mock(request, Chart)
 
 
-class DescribePlotTypeInspector(object):
+class DescribePlotTypeInspector:
     def it_can_determine_the_chart_type_of_a_plot(self, chart_type_fixture):
         plot, expected_chart_type = chart_type_fixture
         chart_type = PlotTypeInspector.chart_type(plot)
@@ -420,24 +420,23 @@ class DescribePlotTypeInspector(object):
             ("c:lineChart/c:grouping{val=percentStacked}", XL.LINE_MARKERS_STACKED_100),
             ("c:lineChart/c:ser/c:marker/c:symbol{val=none}", XL.LINE),
             (
-                "c:lineChart/(c:grouping{val=stacked},c:ser/c:marker/c:symbol{val=n" "one})",
+                "c:lineChart/(c:grouping{val=stacked},c:ser/c:marker/c:symbol{val=none})",
                 XL.LINE_STACKED,
             ),
             (
-                "c:lineChart/(c:grouping{val=percentStacked},c:ser/c:marker/c:symbo" "l{val=none})",
+                "c:lineChart/(c:grouping{val=percentStacked},c:ser/c:marker/c:symbol{val=none})",
                 XL.LINE_STACKED_100,
             ),
             ("c:pieChart", XL.PIE),
             ("c:pieChart/c:ser/c:explosion{val=25}", XL.PIE_EXPLODED),
             ("c:scatterChart/c:scatterStyle", XL.XY_SCATTER),
             (
-                "c:scatterChart/(c:scatterStyle{val=lineMarker},c:ser/c:spPr/a:ln/a" ":noFill)",
+                "c:scatterChart/(c:scatterStyle{val=lineMarker},c:ser/c:spPr/a:ln/a:noFill)",
                 XL.XY_SCATTER,
             ),
             ("c:scatterChart/c:scatterStyle{val=lineMarker}", XL.XY_SCATTER_LINES),
             (
-                "c:scatterChart/(c:scatterStyle{val=lineMarker},c:ser/c:marker/c:sy"
-                "mbol{val=none})",
+                "c:scatterChart/(c:scatterStyle{val=lineMarker},c:ser/c:marker/c:symbol{val=none})",
                 XL.XY_SCATTER_LINES_NO_MARKERS,
             ),
             (
@@ -460,7 +459,7 @@ class DescribePlotTypeInspector(object):
             ("c:radarChart/c:radarStyle{val=marker}", XL.RADAR_MARKERS),
             ("c:radarChart/c:radarStyle{val=filled}", XL.RADAR_FILLED),
             (
-                "c:radarChart/(c:radarStyle{val=marker},c:ser/c:marker/c:symbol{val" "=none})",
+                "c:radarChart/(c:radarStyle{val=marker},c:ser/c:marker/c:symbol{val=none})",
                 XL.RADAR,
             ),
         ]

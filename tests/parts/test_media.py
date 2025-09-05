@@ -9,7 +9,7 @@ from pptx.parts.media import MediaPart
 from ..unitutil.mock import initializer_mock, instance_mock
 
 
-class DescribeMediaPart(object):
+class DescribeMediaPart:
     """Unit-test suite for `pptx.parts.media.MediaPart` objects."""
 
     def it_can_construct_from_a_media_object(self, request):

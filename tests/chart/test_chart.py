@@ -27,7 +27,7 @@ from ..unitutil.mock import (
 )
 
 
-class DescribeChart(object):
+class DescribeChart:
     """Unit-test suite for `pptx.chart.chart.Chart` objects."""
 
     def it_provides_access_to_its_font(self, font_fixture, Font_, font_):
@@ -150,7 +150,7 @@ class DescribeChart(object):
     @pytest.fixture(params=["c:catAx", "c:dateAx", "c:valAx"])
     def category_axis_fixture(self, request, CategoryAxis_, DateAxis_, ValueAxis_):
         ax_tag = request.param
-        chartSpace_cxml = "c:chartSpace/c:chart/c:plotArea/%s" % ax_tag
+        chartSpace_cxml = f"c:chartSpace/c:chart/c:plotArea/{ax_tag}"
         chartSpace = element(chartSpace_cxml)
         chart = Chart(chartSpace, None)
         AxisCls_ = {
@@ -159,7 +159,7 @@ class DescribeChart(object):
             "c:valAx": ValueAxis_,
         }[ax_tag]
         axis_ = AxisCls_.return_value
-        xAx = chartSpace.xpath(".//%s" % ax_tag)[0]
+        xAx = chartSpace.xpath(f".//{ax_tag}")[0]
         return chart, axis_, AxisCls_, xAx
 
     @pytest.fixture
@@ -171,7 +171,7 @@ class DescribeChart(object):
         params=[
             (
                 "c:chartSpace{a:b=c}",
-                "c:chartSpace{a:b=c}/c:txPr/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:chartSpace{a:b=c}/c:txPr/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             ("c:chartSpace/c:txPr/a:p", "c:chartSpace/c:txPr/a:p/a:pPr/a:defRPr"),
             (
@@ -222,7 +222,7 @@ class DescribeChart(object):
     )
     def has_title_set_fixture(self, request):
         chart_cxml, new_value, expected_cxml = request.param
-        chart = Chart(element("c:chartSpace/%s" % chart_cxml), None)
+        chart = Chart(element(f"c:chartSpace/{chart_cxml}"), None)
         expected_xml = xml(expected_cxml)
         return chart, new_value, expected_xml
 
@@ -436,7 +436,7 @@ class DescribeChart(object):
         return property_mock(request, Chart, "_workbook", return_value=workbook_)
 
 
-class DescribeChartTitle(object):
+class DescribeChartTitle:
     """Unit-test suite for `pptx.chart.chart.ChartTitle` objects."""
 
     def it_provides_access_to_its_format(self, format_fixture):
@@ -486,17 +486,17 @@ class DescribeChartTitle(object):
             (
                 "c:title{a:b=c}",
                 True,
-                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             (
                 "c:title{a:b=c}/c:tx",
                 True,
-                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             (
                 "c:title{a:b=c}/c:tx/c:strRef",
                 True,
-                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr" ")",
+                "c:title{a:b=c}/c:tx/c:rich/(a:bodyPr,a:lstStyle,a:p/a:pPr/a:defRPr)",
             ),
             ("c:title/c:tx/c:rich", True, "c:title/c:tx/c:rich"),
             ("c:title", False, "c:title"),
@@ -532,7 +532,7 @@ class DescribeChartTitle(object):
         return class_mock(request, "pptx.chart.chart.TextFrame")
 
 
-class Describe_Plots(object):
+class Describe_Plots:
     """Unit-test suite for `pptx.chart.chart._Plots` objects."""
 
     def it_supports_indexed_access(self, getitem_fixture):

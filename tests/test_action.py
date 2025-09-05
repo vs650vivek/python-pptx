@@ -15,7 +15,7 @@ from .unitutil.cxml import element, xml
 from .unitutil.mock import call, class_mock, instance_mock, method_mock, property_mock
 
 
-class DescribeActionSetting(object):
+class DescribeActionSetting:
     """Unit-test suite for `pptx.action.ActionSetting` objects."""
 
     def it_knows_its_action_type(self, action_fixture):
@@ -49,7 +49,7 @@ class DescribeActionSetting(object):
         _clear_click_action_.assert_called_once_with(action_setting)
         part_.relate_to.assert_called_once_with(slide_part_, RT.SLIDE)
         assert action_setting._element.xml == xml(
-            "p:cNvPr{a:b=c,r:s=t}/a:hlinkClick{action=ppaction://hlinksldjump,r:id=rI" "d42}",
+            "p:cNvPr{a:b=c,r:s=t}/a:hlinkClick{action=ppaction://hlinksldjump,r:id=rId42}",
         )
 
     def but_it_clears_the_target_slide_if_None_is_assigned(self, _clear_click_action_):
@@ -250,7 +250,7 @@ class DescribeActionSetting(object):
         return property_mock(request, ActionSetting, "_slide_index")
 
 
-class DescribeHyperlink(object):
+class DescribeHyperlink:
     """Unit-test suite for `pptx.action.Hyperlink` objects."""
 
     def it_knows_the_target_url_of_the_hyperlink(self, address_fixture):

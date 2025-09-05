@@ -14,7 +14,7 @@ from pptx.parts.presentation import PresentationPart
 from .unitutil.mock import class_mock, instance_mock
 
 
-class DescribePresentation(object):
+class DescribePresentation:
     def it_opens_default_template_on_no_path_provided(self, call_fixture):
         Package_, path, prs_ = call_fixture
         prs = Presentation()

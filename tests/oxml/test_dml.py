@@ -11,7 +11,7 @@ from pptx.oxml.ns import qn
 from .unitdata.dml import a_lumMod, a_lumOff, a_schemeClr, an_srgbClr
 
 
-class Describe_BaseColorElement(object):
+class Describe_BaseColorElement:
     def it_can_get_the_lumMod_child_element_if_there_is_one(
         self, schemeClr, schemeClr_with_lumMod, lumMod
     ):
@@ -83,7 +83,7 @@ class Describe_BaseColorElement(object):
         return schemeClr
 
 
-class DescribeCT_Percentage(object):
+class DescribeCT_Percentage:
     def it_is_used_by_the_parser_for_a_lumOff_element(self, lumOff):
         assert isinstance(lumOff, CT_Percentage)
 
@@ -108,7 +108,7 @@ class DescribeCT_Percentage(object):
         return a_lumOff().with_nsdecls().with_val("66666").element
 
 
-class DescribeCT_SchemeColor(object):
+class DescribeCT_SchemeColor:
     def it_is_used_by_the_parser_for_a_schemeClr_element(self, schemeClr):
         assert isinstance(schemeClr, CT_SchemeColor)
 
@@ -130,7 +130,7 @@ class DescribeCT_SchemeColor(object):
         return a_schemeClr().with_nsdecls().with_val("accent1").xml()
 
 
-class DescribeCT_SRgbColor(object):
+class DescribeCT_SRgbColor:
     def it_is_used_by_the_parser_for_an_srgbClr_element(self, srgbClr):
         assert isinstance(srgbClr, CT_SRgbColor)
 

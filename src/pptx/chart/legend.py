@@ -7,13 +7,13 @@ from pptx.text.text import Font
 from pptx.util import lazyproperty
 
 
-class Legend(object):
+class Legend:
     """
     Represents the legend in a chart. A chart can have at most one legend.
     """
 
     def __init__(self, legend_elm):
-        super(Legend, self).__init__()
+        super().__init__()
         self._element = legend_elm
 
     @lazyproperty

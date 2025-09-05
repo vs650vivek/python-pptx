@@ -21,7 +21,7 @@ from pptx.parts.media import MediaPart
 from .unitutil.mock import call, class_mock, instance_mock, method_mock, property_mock
 
 
-class DescribePackage(object):
+class DescribePackage:
     """Unit-test suite for `pptx.package.Package` objects."""
 
     def it_provides_access_to_its_core_properties_part(self):
@@ -153,7 +153,7 @@ class DescribePackage(object):
         return property_mock(request, Package, "_media_parts")
 
 
-class Describe_ImageParts(object):
+class Describe_ImageParts:
     """Unit-test suite for `pptx.package._ImageParts` objects."""
 
     def it_can_iterate_over_the_package_image_parts(self, iter_fixture):
@@ -269,7 +269,7 @@ class Describe_ImageParts(object):
         return instance_mock(request, Package)
 
 
-class Describe_MediaParts(object):
+class Describe_MediaParts:
     """Unit-test suite for `pptx.package._MediaParts` objects."""
 
     def it_can_iterate_the_media_parts_in_the_package(self, iter_fixture):

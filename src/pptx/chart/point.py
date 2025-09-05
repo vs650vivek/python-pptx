@@ -16,7 +16,7 @@ class _BasePoints(Sequence):
     """
 
     def __init__(self, ser):
-        super(_BasePoints, self).__init__()
+        super().__init__()
         self._element = ser
         self._ser = ser
 
@@ -51,7 +51,7 @@ class CategoryPoints(_BasePoints):
         return self._ser.cat_ptCount_val
 
 
-class Point(object):
+class Point:
     """
     Provides access to the properties of an individual data point in
     a series, such as the visual properties of its marker and the text and
@@ -59,7 +59,7 @@ class Point(object):
     """
 
     def __init__(self, ser, idx):
-        super(Point, self).__init__()
+        super().__init__()
         self._element = ser
         self._ser = ser
         self._idx = idx

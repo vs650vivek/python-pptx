@@ -19,7 +19,7 @@ class Chart(PartElementProxy):
     """A chart object."""
 
     def __init__(self, chartSpace, chart_part):
-        super(Chart, self).__init__(chartSpace, chart_part)
+        super().__init__(chartSpace, chart_part)
         self._chartSpace = chartSpace
 
     @property
@@ -115,9 +115,7 @@ class Chart(PartElementProxy):
         settings.
         """
         title = self._chartSpace.chart.title
-        if title is None:
-            return False
-        return True
+        return title is not None
 
     @has_title.setter
     def has_title(self, value):
@@ -208,7 +206,7 @@ class ChartTitle(ElementProxy):
     # essentially identical.
 
     def __init__(self, title):
-        super(ChartTitle, self).__init__(title)
+        super().__init__(title)
         self._title = title
 
     @lazyproperty
@@ -229,9 +227,7 @@ class ChartTitle(ElementProxy):
         already present. Assigning |False| causes any existing text frame to
         be removed along with its text and formatting.
         """
-        if self._title.tx_rich is None:
-            return False
-        return True
+        return self._title.tx_rich is not None
 
     @has_text_frame.setter
     def has_text_frame(self, value):
@@ -263,7 +259,7 @@ class _Plots(Sequence):
     """
 
     def __init__(self, plotArea, chart):
-        super(_Plots, self).__init__()
+        super().__init__()
         self._plotArea = plotArea
         self._chart = chart
 

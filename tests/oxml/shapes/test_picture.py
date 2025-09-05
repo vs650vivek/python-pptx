@@ -8,7 +8,7 @@ from pptx.oxml.ns import nsdecls
 from pptx.oxml.shapes.picture import CT_Picture
 
 
-class DescribeCT_Picture(object):
+class DescribeCT_Picture:
     """Unit-test suite for `pptx.oxml.shapes.picture.CT_Picture` objects."""
 
     @pytest.mark.parametrize(
@@ -30,9 +30,9 @@ class DescribeCT_Picture(object):
         )
 
         assert pic.xml == (
-            "<p:pic %s>\n"
+            "<p:pic {}>\n"
             "  <p:nvPicPr>\n"
-            '    <p:cNvPr id="9" name="Picture 8" descr="%s"/>\n'
+            '    <p:cNvPr id="9" name="Picture 8" descr="{}"/>\n'
             "    <p:cNvPicPr>\n"
             '      <a:picLocks noChangeAspect="1"/>\n'
             "    </p:cNvPicPr>\n"
@@ -53,7 +53,7 @@ class DescribeCT_Picture(object):
             "      <a:avLst/>\n"
             "    </a:prstGeom>\n"
             "  </p:spPr>\n"
-            "</p:pic>\n" % (nsdecls("a", "p", "r"), xml_desc)
+            "</p:pic>\n".format(nsdecls("a", "p", "r"), xml_desc)
         )
 
     def it_can_create_a_new_video_pic_element(self):
@@ -70,7 +70,7 @@ class DescribeCT_Picture(object):
         )
 
         assert pic.xml == (
-            "<p:pic %s>\n"
+            "<p:pic {}>\n"
             "  <p:nvPicPr>\n"
             '    <p:cNvPr id="42" name="Media 41">\n'
             '      <a:hlinkClick r:id="" action="ppaction://media"/>\n'
@@ -81,7 +81,7 @@ class DescribeCT_Picture(object):
             "    <p:nvPr>\n"
             '      <a:videoFile r:link="rId1"/>\n'
             "      <p:extLst>\n"
-            '        <p:ext uri="{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}">\n'
+            '        <p:ext uri="{{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}}">\n'
             '          <p14:media xmlns:p14="http://schemas.microsoft.com/office/power'
             'point/2010/main" r:embed="rId2"/>\n'
             "        </p:ext>\n"
@@ -104,4 +104,4 @@ class DescribeCT_Picture(object):
             "    </a:prstGeom>\n"
             "  </p:spPr>\n"
             "</p:pic>\n"
-        ) % nsdecls("a", "p", "r")
+        ).format(nsdecls("a", "p", "r"))

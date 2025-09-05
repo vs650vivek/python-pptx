@@ -11,11 +11,11 @@ from pptx.opc.constants import CONTENT_TYPE as CT
 from pptx.util import lazyproperty
 
 
-class Video(object):
+class Video:
     """Immutable value object representing a video such as MP4."""
 
     def __init__(self, blob: bytes, mime_type: str | None, filename: str | None):
-        super(Video, self).__init__()
+        super().__init__()
         self._blob = blob
         self._mime_type = mime_type
         self._filename = filename
@@ -88,7 +88,7 @@ class Video(object):
         """
         if self._filename is not None:
             return self._filename
-        return "movie.%s" % self.ext
+        return f"movie.{self.ext}"
 
     @lazyproperty
     def sha1(self):

@@ -85,7 +85,7 @@ class CT_Picture(BaseShapeElement):
     ) -> CT_Picture:
         """Return a new `p:pic` populated with the specified video."""
         return cast(
-            CT_Picture,
+            "CT_Picture",
             parse_xml(
                 cls._pic_video_tmpl()
                 % (
@@ -164,90 +164,90 @@ class CT_Picture(BaseShapeElement):
     @classmethod
     def _pic_ph_tmpl(cls):
         return (
-            "<p:pic %s>\n"
+            "<p:pic {}>\n"
             "  <p:nvPicPr>\n"
-            '    <p:cNvPr id="%%d" name="%%s" descr="%%s"/>\n'
+            '    <p:cNvPr id="%d" name="%s" descr="%s"/>\n'
             "    <p:cNvPicPr>\n"
             '      <a:picLocks noGrp="1" noChangeAspect="1"/>\n'
             "    </p:cNvPicPr>\n"
             "    <p:nvPr/>\n"
             "  </p:nvPicPr>\n"
             "  <p:blipFill>\n"
-            '    <a:blip r:embed="%%s"/>\n'
+            '    <a:blip r:embed="%s"/>\n'
             "    <a:stretch>\n"
             "      <a:fillRect/>\n"
             "    </a:stretch>\n"
             "  </p:blipFill>\n"
             "  <p:spPr/>\n"
-            "</p:pic>" % nsdecls("p", "a", "r")
+            "</p:pic>".format(nsdecls("p", "a", "r"))
         )
 
     @classmethod
     def _pic_tmpl(cls):
         return (
-            "<p:pic %s>\n"
+            "<p:pic {}>\n"
             "  <p:nvPicPr>\n"
-            '    <p:cNvPr id="%%d" name="%%s" descr="%%s"/>\n'
+            '    <p:cNvPr id="%d" name="%s" descr="%s"/>\n'
             "    <p:cNvPicPr>\n"
             '      <a:picLocks noChangeAspect="1"/>\n'
             "    </p:cNvPicPr>\n"
             "    <p:nvPr/>\n"
             "  </p:nvPicPr>\n"
             "  <p:blipFill>\n"
-            '    <a:blip r:embed="%%s"/>\n'
+            '    <a:blip r:embed="%s"/>\n'
             "    <a:stretch>\n"
             "      <a:fillRect/>\n"
             "    </a:stretch>\n"
             "  </p:blipFill>\n"
             "  <p:spPr>\n"
             "    <a:xfrm>\n"
-            '      <a:off x="%%d" y="%%d"/>\n'
-            '      <a:ext cx="%%d" cy="%%d"/>\n'
+            '      <a:off x="%d" y="%d"/>\n'
+            '      <a:ext cx="%d" cy="%d"/>\n'
             "    </a:xfrm>\n"
             '    <a:prstGeom prst="rect">\n'
             "      <a:avLst/>\n"
             "    </a:prstGeom>\n"
             "  </p:spPr>\n"
-            "</p:pic>" % nsdecls("a", "p", "r")
+            "</p:pic>".format(nsdecls("a", "p", "r"))
         )
 
     @classmethod
     def _pic_video_tmpl(cls):
         return (
-            "<p:pic %s>\n"
+            "<p:pic {}>\n"
             "  <p:nvPicPr>\n"
-            '    <p:cNvPr id="%%d" name="%%s">\n'
+            '    <p:cNvPr id="%d" name="%s">\n'
             '      <a:hlinkClick r:id="" action="ppaction://media"/>\n'
             "    </p:cNvPr>\n"
             "    <p:cNvPicPr>\n"
             '      <a:picLocks noChangeAspect="1"/>\n'
             "    </p:cNvPicPr>\n"
             "    <p:nvPr>\n"
-            '      <a:videoFile r:link="%%s"/>\n'
+            '      <a:videoFile r:link="%s"/>\n'
             "      <p:extLst>\n"
-            '        <p:ext uri="{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}">\n'
+            '        <p:ext uri="{{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}}">\n'
             '          <p14:media xmlns:p14="http://schemas.microsoft.com/of'
-            'fice/powerpoint/2010/main" r:embed="%%s"/>\n'
+            'fice/powerpoint/2010/main" r:embed="%s"/>\n'
             "        </p:ext>\n"
             "      </p:extLst>\n"
             "    </p:nvPr>\n"
             "  </p:nvPicPr>\n"
             "  <p:blipFill>\n"
-            '    <a:blip r:embed="%%s"/>\n'
+            '    <a:blip r:embed="%s"/>\n'
             "    <a:stretch>\n"
             "      <a:fillRect/>\n"
             "    </a:stretch>\n"
             "  </p:blipFill>\n"
             "  <p:spPr>\n"
             "    <a:xfrm>\n"
-            '      <a:off x="%%d" y="%%d"/>\n'
-            '      <a:ext cx="%%d" cy="%%d"/>\n'
+            '      <a:off x="%d" y="%d"/>\n'
+            '      <a:ext cx="%d" cy="%d"/>\n'
             "    </a:xfrm>\n"
             '    <a:prstGeom prst="rect">\n'
             "      <a:avLst/>\n"
             "    </a:prstGeom>\n"
             "  </p:spPr>\n"
-            "</p:pic>" % nsdecls("a", "p", "r")
+            "</p:pic>".format(nsdecls("a", "p", "r"))
         )
 
     def _srcRect_x(self, attr_name):

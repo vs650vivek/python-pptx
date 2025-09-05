@@ -26,7 +26,7 @@ class _BaseChartData(Sequence):
     """
 
     def __init__(self, number_format="General"):
-        super(_BaseChartData, self).__init__()
+        super().__init__()
         self._number_format = number_format
         self._series = []
 
@@ -228,13 +228,13 @@ class _BaseSeriesData(Sequence):
         return self._chart_data.y_values_ref(self)
 
 
-class _BaseDataPoint(object):
+class _BaseDataPoint:
     """
     Base class providing common members for data point objects.
     """
 
     def __init__(self, series_data, number_format):
-        super(_BaseDataPoint, self).__init__()
+        super().__init__()
         self._series_data = series_data
         self._number_format = number_format
 
@@ -346,7 +346,7 @@ class Categories(Sequence):
     """
 
     def __init__(self):
-        super(Categories, self).__init__()
+        super().__init__()
         self._categories = []
         self._number_format = None
 
@@ -391,9 +391,7 @@ class Categories(Sequence):
             return False
         first_cat_label = self[0].label
         date_types = (datetime.date, datetime.datetime)
-        if isinstance(first_cat_label, date_types):
-            return True
-        return False
+        return bool(isinstance(first_cat_label, date_types))
 
     @property
     def are_numeric(self):
@@ -414,9 +412,7 @@ class Categories(Sequence):
         # the caller's input.
         first_cat_label = self[0].label
         numeric_types = (Number, datetime.date, datetime.datetime)
-        if isinstance(first_cat_label, numeric_types):
-            return True
-        return False
+        return bool(isinstance(first_cat_label, numeric_types))
 
     @property
     def depth(self):
@@ -466,13 +462,11 @@ class Categories(Sequence):
             # yield all lower levels
             sub_categories = [sc for c in categories for sc in c.sub_categories]
             if sub_categories:
-                for level in levels(sub_categories):
-                    yield level
+                yield from levels(sub_categories)
             # yield this level
             yield [(cat.idx, cat.label) for cat in categories]
 
-        for level in levels(self):
-            yield level
+        yield from levels(self)
 
     @property
     def number_format(self):
@@ -497,7 +491,7 @@ class Categories(Sequence):
 
         # everything except dates gets 'General'
         first_cat_label = self[0].label
-        if isinstance(first_cat_label, (datetime.date, datetime.datetime)):
+        if isinstance(first_cat_label, datetime.date | datetime.datetime):
             return r"yyyy\-mm\-dd"
         return GENERAL
 
@@ -506,7 +500,7 @@ class Categories(Sequence):
         self._number_format = value
 
 
-class Category(object):
+class Category:
     """
     A chart category, primarily having a label to be displayed on the
     category axis, but also able to be configured in a hierarchy for support
@@ -514,7 +508,7 @@ class Category(object):
     """
 
     def __init__(self, label, parent):
-        super(Category, self).__init__()
+        super().__init__()
         self._label = label
         self._parent = parent
         self._sub_categories = []
@@ -591,8 +585,8 @@ class Category(object):
         for calculating Excel date numbers.
         """
         label = self._label
-        if isinstance(label, (datetime.date, datetime.datetime)):
-            return "%.1f" % self._excel_date_number(date_1904)
+        if isinstance(label, datetime.date | datetime.datetime):
+            return f"{self._excel_date_number(date_1904):.1f}"
         return str(self._label)
 
     @property
@@ -809,7 +803,7 @@ class CategoryDataPoint(_BaseDataPoint):
     """
 
     def __init__(self, series_data, value, number_format):
-        super(CategoryDataPoint, self).__init__(series_data, number_format)
+        super().__init__(series_data, number_format)
         self._value = value
 
     @property
@@ -827,7 +821,7 @@ class XyDataPoint(_BaseDataPoint):
     """
 
     def __init__(self, series_data, x, y, number_format):
-        super(XyDataPoint, self).__init__(series_data, number_format)
+        super().__init__(series_data, number_format)
         self._x = x
         self._y = y
 
@@ -853,7 +847,7 @@ class BubbleDataPoint(XyDataPoint):
     """
 
     def __init__(self, series_data, x, y, size, number_format):
-        super(BubbleDataPoint, self).__init__(series_data, x, y, number_format)
+        super().__init__(series_data, x, y, number_format)
         self._size = size
 
     @property

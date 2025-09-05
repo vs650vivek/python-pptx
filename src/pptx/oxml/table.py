@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Iterator, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.enum.text import MSO_VERTICAL_ANCHOR
 from pptx.oxml import parse_xml
@@ -23,6 +23,8 @@ from pptx.oxml.xmlchemy import (
 from pptx.util import Emu, lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
+
     from pptx.util import Length
 
 
@@ -110,7 +112,7 @@ class CT_Table(BaseOxmlElement):
             tableStyleId = "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}"
 
         xml = cls._tbl_tmpl() % (tableStyleId)
-        tbl = cast(CT_Table, parse_xml(xml))
+        tbl = cast("CT_Table", parse_xml(xml))
 
         # add specified number of rows and columns
         rowheight = height // rows
@@ -157,19 +159,19 @@ class CT_Table(BaseOxmlElement):
         its effective value.
         """
         if value not in (True, False):
-            raise ValueError("assigned value must be either True or False, got %s" % value)
+            raise ValueError(f"assigned value must be either True or False, got {value}")
         tblPr = self.get_or_add_tblPr()
         setattr(tblPr, propname, value)
 
     @classmethod
     def _tbl_tmpl(cls):
         return (
-            "<a:tbl %s>\n"
+            "<a:tbl {}>\n"
             '  <a:tblPr firstRow="1" bandRow="1">\n'
-            "    <a:tableStyleId>%s</a:tableStyleId>\n"
+            "    <a:tableStyleId>{}</a:tableStyleId>\n"
             "  </a:tblPr>\n"
             "  <a:tblGrid/>\n"
-            "</a:tbl>" % (nsdecls("a"), "%s")
+            "</a:tbl>".format(nsdecls("a"), "%s")
         )
 
 
@@ -245,7 +247,7 @@ class CT_TableCell(BaseOxmlElement):
     def col_idx(self) -> int:
         """Offset of this cell's column in its table."""
         # ---tc elements come before any others in `a:tr` element---
-        return cast(CT_TableRow, self.getparent()).index(self)
+        return cast("CT_TableRow", self.getparent()).index(self)
 
     @property
     def is_merge_origin(self) -> bool:
@@ -307,7 +309,7 @@ class CT_TableCell(BaseOxmlElement):
     def new(cls) -> CT_TableCell:
         """Return a new `a:tc` element subtree."""
         return cast(
-            CT_TableCell,
+            "CT_TableCell",
             parse_xml(
                 f"<a:tc {nsdecls('a')}>\n"
                 f"  <a:txBody>\n"
@@ -323,12 +325,12 @@ class CT_TableCell(BaseOxmlElement):
     @property
     def row_idx(self) -> int:
         """Offset of this cell's row in its table."""
-        return cast(CT_TableRow, self.getparent()).row_idx
+        return cast("CT_TableRow", self.getparent()).row_idx
 
     @property
     def tbl(self) -> CT_Table:
         """Table element this cell belongs to."""
-        return cast(CT_Table, self.xpath("ancestor::a:tbl")[0])
+        return cast("CT_Table", self.xpath("ancestor::a:tbl")[0])
 
     @property
     def text(self) -> str:  # pyright: ignore[reportIncompatibleMethodOverride]
@@ -440,13 +442,13 @@ class CT_TableRow(BaseOxmlElement):
     @property
     def row_idx(self) -> int:
         """Offset of this row in its table."""
-        return cast(CT_Table, self.getparent()).tr_lst.index(self)
+        return cast("CT_Table", self.getparent()).tr_lst.index(self)
 
     def _new_tc(self):
         return CT_TableCell.new()
 
 
-class TcRange(object):
+class TcRange:
     """A 2D block of `a:tc` cell elements in a table.
 
     This object assumes the structure of the underlying table does not change during its lifetime.
@@ -492,21 +494,17 @@ class TcRange(object):
     @lazyproperty
     def in_same_table(self):
         """True if both cells provided to constructor are in same table."""
-        if self._tc.tbl is self._other_tc.tbl:
-            return True
-        return False
+        return self._tc.tbl is self._other_tc.tbl
 
     def iter_except_left_col_tcs(self):
         """Generate each `a:tc` element not in leftmost column of range."""
         for tr in self._tbl.tr_lst[self._top : self._bottom]:
-            for tc in tr.tc_lst[self._left + 1 : self._right]:
-                yield tc
+            yield from tr.tc_lst[self._left + 1 : self._right]
 
     def iter_except_top_row_tcs(self):
         """Generate each `a:tc` element in non-first rows of range."""
         for tr in self._tbl.tr_lst[self._top + 1 : self._bottom]:
-            for tc in tr.tc_lst[self._left : self._right]:
-                yield tc
+            yield from tr.tc_lst[self._left : self._right]
 
     def iter_left_col_tcs(self):
         """Generate each `a:tc` element in leftmost column of range."""
@@ -528,8 +526,7 @@ class TcRange(object):
     def iter_top_row_tcs(self):
         """Generate each `a:tc` element in topmost row of range."""
         tr = self._tbl.tr_lst[self._top]
-        for tc in tr.tc_lst[self._left : self._right]:
-            yield tc
+        yield from tr.tc_lst[self._left : self._right]
 
     def move_content_to_origin(self):
         """Move all paragraphs in range to origin cell."""

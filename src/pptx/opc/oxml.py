@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, cast
+from typing import TYPE_CHECKING, cast
 
 from lxml import etree
 
@@ -24,6 +24,8 @@ from pptx.oxml.xmlchemy import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pptx.opc.packuri import PackURI
 
 nsmap = {
@@ -112,7 +114,7 @@ class CT_Relationship(BaseOxmlElement):
 
         `target_ref` is either a partname or a URI.
         """
-        relationship = cast(CT_Relationship, parse_xml(f'<Relationship xmlns="{nsmap["pr"]}"/>'))
+        relationship = cast("CT_Relationship", parse_xml(f'<Relationship xmlns="{nsmap["pr"]}"/>'))
         relationship.rId = rId
         relationship.reltype = reltype
         relationship.target_ref = target_ref
@@ -139,7 +141,7 @@ class CT_Relationships(BaseOxmlElement):
     @classmethod
     def new(cls) -> CT_Relationships:
         """Return a new `<Relationships>` element."""
-        return cast(CT_Relationships, parse_xml(f'<Relationships xmlns="{nsmap["pr"]}"/>'))
+        return cast("CT_Relationships", parse_xml(f'<Relationships xmlns="{nsmap["pr"]}"/>'))
 
     @property
     def xml_file_bytes(self) -> bytes:
@@ -177,7 +179,7 @@ class CT_Types(BaseOxmlElement):
     @classmethod
     def new(cls) -> CT_Types:
         """Return a new `<Types>` element."""
-        return cast(CT_Types, parse_xml(f'<Types xmlns="{nsmap["ct"]}"/>'))
+        return cast("CT_Types", parse_xml(f'<Types xmlns="{nsmap["ct"]}"/>'))
 
 
 register_element_cls("ct:Default", CT_Default)

@@ -8,11 +8,11 @@ from contextlib import contextmanager
 from xlsxwriter import Workbook
 
 
-class _BaseWorkbookWriter(object):
+class _BaseWorkbookWriter:
     """Base class for workbook writers, providing shared members."""
 
     def __init__(self, chart_data):
-        super(_BaseWorkbookWriter, self).__init__()
+        super().__init__()
         self._chart_data = chart_data
 
     @property
@@ -70,7 +70,7 @@ class CategoryWorkbookWriter(_BaseWorkbookWriter):
         for *series*. This also serves as the column heading for the series
         values.
         """
-        return "Sheet1!$%s$1" % self._series_col_letter(series)
+        return f"Sheet1!${self._series_col_letter(series)}$1"
 
     def values_ref(self, series):
         """

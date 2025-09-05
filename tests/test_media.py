@@ -14,7 +14,7 @@ from .unitutil.mock import initializer_mock, instance_mock, method_mock, propert
 TEST_VIDEO_PATH = absjoin(test_file_dir, "dummy.mp4")
 
 
-class DescribeVideo(object):
+class DescribeVideo:
     """Unit-test suite for `pptx.media.Video` objects."""
 
     def it_can_construct_from_a_path(self, video_, from_blob_):

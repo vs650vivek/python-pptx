@@ -31,12 +31,12 @@ from pptx.enum.chart import XL_CHART_TYPE
 from ..unitutil.mock import Mock, call, class_mock, instance_mock, property_mock
 
 
-class DescribeChartData(object):
+class DescribeChartData:
     def it_is_a_CategoryChartData_object(self):
         assert isinstance(ChartData(), CategoryChartData)
 
 
-class Describe_BaseChartData(object):
+class Describe_BaseChartData:
     """Unit-test suite for `pptx.chart.data._BaseChartData`."""
 
     def it_can_generate_chart_part_XML_for_its_data(self, ChartXmlWriter_: Mock):
@@ -46,7 +46,7 @@ class Describe_BaseChartData(object):
         xml_bytes = chart_data.xml_bytes(XL_CHART_TYPE.PIE)
 
         ChartXmlWriter_.assert_called_once_with(XL_CHART_TYPE.PIE, chart_data)
-        assert xml_bytes == "ƒøØßår".encode("utf-8")
+        assert xml_bytes == "ƒøØßår".encode()
 
     def it_knows_its_number_format(self, number_format_fixture):
         chart_data, expected_value = number_format_fixture
@@ -70,7 +70,7 @@ class Describe_BaseChartData(object):
         return ChartXmlWriter_
 
 
-class Describe_BaseSeriesData(object):
+class Describe_BaseSeriesData:
     def it_knows_its_name(self, name_fixture):
         name_arg, expected_value = name_fixture
         series_data = _BaseSeriesData(None, name_arg, None)
@@ -104,7 +104,7 @@ class Describe_BaseSeriesData(object):
         return instance_mock(request, _BaseChartData)
 
 
-class Describe_BaseDataPoint(object):
+class Describe_BaseDataPoint:
     def it_knows_its_number_format(self, number_format_fixture):
         data_point, expected_value = number_format_fixture
         assert data_point.number_format == expected_value
@@ -125,7 +125,7 @@ class Describe_BaseDataPoint(object):
         return instance_mock(request, _BaseSeriesData)
 
 
-class DescribeCategoryChartData(object):
+class DescribeCategoryChartData:
     def it_is_a__BaseChartData_object(self):
         assert isinstance(CategoryChartData(), _BaseChartData)
 
@@ -257,7 +257,7 @@ class DescribeCategoryChartData(object):
         )
 
 
-class DescribeCategories(object):
+class DescribeCategories:
     def it_knows_when_its_categories_are_numeric(self, are_numeric_fixture):
         categories, expected_value = are_numeric_fixture
         assert categories.are_numeric == expected_value
@@ -447,7 +447,7 @@ class DescribeCategories(object):
         return instance_mock(request, Category)
 
 
-class DescribeCategory(object):
+class DescribeCategory:
     def it_knows_its_depth(self, depth_fixture):
         category, expected_value = depth_fixture
         assert category.depth == expected_value
@@ -604,7 +604,7 @@ class DescribeCategory(object):
         return instance_mock(request, Category)
 
 
-class DescribeCategorySeriesData(object):
+class DescribeCategorySeriesData:
     def it_knows_the_categories_range_ref(self, categories_ref_fixture):
         series_data, expected_value = categories_ref_fixture
         assert series_data.categories_ref == expected_value
@@ -686,7 +686,7 @@ class DescribeCategorySeriesData(object):
         return instance_mock(request, CategoryDataPoint)
 
 
-class DescribeBubbleChartData(object):
+class DescribeBubbleChartData:
     def it_can_add_a_series(self, add_series_fixture):
         chart_data, name, BubbleSeriesData_, series_data_ = add_series_fixture
         series_data = chart_data.add_series(name)
@@ -713,7 +713,7 @@ class DescribeBubbleChartData(object):
         return instance_mock(request, BubbleSeriesData)
 
 
-class DescribeXyChartData(object):
+class DescribeXyChartData:
     def it_is_a__BaseChartData_object(self):
         assert isinstance(XyChartData(), _BaseChartData)
 
@@ -743,7 +743,7 @@ class DescribeXyChartData(object):
         return instance_mock(request, XySeriesData)
 
 
-class DescribeBubbleSeriesData(object):
+class DescribeBubbleSeriesData:
     def it_can_add_a_data_point(self, add_data_point_fixture):
         series_data, x, y, size, BubbleDataPoint_, data_point_ = add_data_point_fixture
         data_point = series_data.add_data_point(x, y, size)
@@ -770,7 +770,7 @@ class DescribeBubbleSeriesData(object):
         return instance_mock(request, BubbleDataPoint)
 
 
-class DescribeXySeriesData(object):
+class DescribeXySeriesData:
     def it_is_a__BaseSeriesData_object(self, chart_data_):
         name, number_format = "Series 42", "#0.0"
         series_data = XySeriesData(chart_data_, name, number_format)
@@ -809,7 +809,7 @@ class DescribeXySeriesData(object):
         return class_mock(request, "pptx.chart.data.XyDataPoint", return_value=data_point_)
 
 
-class DescribeCategoryDataPoint(object):
+class DescribeCategoryDataPoint:
     def it_is_a__BaseDataPoint_object(self, series_data_):
         data_point = CategoryDataPoint(series_data_, 42, "#,##0.0")
         assert isinstance(data_point, _BaseDataPoint)
@@ -835,7 +835,7 @@ class DescribeCategoryDataPoint(object):
         return instance_mock(request, CategorySeriesData)
 
 
-class DescribeXyDataPoint(object):
+class DescribeXyDataPoint:
     def it_is_a__BaseDataPoint_object(self, series_data_):
         data_point = XyDataPoint(series_data_, 42, 24, "00.0")
         assert isinstance(data_point, _BaseDataPoint)
@@ -862,7 +862,7 @@ class DescribeXyDataPoint(object):
         return instance_mock(request, XySeriesData)
 
 
-class DescribeBubbleDataPoint(object):
+class DescribeBubbleDataPoint:
     def it_is_an_XyDataPoint_subclass(self, series_data_):
         x, y, size, number_format = 1, 2, 10, "#00.0"
         data_point = BubbleDataPoint(series_data_, x, y, size, number_format)

@@ -40,7 +40,7 @@ from ..unitutil.file import snippet_seq
 from ..unitutil.mock import class_mock, instance_mock, method_mock, property_mock
 
 
-class Describe_BaseSlidePlaceholder(object):
+class Describe_BaseSlidePlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder._BaseSlidePlaceholder` object."""
 
     def it_knows_its_shape_type(self):
@@ -162,7 +162,7 @@ class Describe_BaseSlidePlaceholder(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribeBasePlaceholder(object):
+class DescribeBasePlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder.BasePlaceholder` object."""
 
     def it_knows_its_idx_value(self, idx_fixture):
@@ -278,7 +278,7 @@ class DescribeBasePlaceholder(object):
         return (root_bldr.with_child(nvXxPr_bldr.with_child(an_nvPr().with_child(ph_bldr)))).element
 
 
-class DescribeChartPlaceholder(object):
+class DescribeChartPlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder.ChartPlaceholder` object."""
 
     def it_can_insert_a_chart_into_itself(self, request, part_prop_):
@@ -340,7 +340,7 @@ class DescribeChartPlaceholder(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribeLayoutPlaceholder(object):
+class DescribeLayoutPlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder.LayoutPlaceholder` object."""
 
     def it_uses_InheritsDimensions_mixin(self):
@@ -385,7 +385,7 @@ class DescribeLayoutPlaceholder(object):
         return instance_mock(request, SlideMaster)
 
 
-class DescribeNotesSlidePlaceholder(object):
+class DescribeNotesSlidePlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder.NotesSlidePlaceholder` object."""
 
     def it_finds_its_base_placeholder_to_help(self, base_ph_fixture):
@@ -436,7 +436,7 @@ class DescribeNotesSlidePlaceholder(object):
         return property_mock(request, NotesSlidePlaceholder, "part", return_value=notes_slide_part_)
 
 
-class DescribePicturePlaceholder(object):
+class DescribePicturePlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder.PicturePlaceholder` object."""
 
     def it_can_insert_a_picture_into_itself(self, request):
@@ -474,7 +474,7 @@ class DescribePicturePlaceholder(object):
             return_value=(42, "bar", image_size),
         )
         picture_ph = PicturePlaceholder(
-            element("p:sp/(p:nvSpPr/p:cNvPr{id=2,name=foo},p:spPr/a:xfrm/a:ext{cx=99" ",cy=99})"),
+            element("p:sp/(p:nvSpPr/p:cNvPr{id=2,name=foo},p:spPr/a:xfrm/a:ext{cx=99,cy=99})"),
             None,
         )
 
@@ -482,10 +482,10 @@ class DescribePicturePlaceholder(object):
 
         _get_or_add_image_.assert_called_once_with(picture_ph, "foobar.png")
         assert pic.xml == xml(
-            "p:pic/(p:nvPicPr/(p:cNvPr{id=2,name=foo,descr=bar},p:cNvPicPr/a"
-            ":picLocks{noGrp=1,noChangeAspect=1},p:nvPr),p:blipFill/(a:blip{"
-            "r:embed=42},a:srcRect{%s=12500,%s=12500},a:stretch/a:fillRect),"
-            "p:spPr)" % crop_attr_names
+            "p:pic/(p:nvPicPr/(p:cNvPr{{id=2,name=foo,descr=bar}},p:cNvPicPr/a"
+            ":picLocks{{noGrp=1,noChangeAspect=1}},p:nvPr),p:blipFill/(a:blip{{"
+            "r:embed=42}},a:srcRect{{{}=12500,{}=12500}},a:stretch/a:fillRect),"
+            "p:spPr)".format(*crop_attr_names)
         )
 
     def it_adds_an_image_to_help(self, get_or_add_fixture):
@@ -522,7 +522,7 @@ class DescribePicturePlaceholder(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribeTablePlaceholder(object):
+class DescribeTablePlaceholder:
     """Unit-test suite for `pptx.shapes.placeholder.TablePlaceholder` object."""
 
     def it_can_insert_a_table_into_itself(self, request):

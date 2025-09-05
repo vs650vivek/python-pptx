@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from numbers import Number
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING
 from xml.sax import saxutils
 
 from pptx.dml.fill import FillFormat
@@ -15,6 +15,8 @@ from pptx.text.text import TextFrame
 from pptx.util import lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from pptx.oxml.shapes.autoshape import CT_GeomGuide, CT_PresetGeometry2D, CT_Shape
     from pptx.spec import AdjustmentValue
     from pptx.types import ProvidesPart
@@ -33,7 +35,7 @@ class Adjustment:
     """
 
     def __init__(self, name: str, def_val: int, actual: int | None = None):
-        super(Adjustment, self).__init__()
+        super().__init__()
         self.name = name
         self.def_val = def_val
         self.actual = actual
@@ -94,7 +96,7 @@ class AdjustmentCollection:
     """
 
     def __init__(self, prstGeom: CT_PresetGeometry2D):
-        super(AdjustmentCollection, self).__init__()
+        super().__init__()
         self._adjustments_ = self._initialized_adjustments(prstGeom)
         self._prstGeom = prstGeom
 
@@ -136,7 +138,7 @@ class AdjustmentCollection:
         `guides` is a list of `a:gd` elements. Guides with a name that does not match an adjustment
         object are skipped.
         """
-        adjustments_by_name = dict((adj.name, adj) for adj in adjustments)
+        adjustments_by_name = {adj.name: adj for adj in adjustments}
         for gd in guides:
             name = gd.name
             actual = int(gd.fmla[4:])
@@ -192,7 +194,7 @@ class AutoShapeType:
         """
         # -- if there's not a matching instance in the cache, create one --
         if autoshape_type_id not in cls._instances:
-            inst = super(AutoShapeType, cls).__new__(cls)
+            inst = super().__new__(cls)
             cls._instances[autoshape_type_id] = inst
         # -- return the instance; note that __init__() gets called either way --
         return cls._instances[autoshape_type_id]
@@ -205,7 +207,7 @@ class AutoShapeType:
         # -- raise on bad autoshape_type_id --
         if autoshape_type_id not in autoshape_types:
             raise KeyError(
-                "no autoshape type with id '%s' in pptx.spec.autoshape_types" % autoshape_type_id
+                f"no autoshape type with id '{autoshape_type_id}' in pptx.spec.autoshape_types"
             )
         # -- otherwise initialize new instance --
         autoshape_type = autoshape_types[autoshape_type_id]
@@ -260,7 +262,7 @@ class Shape(BaseShape):
     """
 
     def __init__(self, sp: CT_Shape, parent: ProvidesPart):
-        super(Shape, self).__init__(sp, parent)
+        super().__init__(sp, parent)
         self._sp = sp
 
     @lazyproperty

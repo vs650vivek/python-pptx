@@ -12,13 +12,13 @@ from pptx.oxml.ns import qn
 from pptx.util import lazyproperty
 
 
-class _BaseSeries(object):
+class _BaseSeries:
     """
     Base class for |BarSeries| and other series classes.
     """
 
     def __init__(self, ser):
-        super(_BaseSeries, self).__init__()
+        super().__init__()
         self._element = ser
         self._ser = ser
 
@@ -83,7 +83,7 @@ class _BaseCategorySeries(_BaseSeries):
         return tuple(iter_values())
 
 
-class _MarkerMixin(object):
+class _MarkerMixin:
     """
     Mixin class providing `.marker` property for line-type chart series. The
     line-type charts are Line, XY, and Radar.
@@ -223,7 +223,7 @@ class SeriesCollection(Sequence):
 
     def __init__(self, parent_elm):
         # *parent_elm* can be either a c:plotArea or xChart element
-        super(SeriesCollection, self).__init__()
+        super().__init__()
         self._element = parent_elm
 
     def __getitem__(self, index):
@@ -253,6 +253,6 @@ def _SeriesFactory(ser):
             qn("c:scatterChart"): XySeries,
         }[xChart_tag]
     except KeyError:
-        raise NotImplementedError("series class for %s not yet implemented" % xChart_tag)
+        raise NotImplementedError(f"series class for {xChart_tag} not yet implemented")
 
     return SeriesCls(ser)

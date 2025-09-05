@@ -7,7 +7,8 @@ presentations to and from a .pptx file.
 from __future__ import annotations
 
 import collections
-from typing import IO, TYPE_CHECKING, DefaultDict, Iterator, Mapping, Set, cast
+from collections.abc import Iterator, Mapping
+from typing import IO, TYPE_CHECKING, cast
 
 from pptx.opc.constants import RELATIONSHIP_TARGET_MODE as RTM
 from pptx.opc.constants import RELATIONSHIP_TYPE as RT
@@ -19,7 +20,7 @@ from pptx.oxml import parse_xml
 from pptx.util import lazyproperty
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing import Self
 
     from pptx.opc.oxml import CT_Relationship, CT_Types
     from pptx.oxml.xmlchemy import BaseOxmlElement
@@ -62,7 +63,7 @@ class _RelatableMixin:
     def _rels(self) -> _Relationships:
         """|_Relationships| object containing relationships from this part to others."""
         raise NotImplementedError(  # pragma: no cover
-            "`%s` must implement `.rels`" % type(self).__name__
+            f"`{type(self).__name__}` must implement `.rels`"
         )
 
 
@@ -87,7 +88,7 @@ class OpcPackage(_RelatableMixin):
 
     def iter_parts(self) -> Iterator[Part]:
         """Generate exactly one reference to each part in the package."""
-        visited: Set[Part] = set()
+        visited: set[Part] = set()
         for rel in self.iter_rels():
             if rel.is_external:
                 continue
@@ -102,7 +103,7 @@ class OpcPackage(_RelatableMixin):
 
         Performs a depth-first traversal of the rels graph.
         """
-        visited: Set[Part] = set()
+        visited: set[Part] = set()
 
         def walk_rels(rels: _Relationships) -> Iterator[_Relationship]:
             for rel in rels.values():
@@ -244,7 +245,7 @@ class _PackageLoader:
         populating their relationships.
         """
         xml_rels: dict[PackURI, CT_Relationships] = {}
-        visited_partnames: Set[PackURI] = set()
+        visited_partnames: set[PackURI] = set()
 
         def load_rels(source_partname: PackURI, rels: CT_Relationships):
             """Populate `xml_rels` dict by traversing relationships depth-first."""
@@ -274,7 +275,7 @@ class _PackageLoader:
         return (
             CT_Relationships.new()
             if rels_xml is None
-            else cast(CT_Relationships, parse_xml(rels_xml))
+            else cast("CT_Relationships", parse_xml(rels_xml))
         )
 
 
@@ -350,7 +351,7 @@ class Part(_RelatableMixin):
     def partname(self, partname: PackURI):
         if not isinstance(partname, PackURI):  # pyright: ignore[reportUnnecessaryIsInstance]
             raise TypeError(  # pragma: no cover
-                "partname must be instance of PackURI, got '%s'" % type(partname).__name__
+                f"partname must be instance of PackURI, got '{type(partname).__name__}'"
             )
         self._partname = partname
 
@@ -389,7 +390,7 @@ class XmlPart(Part):
     def __init__(
         self, partname: PackURI, content_type: str, package: Package, element: BaseOxmlElement
     ):
-        super(XmlPart, self).__init__(partname, content_type, package)
+        super().__init__(partname, content_type, package)
         self._element = element
 
     @classmethod
@@ -465,7 +466,7 @@ class _ContentTypeMap:
         """Return content-type (MIME-type) for part identified by *partname*."""
         if not isinstance(partname, PackURI):  # pyright: ignore[reportUnnecessaryIsInstance]
             raise TypeError(
-                "_ContentTypeMap key must be <type 'PackURI'>, got %s" % type(partname).__name__
+                f"_ContentTypeMap key must be <type 'PackURI'>, got {type(partname).__name__}"
             )
 
         if partname in self._overrides:
@@ -474,7 +475,7 @@ class _ContentTypeMap:
         if partname.ext in self._defaults:
             return self._defaults[partname.ext]
 
-        raise KeyError("no content-type for partname '%s' in [Content_Types].xml" % partname)
+        raise KeyError(f"no content-type for partname '{partname}' in [Content_Types].xml")
 
     @classmethod
     def from_xml(cls, content_types_xml: bytes) -> _ContentTypeMap:
@@ -513,7 +514,7 @@ class _Relationships(Mapping[str, "_Relationship"]):
         try:
             return self._rels[rId]
         except KeyError:
-            raise KeyError("no relationship with key '%s'" % rId)
+            raise KeyError(f"no relationship with key '{rId}'")
 
     def __iter__(self) -> Iterator[str]:
         """Implement iteration of rIds (iterating a mapping produces its keys)."""
@@ -577,10 +578,10 @@ class _Relationships(Mapping[str, "_Relationship"]):
         rels_of_reltype = self._rels_by_reltype[reltype]
 
         if len(rels_of_reltype) == 0:
-            raise KeyError("no relationship of type '%s' in collection" % reltype)
+            raise KeyError(f"no relationship of type '{reltype}' in collection")
 
         if len(rels_of_reltype) > 1:
-            raise ValueError("multiple relationships of type '%s' in collection" % reltype)
+            raise ValueError(f"multiple relationships of type '{reltype}' in collection")
 
         return rels_of_reltype[0].target_part
 
@@ -671,7 +672,7 @@ class _Relationships(Mapping[str, "_Relationship"]):
     @property
     def _rels_by_reltype(self) -> dict[str, list[_Relationship]]:
         """defaultdict {reltype: [rels]} for all relationships in collection."""
-        D: DefaultDict[str, list[_Relationship]] = collections.defaultdict(list)
+        D: collections.defaultdict[str, list[_Relationship]] = collections.defaultdict(list)
         for rel in self.values():
             D[rel.reltype].append(rel)
         return D
@@ -727,8 +728,7 @@ class _Relationship:
         """|Part| or subtype referred to by this relationship."""
         if self.is_external:
             raise ValueError(
-                "`.target_part` property on _Relationship is undefined when "
-                "target-mode is external"
+                "`.target_part` property on _Relationship is undefined when target-mode is external"
             )
         assert isinstance(self._target, Part)
         return self._target

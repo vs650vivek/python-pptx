@@ -48,7 +48,7 @@ class CT_Connector(BaseShapeElement):
         """Return a new `p:cxnSp` element tree configured as a base connector."""
         flip = (' flipH="1"' if flipH else "") + (' flipV="1"' if flipV else "")
         return cast(
-            CT_Connector,
+            "CT_Connector",
             parse_xml(
                 f"<p:cxnSp {nsdecls('a', 'p')}>\n"
                 f"  <p:nvCxnSpPr>\n"

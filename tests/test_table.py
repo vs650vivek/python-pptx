@@ -27,7 +27,7 @@ from .unitutil.cxml import element, xml
 from .unitutil.mock import call, class_mock, instance_mock, property_mock
 
 
-class DescribeTable(object):
+class DescribeTable:
     """Unit-test suite for `pptx.table.Table` objects."""
 
     def it_provides_access_to_its_cells(self, tbl_, tc_, _Cell_, cell_):
@@ -128,7 +128,7 @@ class DescribeTable(object):
         return instance_mock(request, CT_TableCell)
 
 
-class DescribeTableBooleanProperties(object):
+class DescribeTableBooleanProperties:
     def it_knows_its_boolean_property_settings(self, boolprop_get_fixture):
         table, boolprop_name, expected_value = boolprop_get_fixture
         boolprop_value = getattr(table, boolprop_name)
@@ -194,7 +194,7 @@ class DescribeTableBooleanProperties(object):
         return table, boolprop_name, new_value, expected_xml
 
 
-class Describe_Cell(object):
+class Describe_Cell:
     """Unit-test suite for `pptx.table._Cell` object."""
 
     def it_is_equal_to_other_instance_having_same_tc(self):
@@ -512,7 +512,7 @@ class Describe_Cell(object):
         return property_mock(request, _Cell, "text_frame")
 
 
-class Describe_CellCollection(object):
+class Describe_CellCollection:
     def it_knows_how_many_cells_it_contains(self, len_fixture):
         cells, expected_count = len_fixture
         assert len(cells) == expected_count
@@ -577,7 +577,7 @@ class Describe_CellCollection(object):
         return instance_mock(request, _Cell)
 
 
-class Describe_Column(object):
+class Describe_Column:
     def it_knows_its_width(self, width_get_fixture):
         column, expected_value = width_get_fixture
         width = column.width
@@ -617,7 +617,7 @@ class Describe_Column(object):
         return instance_mock(request, _ColumnCollection)
 
 
-class Describe_ColumnCollection(object):
+class Describe_ColumnCollection:
     def it_knows_how_many_columns_it_contains(self, len_fixture):
         columns, expected_count = len_fixture
         assert len(columns) == expected_count
@@ -688,7 +688,7 @@ class Describe_ColumnCollection(object):
         return columns, expected_len
 
 
-class Describe_Row(object):
+class Describe_Row:
     def it_knows_its_height(self, height_get_fixture):
         row, expected_value = height_get_fixture
         height = row.height
@@ -747,7 +747,7 @@ class Describe_Row(object):
         return instance_mock(request, _RowCollection)
 
 
-class Describe_RowCollection(object):
+class Describe_RowCollection:
     def it_knows_how_many_rows_it_contains(self, len_fixture):
         rows, expected_count = len_fixture
         assert len(rows) == expected_count

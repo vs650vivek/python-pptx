@@ -26,7 +26,7 @@ test_eps_path = absjoin(test_file_dir, "cdw-logo.eps")
 new_image_path = absjoin(test_file_dir, "monty-truth.png")
 
 
-class DescribeImagePart(object):
+class DescribeImagePart:
     """Unit-test suite for `pptx.parts.image.ImagePart` objects."""
 
     def it_can_construct_from_an_image_object(self, request, image_):
@@ -88,7 +88,7 @@ class DescribeImagePart(object):
         return instance_mock(request, Image)
 
 
-class DescribeImage(object):
+class DescribeImage:
     """Unit-test suite for `pptx.parts.image.Image` objects."""
 
     def it_can_construct_from_a_path(self, from_blob_, image_):

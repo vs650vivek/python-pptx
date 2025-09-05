@@ -9,7 +9,7 @@ from pptx.oxml.theme import CT_OfficeStyleSheet
 from ..unitutil.file import snippet_text
 
 
-class DescribeCT_OfficeStyleSheet(object):
+class DescribeCT_OfficeStyleSheet:
     def it_can_create_a_default_theme_element(self, new_fixture):
         expected_xml = new_fixture
         theme = CT_OfficeStyleSheet.new_default()

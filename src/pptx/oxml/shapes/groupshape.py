@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Iterator
+from typing import TYPE_CHECKING
 
 from pptx.enum.shapes import MSO_CONNECTOR_TYPE
 from pptx.oxml import parse_xml
@@ -16,6 +16,8 @@ from pptx.oxml.xmlchemy import BaseOxmlElement, OneAndOnlyOne, ZeroOrOne
 from pptx.util import Emu
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
+
     from pptx.enum.shapes import PP_PLACEHOLDER
     from pptx.oxml.shapes import ShapeElement
     from pptx.oxml.shapes.shared import CT_Transform2D
@@ -166,9 +168,9 @@ class CT_GroupShape(BaseShapeElement):
     def new_grpSp(cls, id_: int, name: str) -> CT_GroupShape:
         """Return new "loose" `p:grpSp` element having `id_` and `name`."""
         xml = (
-            "<p:grpSp %s>\n"
+            "<p:grpSp {}>\n"
             "  <p:nvGrpSpPr>\n"
-            '    <p:cNvPr id="%%d" name="%%s"/>\n'
+            '    <p:cNvPr id="%d" name="%s"/>\n'
             "    <p:cNvGrpSpPr/>\n"
             "    <p:nvPr/>\n"
             "  </p:nvGrpSpPr>\n"
@@ -180,7 +182,7 @@ class CT_GroupShape(BaseShapeElement):
             '      <a:chExt cx="0" cy="0"/>\n'
             "    </a:xfrm>\n"
             "  </p:grpSpPr>\n"
-            "</p:grpSp>" % nsdecls("a", "p", "r")
+            "</p:grpSp>".format(nsdecls("a", "p", "r"))
         ) % (id_, name)
         grpSp = parse_xml(xml)
         return grpSp
@@ -194,7 +196,7 @@ class CT_GroupShape(BaseShapeElement):
         This method is recursive "upwards" since a change in a group shape
         can change the position and size of its containing group.
         """
-        if not self.tag == qn("p:grpSp"):
+        if self.tag != qn("p:grpSp"):
             return
 
         x, y, cx, cy = self._child_extents

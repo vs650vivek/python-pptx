@@ -27,7 +27,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock, method_mock, property_mock
 
 
-class DescribeFillFormat(object):
+class DescribeFillFormat:
     def it_can_set_the_fill_type_to_no_fill(self, background_fixture):
         fill, _NoFill_, expected_xml, no_fill_ = background_fixture
 
@@ -286,7 +286,7 @@ class DescribeFillFormat(object):
         return property_mock(request, FillFormat, "type")
 
 
-class Describe_Fill(object):
+class Describe_Fill:
     def it_raises_on_fore_color_access(self, fore_raise_fixture):
         fill, exception_type = fore_raise_fixture
         with pytest.raises(exception_type):
@@ -323,7 +323,7 @@ class Describe_Fill(object):
         return fill, exception_type
 
 
-class Describe_BlipFill(object):
+class Describe_BlipFill:
     def it_knows_its_fill_type(self, fill_type_fixture):
         blip_fill, expected_value = fill_type_fixture
         fill_type = blip_fill.type
@@ -339,7 +339,7 @@ class Describe_BlipFill(object):
         return blip_fill, expected_value
 
 
-class Describe_GradFill(object):
+class Describe_GradFill:
     def it_knows_the_gradient_angle(self, angle_fixture):
         grad_fill, expected_value = angle_fixture
         angle = grad_fill.gradient_angle
@@ -442,7 +442,7 @@ class Describe_GradFill(object):
         return instance_mock(request, _GradientStops)
 
 
-class Describe_GrpFill(object):
+class Describe_GrpFill:
     def it_knows_its_fill_type(self, fill_type_fixture):
         grp_fill, expected_value = fill_type_fixture
         fill_type = grp_fill.type
@@ -458,7 +458,7 @@ class Describe_GrpFill(object):
         return grp_fill, expected_value
 
 
-class Describe_NoFill(object):
+class Describe_NoFill:
     def it_knows_its_fill_type(self, fill_type_fixture):
         no_fill, expected_value = fill_type_fixture
         fill_type = no_fill.type
@@ -474,7 +474,7 @@ class Describe_NoFill(object):
         return no_fill, expected_value
 
 
-class Describe_NoneFill(object):
+class Describe_NoneFill:
     def it_knows_its_fill_type(self, fill_type_fixture):
         none_fill, expected_value = fill_type_fixture
         fill_type = none_fill.type
@@ -489,7 +489,7 @@ class Describe_NoneFill(object):
         return none_fill, expected_value
 
 
-class Describe_PattFill(object):
+class Describe_PattFill:
     """Unit-test suite for `pptx.dml.fill._PattFill` objects."""
 
     def it_knows_its_fill_type(self, fill_type_fixture):
@@ -625,7 +625,7 @@ class Describe_PattFill(object):
         return instance_mock(request, ColorFormat)
 
 
-class Describe_SolidFill(object):
+class Describe_SolidFill:
     def it_knows_its_fill_type(self, fill_type_fixture):
         solid_fill, expected_value = fill_type_fixture
         fill_type = solid_fill.type
@@ -667,7 +667,7 @@ class Describe_SolidFill(object):
         return instance_mock(request, ColorFormat)
 
 
-class Describe_GradientStops(object):
+class Describe_GradientStops:
     def it_provides_access_to_its_stops(self):
         stops = _GradientStops(CT_GradientStopList.new_gsLst())
 
@@ -676,7 +676,7 @@ class Describe_GradientStops(object):
             assert isinstance(stop, _GradientStop)
 
 
-class Describe_GradientStop(object):
+class Describe_GradientStop:
     def it_provides_access_to_its_color(self, request):
         gs = element("a:gs")
         ColorFormat_ = class_mock(request, "pptx.dml.fill.ColorFormat")

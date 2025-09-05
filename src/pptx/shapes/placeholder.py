@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from pptx.oxml.shapes.autoshape import CT_Shape
 
 
-class _InheritsDimensions(object):
+class _InheritsDimensions:
     """
     Mixin class that provides inherited dimension behavior. Specifically,
     left, top, width, and height report the value from the layout placeholder
@@ -107,7 +107,7 @@ class _InheritsDimensions(object):
         directly-applied value if it has one, otherwise the value on the
         layout placeholder it inherits from.
         """
-        directly_applied_value = getattr(super(_InheritsDimensions, self), attr_name)
+        directly_applied_value = getattr(super(), attr_name)
         if directly_applied_value is not None:
             return directly_applied_value
         return self._inherited_value(attr_name)

@@ -5,7 +5,8 @@ from __future__ import annotations
 import os
 import posixpath
 import zipfile
-from typing import IO, TYPE_CHECKING, Any, Container, Sequence
+from collections.abc import Container, Sequence
+from typing import IO, TYPE_CHECKING, Any
 
 from pptx.exc import PackageNotFoundError
 from pptx.opc.constants import CONTENT_TYPE as CT
@@ -44,7 +45,7 @@ class PackageReader(Container[bytes]):
         instance.
         """
         blob_reader, uri = self._blob_reader, partname.rels_uri
-        return blob_reader[uri] if uri in blob_reader else None
+        return blob_reader.get(uri, None)
 
     @lazyproperty
     def _blob_reader(self) -> _PhysPkgReader:
@@ -117,7 +118,7 @@ class _PhysPkgReader(Container[PackURI]):
     def __contains__(self, item: object) -> bool:
         """Must be implemented by each subclass."""
         raise NotImplementedError(  # pragma: no cover
-            "`%s` must implement `.__contains__()`" % type(self).__name__
+            f"`{type(self).__name__}` must implement `.__contains__()`"
         )
 
     def __getitem__(self, pack_uri: PackURI) -> bytes:
@@ -141,7 +142,7 @@ class _PhysPkgReader(Container[PackURI]):
         if zipfile.is_zipfile(pkg_file):
             return _ZipPkgReader(pkg_file)
 
-        raise PackageNotFoundError("Package not found at '%s'" % pkg_file)
+        raise PackageNotFoundError(f"Package not found at '{pkg_file}'")
 
 
 class _DirPkgReader(_PhysPkgReader):
@@ -165,8 +166,8 @@ class _DirPkgReader(_PhysPkgReader):
         try:
             with open(path, "rb") as f:
                 return f.read()
-        except IOError:
-            raise KeyError("no member '%s' in package" % pack_uri)
+        except OSError:
+            raise KeyError(f"no member '{pack_uri}' in package")
 
 
 class _ZipPkgReader(_PhysPkgReader):
@@ -185,14 +186,24 @@ class _ZipPkgReader(_PhysPkgReader):
         Raises |KeyError| if no matching member is present in zip archive.
         """
         if pack_uri not in self._blobs:
-            raise KeyError("no member '%s' in package" % pack_uri)
+            raise KeyError(f"no member '{pack_uri}' in package")
         return self._blobs[pack_uri]
+
+    def get(self, partname, default=None):
+        """Dict-like access used by callers expecting a mapping API.
+
+        Returns the bytes blob for `partname`, or `default` if not present.
+        """
+        try:
+            return self[partname]
+        except KeyError:
+            return default
 
     @lazyproperty
     def _blobs(self) -> dict[PackURI, bytes]:
         """dict mapping partname to package part binaries."""
         with zipfile.ZipFile(self._pkg_file, "r") as z:
-            return {PackURI("/%s" % name): z.read(name) for name in z.namelist()}
+            return {PackURI(f"/{name}"): z.read(name) for name in z.namelist()}
 
 
 class _PhysPkgWriter:

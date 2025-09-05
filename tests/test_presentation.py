@@ -14,7 +14,7 @@ from .unitutil.cxml import element, xml
 from .unitutil.mock import class_mock, instance_mock, property_mock
 
 
-class DescribePresentation(object):
+class DescribePresentation:
     def it_knows_the_height_of_its_slides(self, sld_height_get_fixture):
         prs, expected_value = sld_height_get_fixture
         assert prs.slide_height == expected_value

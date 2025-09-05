@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, cast
+from typing import TYPE_CHECKING, cast
 
 from pptx.oxml.simpletypes import ST_SlideId, ST_SlideSizeCoordinate, XsdString
 from pptx.oxml.xmlchemy import BaseOxmlElement, RequiredAttribute, ZeroOrMore, ZeroOrOne
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pptx.util import Length
 
 

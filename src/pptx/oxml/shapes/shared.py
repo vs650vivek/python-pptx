@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from pptx.dml.fill import CT_GradientFillProperties
 from pptx.enum.shapes import PP_PLACEHOLDER
@@ -31,6 +31,8 @@ from pptx.oxml.xmlchemy import (
 from pptx.util import Emu
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from pptx.oxml.action import CT_Hyperlink
     from pptx.oxml.shapes.autoshape import CT_CustomGeometry2D, CT_PresetGeometry2D
     from pptx.util import Length

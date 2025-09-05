@@ -13,7 +13,7 @@ from ...unitutil.cxml import element, xml
 from ...unitutil.mock import call, class_mock, instance_mock, method_mock, property_mock
 
 
-class DescribeCT_GroupShape(object):
+class DescribeCT_GroupShape:
     """Unit-test suite for `pptx.oxml.shapes.groupshape.CT_GroupShape` objects."""
 
     def it_can_add_a_graphicFrame_element_containing_a_table(self, add_table_fixt):

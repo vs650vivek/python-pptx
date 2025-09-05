@@ -6,7 +6,7 @@ from pptx.text.text import Font, TextFrame
 from pptx.util import lazyproperty
 
 
-class DataLabels(object):
+class DataLabels:
     """Provides access to properties of data labels for a plot or a series.
 
     This is not a collection and does not provide access to individual data
@@ -16,7 +16,7 @@ class DataLabels(object):
     """
 
     def __init__(self, dLbls):
-        super(DataLabels, self).__init__()
+        super().__init__()
         self._element = dLbls
 
     @lazyproperty
@@ -140,13 +140,13 @@ class DataLabels(object):
         self._element.get_or_add_showVal().val = bool(value)
 
 
-class DataLabel(object):
+class DataLabel:
     """
     The data label associated with an individual data point.
     """
 
     def __init__(self, ser, idx):
-        super(DataLabel, self).__init__()
+        super().__init__()
         self._ser = self._element = ser
         self._idx = idx
 
@@ -177,9 +177,7 @@ class DataLabel(object):
         dLbl = self._dLbl
         if dLbl is None:
             return False
-        if dLbl.xpath("c:tx/c:rich"):
-            return True
-        return False
+        return bool(dLbl.xpath("c:tx/c:rich"))
 
     @has_text_frame.setter
     def has_text_frame(self, value):

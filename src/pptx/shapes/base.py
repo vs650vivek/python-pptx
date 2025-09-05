@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from pptx.util import Length
 
 
-class BaseShape(object):
+class BaseShape:
     """Base class for shape objects.
 
     Subclasses include |Shape|, |Picture|, and |GraphicFrame|.

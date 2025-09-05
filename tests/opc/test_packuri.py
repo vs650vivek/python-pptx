@@ -7,7 +7,7 @@ import pytest
 from pptx.opc.packuri import PackURI
 
 
-class DescribePackURI(object):
+class DescribePackURI:
     """Unit-test suite for the `pptx.opc.packuri.PackURI` objects."""
 
     def it_can_construct_from_relative_ref(self):

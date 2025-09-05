@@ -15,7 +15,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import call, class_mock, instance_mock, property_mock
 
 
-class Describe_BasePicture(object):
+class Describe_BasePicture:
     def it_knows_its_cropping(self, crop_get_fixture):
         picture, prop_name, expected_value = crop_get_fixture
         crop = getattr(picture, prop_name)
@@ -50,7 +50,7 @@ class Describe_BasePicture(object):
     def crop_get_fixture(self, request):
         pic_cxml, side, expected_value = request.param
         picture = Picture(element(pic_cxml), None)
-        prop_name = "crop_%s" % side
+        prop_name = f"crop_{side}"
         return picture, prop_name, expected_value
 
     @pytest.fixture(
@@ -133,7 +133,7 @@ class Describe_BasePicture(object):
         pic_cxml, side, value, expected_cxml = request.param
         pic = element(pic_cxml)
         picture = Picture(pic, None)
-        prop_name = "crop_%s" % side
+        prop_name = f"crop_{side}"
         expected_xml = xml(expected_cxml)
         return picture, prop_name, value, expected_xml
 
@@ -142,7 +142,7 @@ class Describe_BasePicture(object):
         return _BasePicture(element("p:pic/p:spPr"), None)
 
 
-class DescribeMovie(object):
+class DescribeMovie:
     def it_knows_its_shape_type(self, shape_type_fixture):
         movie = shape_type_fixture
         assert movie.shape_type == MSO_SHAPE_TYPE.MEDIA
@@ -219,7 +219,7 @@ class DescribeMovie(object):
         return instance_mock(request, SlidePart)
 
 
-class DescribePicture(object):
+class DescribePicture:
     def it_knows_its_masking_shape(self, autoshape_get_fixture):
         picture, expected_value = autoshape_get_fixture
         auto_shape_type = picture.auto_shape_type
@@ -251,7 +251,7 @@ class DescribePicture(object):
     )
     def autoshape_get_fixture(self, request):
         prstGeom_cxml, expected_value = request.param
-        pic_cxml = "p:pic/p:spPr%s" % prstGeom_cxml
+        pic_cxml = f"p:pic/p:spPr{prstGeom_cxml}"
         picture = Picture(element(pic_cxml), None)
         return picture, expected_value
 

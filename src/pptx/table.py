@@ -2,15 +2,20 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator
+from typing import TYPE_CHECKING
 
 from pptx.dml.fill import FillFormat
+
+# 🔽 NEW: centralized measurement helpers
+from pptx.layout._measure import calc_row_height_emu, pt_to_emu
 from pptx.oxml.table import TcRange
 from pptx.shapes import Subshape
 from pptx.text.text import TextFrame
 from pptx.util import Emu, lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from pptx.enum.text import MSO_VERTICAL_ANCHOR
     from pptx.oxml.table import CT_Table, CT_TableCell, CT_TableCol, CT_TableRow
     from pptx.parts.slide import BaseSlidePart
@@ -19,7 +24,7 @@ if TYPE_CHECKING:
     from pptx.util import Length
 
 
-class Table(object):
+class Table:
     """A DrawingML table object.
 
     Not intended to be constructed directly, use
@@ -27,7 +32,7 @@ class Table(object):
     """
 
     def __init__(self, tbl: CT_Table, graphic_frame: GraphicFrame):
-        super(Table, self).__init__()
+        super().__init__()
         self._tbl = tbl
         self._graphic_frame = graphic_frame
 
@@ -169,7 +174,7 @@ class _Cell(Subshape):
     """Table cell"""
 
     def __init__(self, tc: CT_TableCell, parent: ProvidesPart):
-        super(_Cell, self).__init__(parent)
+        super().__init__(parent)
         self._tc = tc
 
     def __eq__(self, other: object) -> bool:
@@ -319,7 +324,7 @@ class _Cell(Subshape):
         `.is_merge_origin` before calling.
         """
         if not self.is_merge_origin:
-            raise ValueError("not a merge-origin cell; only a merge-origin cell can be sp" "lit")
+            raise ValueError("not a merge-origin cell; only a merge-origin cell can be split")
 
         tc_range = TcRange.from_merge_origin(self._tc)
 
@@ -382,7 +387,7 @@ class _Column(Subshape):
     """Table column"""
 
     def __init__(self, gridCol: CT_TableCol, parent: _ColumnCollection):
-        super(_Column, self).__init__(parent)
+        super().__init__(parent)
         self._parent = parent
         self._gridCol = gridCol
 
@@ -401,7 +406,7 @@ class _Row(Subshape):
     """Table row"""
 
     def __init__(self, tr: CT_TableRow, parent: _RowCollection):
-        super(_Row, self).__init__(parent)
+        super().__init__(parent)
         self._parent = parent
         self._tr = tr
 
@@ -423,12 +428,31 @@ class _Row(Subshape):
         self._tr.h = height
         self._parent.notify_height_changed()
 
+    # 🔽 NEW: internal helper to set height using centralized heuristic (no public API change)
+    def _set_auto_height(
+        self,
+        font_pt: float,
+        padding_pt: float = 6.0,
+        max_chars_per_line: int = 25,
+        line_spacing: float | None = None,
+    ) -> None:
+        """Compute and set row height from cell texts using shared measurement helpers."""
+        texts = [c.text for c in self.cells]
+        height_emu = calc_row_height_emu(
+            cell_texts=texts,
+            font_pt=font_pt,
+            padding_emu=pt_to_emu(padding_pt),
+            max_chars_per_line=max_chars_per_line,
+            line_spacing=line_spacing,
+        )
+        self.height = Emu(height_emu)
+
 
 class _CellCollection(Subshape):
     """Horizontal sequence of row cells"""
 
     def __init__(self, tr: CT_TableRow, parent: _Row):
-        super(_CellCollection, self).__init__(parent)
+        super().__init__(parent)
         self._parent = parent
         self._tr = tr
 
@@ -452,7 +476,7 @@ class _ColumnCollection(Subshape):
     """Sequence of table columns."""
 
     def __init__(self, tbl: CT_Table, parent: Table):
-        super(_ColumnCollection, self).__init__(parent)
+        super().__init__(parent)
         self._parent = parent
         self._tbl = tbl
 
@@ -476,7 +500,7 @@ class _RowCollection(Subshape):
     """Sequence of table rows"""
 
     def __init__(self, tbl: CT_Table, parent: Table):
-        super(_RowCollection, self).__init__(parent)
+        super().__init__(parent)
         self._parent = parent
         self._tbl = tbl
 

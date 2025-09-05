@@ -11,7 +11,7 @@ from pptx.text.text import Font
 from ..unitutil.cxml import element, xml
 
 
-class DescribeLegend(object):
+class DescribeLegend:
     def it_provides_access_to_its_font(self, font_fixture):
         legend, expected_xml = font_fixture
         font = legend.font
@@ -72,7 +72,7 @@ class DescribeLegend(object):
             ("c:legend/c:layout/c:manualLayout/c:xMode{val=factor}", 0.0),
             ("c:legend/c:layout/c:manualLayout/(c:xMode,c:x{val=0.42})", 0.42),
             (
-                "c:legend/c:layout/c:manualLayout/(c:xMode{val=factor},c:x{val=0.42" "})",
+                "c:legend/c:layout/c:manualLayout/(c:xMode{val=factor},c:x{val=0.42})",
                 0.42,
             ),
         ]

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import io
 import os
-from typing import IO, TYPE_CHECKING, Callable, Iterable, Iterator, cast
+from typing import IO, TYPE_CHECKING, cast
 
 from pptx.enum.shapes import PP_PLACEHOLDER, PROG_ID
 from pptx.media import SPEAKER_IMAGE_BYTES, Video
@@ -36,6 +36,8 @@ from pptx.shared import ParentedElementProxy
 from pptx.util import Emu, lazyproperty
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Iterator
+
     from pptx.chart.chart import Chart
     from pptx.chart.data import ChartData
     from pptx.enum.chart import XL_CHART_TYPE
@@ -81,7 +83,7 @@ class _BaseShapes(ParentedElementProxy):
     """
 
     def __init__(self, spTree: CT_GroupShape, parent: ProvidesPart):
-        super(_BaseShapes, self).__init__(spTree, parent)
+        super().__init__(spTree, parent)
         self._spTree = spTree
         self._cached_max_shape_id = None
 
@@ -191,7 +193,7 @@ class _BaseShapes(ParentedElementProxy):
 
         # prefix rootname with 'Vertical ' if orient is 'vert'
         if orient == ST_Direction.VERT:
-            basename = "Vertical %s" % basename
+            basename = f"Vertical {basename}"
 
         # increment numpart as necessary to make name unique
         numpart = id - 1
@@ -230,7 +232,7 @@ class _BaseGroupShapes(_BaseShapes):
     _element: CT_GroupShape
 
     def __init__(self, grpSp: CT_GroupShape, parent: ProvidesPart):
-        super(_BaseGroupShapes, self).__init__(grpSp, parent)
+        super().__init__(grpSp, parent)
         self._grpSp = grpSp
 
     def add_chart(
@@ -273,7 +275,7 @@ class _BaseGroupShapes(_BaseShapes):
         """
         cxnSp = self._add_cxnSp(connector_type, begin_x, begin_y, end_x, end_y)
         self._recalculate_extents()
-        return cast(Connector, self._shape_factory(cxnSp))
+        return cast("Connector", self._shape_factory(cxnSp))
 
     def add_group_shape(self, shapes: Iterable[BaseShape] = ()) -> GroupShape:
         """Return a |GroupShape| object newly appended to this shape tree.
@@ -287,11 +289,12 @@ class _BaseGroupShapes(_BaseShapes):
         grpSp = self._element.add_grpSp()
         for shape in shapes:
             grpSp.insert_element_before(
-                shape._element, "p:extLst"  # pyright: ignore[reportPrivateUsage]
+                shape._element,
+                "p:extLst",  # pyright: ignore[reportPrivateUsage]
             )
         if shapes:
             grpSp.recalculate_extents()
-        return cast(GroupShape, self._shape_factory(grpSp))
+        return cast("GroupShape", self._shape_factory(grpSp))
 
     def add_ole_object(
         self,
@@ -348,7 +351,7 @@ class _BaseGroupShapes(_BaseShapes):
         )
         self._spTree.append(graphicFrame)
         self._recalculate_extents()
-        return cast(GraphicFrame, self._shape_factory(graphicFrame))
+        return cast("GraphicFrame", self._shape_factory(graphicFrame))
 
     def add_picture(
         self,
@@ -370,7 +373,7 @@ class _BaseGroupShapes(_BaseShapes):
         image_part, rId = self.part.get_or_add_image_part(image_file)
         pic = self._add_pic_from_image_part(image_part, rId, left, top, width, height)
         self._recalculate_extents()
-        return cast(Picture, self._shape_factory(pic))
+        return cast("Picture", self._shape_factory(pic))
 
     def add_shape(
         self, autoshape_type_id: MSO_SHAPE, left: Length, top: Length, width: Length, height: Length
@@ -384,7 +387,7 @@ class _BaseGroupShapes(_BaseShapes):
         autoshape_type = AutoShapeType(autoshape_type_id)
         sp = self._add_sp(autoshape_type, left, top, width, height)
         self._recalculate_extents()
-        return cast(Shape, self._shape_factory(sp))
+        return cast("Shape", self._shape_factory(sp))
 
     def add_textbox(self, left: Length, top: Length, width: Length, height: Length) -> Shape:
         """Return newly added text box shape appended to this shape tree.
@@ -393,7 +396,7 @@ class _BaseGroupShapes(_BaseShapes):
         """
         sp = self._add_textbox_sp(left, top, width, height)
         self._recalculate_extents()
-        return cast(Shape, self._shape_factory(sp))
+        return cast("Shape", self._shape_factory(sp))
 
     def build_freeform(
         self, start_x: float = 0, start_y: float = 0, scale: tuple[float, float] | float = 1.0
@@ -584,7 +587,7 @@ class SlideShapes(_BaseGroupShapes):
         )
         self._spTree.append(movie_pic)
         self._add_video_timing(movie_pic)
-        return cast(GraphicFrame, self._shape_factory(movie_pic))
+        return cast("GraphicFrame", self._shape_factory(movie_pic))
 
     def add_table(
         self, rows: int, cols: int, left: Length, top: Length, width: Length, height: Length
@@ -597,7 +600,7 @@ class SlideShapes(_BaseGroupShapes):
         returned |GraphicFrame| shape must be used to access the enclosed |Table| object.
         """
         graphicFrame = self._add_graphicFrame_containing_table(rows, cols, left, top, width, height)
-        return cast(GraphicFrame, self._shape_factory(graphicFrame))
+        return cast("GraphicFrame", self._shape_factory(graphicFrame))
 
     def clone_layout_placeholders(self, slide_layout: SlideLayout) -> None:
         """Add placeholder shapes based on those in `slide_layout`.
@@ -621,7 +624,7 @@ class SlideShapes(_BaseGroupShapes):
         """
         for elm in self._spTree.iter_ph_elms():
             if elm.ph_idx == 0:
-                return cast(Shape, self._shape_factory(elm))
+                return cast("Shape", self._shape_factory(elm))
         return None
 
     def _add_graphicFrame_containing_table(
@@ -753,7 +756,7 @@ class MasterPlaceholders(BasePlaceholders):
         self, placeholder_elm: CT_Shape
     ) -> MasterPlaceholder:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return cast(MasterPlaceholder, _MasterShapeFactory(placeholder_elm, self))
+        return cast("MasterPlaceholder", _MasterShapeFactory(placeholder_elm, self))
 
 
 class NotesSlidePlaceholders(MasterPlaceholders):
@@ -767,7 +770,7 @@ class NotesSlidePlaceholders(MasterPlaceholders):
         self, placeholder_elm: CT_Shape
     ) -> NotesSlidePlaceholder:
         """Return an instance of the appropriate placeholder proxy class for `placeholder_elm`."""
-        return cast(NotesSlidePlaceholder, _NotesSlideShapeFactory(placeholder_elm, self))
+        return cast("NotesSlidePlaceholder", _NotesSlideShapeFactory(placeholder_elm, self))
 
 
 class SlidePlaceholders(ParentedElementProxy):
@@ -792,7 +795,7 @@ class SlidePlaceholders(ParentedElementProxy):
 
     def __iter__(self):
         """Generate placeholder shapes in `idx` order."""
-        ph_elms = sorted([e for e in self._element.iter_ph_elms()], key=lambda e: e.ph_idx)
+        ph_elms = sorted(self._element.iter_ph_elms(), key=lambda e: e.ph_idx)
         return (SlideShapeFactory(e, self) for e in ph_elms)
 
     def __len__(self) -> int:
@@ -867,7 +870,7 @@ def SlideShapeFactory(shape_elm: ShapeElement, parent: ProvidesPart) -> BaseShap
     return BaseShapeFactory(shape_elm, parent)
 
 
-class _MoviePicElementCreator(object):
+class _MoviePicElementCreator:
     """Functional service object for creating a new movie p:pic element.
 
     It's entire external interface is its :meth:`new_movie_pic` class method that returns a new
@@ -888,7 +891,7 @@ class _MoviePicElementCreator(object):
         poster_frame_file: str | IO[bytes] | None,
         mime_type: str | None,
     ):
-        super(_MoviePicElementCreator, self).__init__()
+        super().__init__()
         self._shapes = shapes
         self._shape_id = shape_id
         self._movie_file = movie_file
@@ -997,7 +1000,7 @@ class _MoviePicElementCreator(object):
         return self._video_part_rIds[1]
 
 
-class _OleObjectElementCreator(object):
+class _OleObjectElementCreator:
     """Functional service object for creating a new OLE-object p:graphicFrame element.
 
     It's entire external interface is its :meth:`graphicFrame` class method that returns a new

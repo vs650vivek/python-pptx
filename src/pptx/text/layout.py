@@ -6,6 +6,14 @@ from typing import TYPE_CHECKING
 
 from PIL import ImageFont
 
+# 🔽 NEW: centralized measurement helpers
+from pptx.layout._measure import (
+    EMU_PER_INCH,
+    PT_PER_INCH,
+    line_height_pt,
+    pt_to_emu,
+)
+
 if TYPE_CHECKING:
     from pptx.util import Length
 
@@ -82,7 +90,11 @@ class TextFitter(tuple):
             when rendered at `point_size` using the font defined in `font_file`.
             """
             text_lines = self._wrap_lines(self._line_source, point_size)
-            cy = _rendered_size("Ty", point_size, self._font_file)[1]
+
+            # 🔽 NEW: central line-height calculation (instead of measuring "Ty")
+            cy_pt = line_height_pt(font_pt=float(point_size), line_spacing=None)
+            cy = pt_to_emu(cy_pt)
+
             return (cy * len(text_lines)) <= self._height
 
         return predicate
@@ -116,7 +128,7 @@ class TextFitter(tuple):
         return lines
 
 
-class _BinarySearchTree(object):
+class _BinarySearchTree:
     """
     A node in a binary search tree. Uniform for root, subtree root, and leaf
     nodes.
@@ -170,7 +182,7 @@ class _BinarySearchTree(object):
         A string representation of the tree rooted in this node, useful for
         debugging purposes.
         """
-        text = "%s%s\n" % (prefix, self.value.text)
+        text = f"{prefix}{self.value.text}\n"
         prefix = "%s└── " % ("    " * level)
         if self._lesser:
             text += self._lesser.tree(level + 1, prefix)
@@ -212,7 +224,7 @@ class _BinarySearchTree(object):
         self._insert_from_ordered_sequence(lesser)
 
 
-class _LineSource(object):
+class _LineSource:
     """
     Generates all the possible even-word line breaks in a string of text,
     each in the form of a (line, remainder) 2-tuple where *line* contains the
@@ -255,7 +267,7 @@ class _LineSource(object):
         return self._text.strip() != ""
 
     def __repr__(self):
-        return "<_LineSource('%s')>" % self._text
+        return f"<_LineSource('{self._text}')>"
 
 
 class _Line(tuple):
@@ -278,7 +290,7 @@ class _Line(tuple):
         return len(self.text)
 
     def __repr__(self):
-        return "'%s' => '%s'" % (self.text, self.remainder)
+        return f"'{self.text}' => '{self.remainder}'"
 
     @property
     def remainder(self):
@@ -289,7 +301,7 @@ class _Line(tuple):
         return self[0]
 
 
-class _Fonts(object):
+class _Fonts:
     """
     A memoizing cache for ImageFont objects.
     """
@@ -309,8 +321,9 @@ def _rendered_size(text, point_size, font_file):
     Metric Units (EMU) when rendered at *point_size* in the font defined in
     *font_file*.
     """
-    emu_per_inch = 914400
-    px_per_inch = 72.0
+    # 🔽 NEW: use centralized unit constants
+    emu_per_inch = EMU_PER_INCH
+    px_per_inch = PT_PER_INCH  # historical assumption: 72 px/in == 72 pt/in
 
     font = _Fonts.font(font_file, point_size)
     try:

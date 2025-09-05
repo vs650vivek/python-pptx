@@ -61,7 +61,7 @@ class CT_GradientFillProperties(BaseOxmlElement):
     def new_gradFill(cls):
         """Return newly-created "loose" default gradient subtree."""
         return parse_xml(
-            '<a:gradFill %s rotWithShape="1">\n'
+            '<a:gradFill {} rotWithShape="1">\n'
             "  <a:gsLst>\n"
             '    <a:gs pos="0">\n'
             '      <a:schemeClr val="accent1">\n'
@@ -79,7 +79,7 @@ class CT_GradientFillProperties(BaseOxmlElement):
             "    </a:gs>\n"
             "  </a:gsLst>\n"
             '  <a:lin scaled="0"/>\n'
-            "</a:gradFill>\n" % nsdecls("a")
+            "</a:gradFill>\n".format(nsdecls("a"))
         )
 
     def _new_gsLst(self):
@@ -117,7 +117,7 @@ class CT_GradientStopList(BaseOxmlElement):
         are the default from the PowerPoint built-in "White" template.
         """
         return parse_xml(
-            "<a:gsLst %s>\n"
+            "<a:gsLst {}>\n"
             '  <a:gs pos="0">\n'
             '    <a:schemeClr val="accent1">\n'
             '      <a:tint val="100000"/>\n'
@@ -132,7 +132,7 @@ class CT_GradientStopList(BaseOxmlElement):
             '      <a:satMod val="350000"/>\n'
             "    </a:schemeClr>\n"
             "  </a:gs>\n"
-            "</a:gsLst>\n" % nsdecls("a")
+            "</a:gsLst>\n".format(nsdecls("a"))
         )
 
 
@@ -161,13 +161,13 @@ class CT_PatternFillProperties(BaseOxmlElement):
 
     def _new_bgClr(self):
         """Override default to add minimum subtree."""
-        xml = ("<a:bgClr %s>\n" ' <a:srgbClr val="FFFFFF"/>\n' "</a:bgClr>\n") % nsdecls("a")
+        xml = ('<a:bgClr {}>\n <a:srgbClr val="FFFFFF"/>\n</a:bgClr>\n').format(nsdecls("a"))
         bgClr = parse_xml(xml)
         return bgClr
 
     def _new_fgClr(self):
         """Override default to add minimum subtree."""
-        xml = ("<a:fgClr %s>\n" ' <a:srgbClr val="000000"/>\n' "</a:fgClr>\n") % nsdecls("a")
+        xml = ('<a:fgClr {}>\n <a:srgbClr val="000000"/>\n</a:fgClr>\n').format(nsdecls("a"))
         fgClr = parse_xml(xml)
         return fgClr
 

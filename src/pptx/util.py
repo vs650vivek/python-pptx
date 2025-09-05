@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, Callable, Generic, TypeVar, cast
+from typing import TYPE_CHECKING, Any, TypeVar, cast
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class Length(int):
@@ -105,7 +108,7 @@ class Pt(Length):
 _T = TypeVar("_T")
 
 
-class lazyproperty(Generic[_T]):
+class lazyproperty[T]:
     """Decorator like @property, but evaluated only on first access.
 
     Like @property, this can only be used to decorate methods having only a `self` parameter, and
@@ -190,7 +193,7 @@ class lazyproperty(Generic[_T]):
             # --- __dict__ value of same name ('fget' nominally)
             value = self._fget(obj)
             obj.__dict__[self._name] = value
-        return cast(_T, value)
+        return cast("_T", value)
 
     def __set__(self, obj: Any, value: Any) -> None:
         """Raises unconditionally, to preserve read-only behavior.

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 
-class ShadowFormat(object):
+class ShadowFormat:
     """Provides access to shadow effect on a shape."""
 
     def __init__(self, spPr):
@@ -26,9 +26,7 @@ class ShadowFormat(object):
         Assigning |False| causes the inheritance link to be broken and **no**
         effects to appear on the shape.
         """
-        if self._element.effectLst is None:
-            return True
-        return False
+        return self._element.effectLst is None
 
     @inherit.setter
     def inherit(self, value):

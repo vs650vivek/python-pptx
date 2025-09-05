@@ -12,7 +12,7 @@ from ..unitutil.cxml import element, xml
 from ..unitutil.mock import class_mock, instance_mock
 
 
-class DescribeMarker(object):
+class DescribeMarker:
     def it_knows_its_size(self, size_get_fixture):
         marker, expected_value = size_get_fixture
         assert marker.size == expected_value

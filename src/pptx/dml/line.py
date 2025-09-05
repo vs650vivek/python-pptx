@@ -7,7 +7,7 @@ from pptx.enum.dml import MSO_FILL
 from pptx.util import Emu, lazyproperty
 
 
-class LineFormat(object):
+class LineFormat:
     """Provides access to line properties such as color, style, and width.
 
     A LineFormat object is typically accessed via the ``.line`` property of
@@ -15,7 +15,7 @@ class LineFormat(object):
     """
 
     def __init__(self, parent):
-        super(LineFormat, self).__init__()
+        super().__init__()
         self._parent = parent
 
     @lazyproperty
